@@ -21,6 +21,7 @@ export default function PestanasLayout() {
     <NativeTabs
       backgroundColor={c.surface}
       indicatorColor={c.accentSoft}
+      labelVisibilityMode="labeled"
       iconColor={{ default: c.muted, selected: c.accent }}
       labelStyle={{ default: { color: c.muted }, selected: { color: c.accent } }}>
       {PESTANAS.map((p) => (

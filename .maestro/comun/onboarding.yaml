@@ -15,4 +15,8 @@ appId: com.brota.app
 - tapOn:
     id: "perfil-hidro"
 - tapOn: "Empezar"
+# Hoy pide la ubicación para el clima; se rechaza y se usa la ubicación por defecto (D-19).
+- tapOn:
+    text: "Don.t allow|No permitir"
+    optional: true
 - assertVisible: "Tareas de hoy"
