@@ -45,6 +45,15 @@ jobs:
       - uses: supabase/setup-cli@v3
         with:
           version: 3.3.0
+      # La app inicia una sesión anónima para hablar con el Agente (D-27). Si la API cambia, se avisa y se
+      # sigue: se puede activar a mano en Authentication > Sign In / Providers > Allow anonymous sign-ins.
+      - name: Activar las sesiones anónimas
+        run: |
+          estado=$(curl -s -o /dev/null -w '%{http_code}' -X PATCH \
+            "https://api.supabase.com/v1/projects/$PROYECTO/config/auth" \
+            -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H 'Content-Type: application/json' \
+            -d '{"external_anonymous_users_enabled": true}')
+          if [ "$estado" -ge 200 ] && [ "$estado" -lt 300 ]; then echo "Sesiones anónimas activadas."; else echo "::warning::No se pudieron activar las sesiones anónimas (HTTP $estado): activalas a mano en Supabase."; fi
       - name: Vincular el proyecto
         run: supabase link --project-ref "$PROYECTO" --password "$SUPABASE_DB_PASSWORD"
       - name: Migraciones de la base
