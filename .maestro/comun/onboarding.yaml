@@ -16,12 +16,22 @@ appId: com.brota.app
     id: "perfil-hidro"
 - tapOn: "Empezar"
 # Hoy pide la ubicación para el clima. El diálogo aparece unos segundos después: se lo espera y se
-# rechaza; el clima usa la ubicación por defecto (D-19, D-20).
+# rechaza; el clima usa la ubicación por defecto (D-19, D-20). Android descarta los toques mientras el
+# diálogo se está abriendo, así que se espera la animación y se repite el toque mientras siga visible.
 - extendedWaitUntil:
     visible: "Don.t allow|No permitir"
-    timeout: 10000
+    timeout: 15000
     optional: true
-- tapOn:
-    text: "Don.t allow|No permitir"
-    optional: true
+- waitForAnimationToEnd:
+    timeout: 3000
+- repeat:
+    while:
+      visible: "Don.t allow|No permitir"
+    times: 5
+    commands:
+      - tapOn:
+          text: "Don.t allow|No permitir"
+          optional: true
+      - waitForAnimationToEnd:
+          timeout: 2000
 - assertVisible: "Tareas de hoy"
