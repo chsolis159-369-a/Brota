@@ -18,6 +18,7 @@ import {
   SISTEMA,
   armarMensajes,
   esConsultaProhibida,
+  motivoDeErrorIA,
   textoDeRespuesta,
   validarPedido,
   type Pedido,
@@ -169,5 +170,20 @@ describe('servicio de la app', () => {
   it('cualquier otra falla es "sin_conexion"', async () => {
     const s = clienteSimulado(true, { data: null, error: { context: { status: 502 } } });
     await expect(preguntarAgenteIA(p, s.cliente)).rejects.toMatchObject({ motivo: 'sin_conexion' });
+  });
+});
+
+describe('motivo de las fallas de la API de Claude', () => {
+  it.each([
+    [400, 'Your credit balance is too low to access the Anthropic API.', 'sin_credito'],
+    [401, 'invalid x-api-key', 'clave_invalida'],
+    [403, 'permission denied', 'sin_permiso'],
+    [404, 'model: claude-x', 'modelo_no_disponible'],
+    [400, 'messages: field required', 'pedido_invalido'],
+    [529, 'Overloaded', 'ia_no_disponible'],
+    [500, 'Internal server error', 'ia_no_disponible'],
+    [undefined, 'Connection error.', 'ia'],
+  ] as const)('HTTP %s "%s" → %s', (status, mensaje, motivo) => {
+    expect(motivoDeErrorIA(status, mensaje)).toBe(motivo);
   });
 });

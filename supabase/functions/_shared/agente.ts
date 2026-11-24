@@ -156,3 +156,26 @@ export function textoDeRespuesta(r: Pick<Anthropic.Beta.BetaMessage, 'content' |
     .trim();
   return t || SIN_RESPUESTA;
 }
+
+export type MotivoErrorIA =
+  | 'sin_credito'
+  | 'clave_invalida'
+  | 'sin_permiso'
+  | 'modelo_no_disponible'
+  | 'pedido_invalido'
+  | 'ia_no_disponible'
+  | 'ia';
+
+/**
+ * Motivo de una falla de la API de Claude, sin datos privados, para la respuesta de la función y el
+ * diagnóstico (el mensaje completo queda solo en los logs de Supabase).
+ */
+export function motivoDeErrorIA(status: number | undefined, mensaje: string): MotivoErrorIA {
+  if (/credit balance/i.test(mensaje)) return 'sin_credito';
+  if (status === 401) return 'clave_invalida';
+  if (status === 403) return 'sin_permiso';
+  if (status === 404) return 'modelo_no_disponible';
+  if (status === 400) return 'pedido_invalido';
+  if (status !== undefined && status >= 500) return 'ia_no_disponible';
+  return 'ia';
+}

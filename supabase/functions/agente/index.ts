@@ -17,6 +17,7 @@ import {
   SISTEMA,
   armarMensajes,
   esConsultaProhibida,
+  motivoDeErrorIA,
   textoDeRespuesta,
   validarPedido,
 } from '../_shared/agente.ts';
@@ -97,7 +98,7 @@ Deno.serve(async (req) => {
     if (e instanceof Anthropic.RateLimitError) return json({ error: 'ocupado' }, 503);
     if (e instanceof Anthropic.APIError) {
       console.error('Anthropic', e.status, e.message);
-      return json({ error: 'ia' }, 502);
+      return json({ error: 'ia', motivo: motivoDeErrorIA(e.status, e.message) }, 502);
     }
     console.error(e);
     return json({ error: 'servidor' }, 500);
