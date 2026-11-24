@@ -1,4 +1,5 @@
 # Crear un cultivo, registrar y medir: puntos con topes y evaluación de la luz.
+# Los textos se buscan con patrones (.*): Maestro interpreta el texto como expresión regular.
 appId: com.brota.app
 ---
 - runFlow: comun/onboarding.yaml
@@ -13,8 +14,9 @@ appId: com.brota.app
 - assertVisible: "Hacé tu primer registro para empezar la bitácora"
 - tapOn:
     id: "registro-Riego"
-- assertVisible: "Registro rápido: riego"
-- assertVisible: "Cada registro suma 2 pts (hoy 1 de 5). Cada medición de luz suma 4 pts (hoy 0 de 2)."
+- scrollUntilVisible:
+    element:
+      text: "Cada registro suma 2 pts .hoy 1 de 5.. Cada medición de luz suma 4 pts .hoy 0 de 2.."
 - scrollUntilVisible:
     element:
       id: "medicion-ppfd"
@@ -29,16 +31,22 @@ appId: com.brota.app
     id: "guardar-medicion"
 - scrollUntilVisible:
     element:
-      text: "Demasiada luz para siembra.*"
-- assertVisible: "Demasiada luz para siembra (recomendado 150–300). Alejá la lámpara para evitar estrés lumínico."
+      text: "Demasiada luz para siembra .recomendado 150–300.. Alejá la lámpara para evitar estrés lumínico."
 - scrollUntilVisible:
     element:
-      text: "Zona de peligro"
+      text: "Registro rápido: riego"
+- scrollUntilVisible:
+    element:
+      id: "eliminar-cultivo"
 - tapOn:
     id: "eliminar-cultivo"
+- scrollUntilVisible:
+    element:
+      id: "confirmar-eliminar"
 - tapOn:
     id: "confirmar-eliminar"
 - assertVisible: "Mis cultivos"
 - assertNotVisible: "Lechuga Maestro"
+# Los puntos del registro (2) y la medición (4) no se pierden al borrar el cultivo.
 - tapOn: "Hoy"
 - assertVisible: "6"

@@ -6,4 +6,6 @@ appId: com.brota.app
 - assertVisible: "Recomendado para tu forma de cultivar"
 - assertVisible: "Qué es la hidroponía"
 - assertVisible: "Mientras tanto, para sumar puntos"
-- assertVisible: "Albahaca 1"
+- scrollUntilVisible:
+    element:
+      text: "Albahaca 1"

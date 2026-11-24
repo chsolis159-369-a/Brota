@@ -184,7 +184,7 @@ const estilos = StyleSheet.create({
   },
   check: { width: 24, height: 24, borderRadius: 8, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
   tachado: { textDecorationLine: 'line-through' },
-  pts: { fontWeight: '600' },
+  pts: { fontWeight: '600', flexShrink: 0 },
   badges: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   badge: { width: '48.5%', borderWidth: 1, borderStyle: 'dashed', borderRadius: 12, padding: 10, justifyContent: 'center' },
   climaFila: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 },

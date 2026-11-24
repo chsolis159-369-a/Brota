@@ -8,10 +8,24 @@ appId: com.brota.app
       id: "tarea-riego-ejemplo-1"
 - tapOn:
     id: "tarea-riego-ejemplo-1"
-- assertVisible: "Tareas de hoy: 5 de 40 pts posibles por día. Registros, mediciones y estudio suman aparte."
+- scrollUntilVisible:
+    element:
+      text: "Tareas de hoy: 5 de 40 pts posibles por día.*"
+- scrollUntilVisible:
+    element:
+      id: "tarea-med-ejemplo-1"
+    direction: UP
 - tapOn:
     id: "tarea-med-ejemplo-1"
-- assertVisible: "Tareas de hoy: 15 de 40 pts posibles por día. Registros, mediciones y estudio suman aparte."
+- scrollUntilVisible:
+    element:
+      text: "Tareas de hoy: 15 de 40 pts posibles por día.*"
+- scrollUntilVisible:
+    element:
+      id: "tarea-med-ejemplo-1"
+    direction: UP
 - tapOn:
     id: "tarea-med-ejemplo-1"
-- assertVisible: "Tareas de hoy: 5 de 40 pts posibles por día. Registros, mediciones y estudio suman aparte."
+- scrollUntilVisible:
+    element:
+      text: "Tareas de hoy: 5 de 40 pts posibles por día.*"
