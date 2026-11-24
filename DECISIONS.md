@@ -62,7 +62,9 @@ Estos textos describen limitaciones del prototipo web. Se reemplazan cuando lleg
 - Permisos del sistema (en `app.json`; iOS los exige): "BROTA usa tu ubicación aproximada para mostrar el pronóstico del clima de tu zona." y "BROTA usa tus fotos para que sigas la evolución de tus cultivos." Cámara y micrófono quedan apagados.
 
 ## D-13 · Identidad de git
-Los commits se firman con `user.name = chsol` y el email de la cuenta del usuario, configurados solo en este repo (`git config --local`). Se cambia con `git config user.name "…"` y `git config user.email "…"`.
+Los commits se firman con `user.name = chsol` y el email privado de GitHub del usuario (`…@users.noreply.github.com`), configurados solo en este repo (`git config --local`), para que su email personal no quede en el historial. Los commits H0 a H2 se reescribieron con ese email antes de la primera subida. Se cambia con `git config user.name "…"` y `git config user.email "…"`.
+
+Repositorio: `github.com/chsolis159-369-a/brota` (privado).
 
 ## D-14 · Contraste AA sobre los colores del prototipo
 Tres pares del prototipo no llegan a 4,5:1. Se ajusta lo mínimo y el resto de los tokens queda igual (lo verifica `__tests__/tema.test.ts`):
