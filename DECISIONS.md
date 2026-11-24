@@ -93,13 +93,23 @@ Los repositorios reciben un `BaseDatos` con la forma de expo-sqlite. En Jest se 
 - En la lista de días se muestra la máxima de cada día.
 
 ## D-20 · Flujos de Maestro
-Los flujos (`.maestro/`) corren sobre un build release con el JS incluido (`npm run android:release`), sin depender de Metro ni del menú de desarrollo, con `clearState`, todos los permisos denegados salvo la ubicación, que se concede de entrada para que el diálogo del sistema no aparezca en un momento variable y tape la pantalla. Las tareas dependen del pronóstico real, así que los flujos no cuentan tareas: verifican los puntos.
+Los flujos (`.maestro/`) corren sobre un build release con el JS incluido (`npm run android:release`), sin depender de Metro ni del menú de desarrollo, con `clearState` y todos los permisos denegados. El diálogo del permiso de ubicación aparece unos segundos después de abrir Hoy: los flujos lo esperan hasta 10 s y lo rechazan. (Conceder la ubicación no sirve: en el emulador el GPS está apagado y Google muestra su propio diálogo; por eso la app pide la posición con `mayShowUserSettingsDialog: false` y, si falla, usa la ubicación por defecto.) Las tareas dependen del pronóstico real, así que los flujos no cuentan tareas: verifican los puntos.
 
 ## D-21 · Entorno Android en Windows
 SDK en `%LOCALAPPDATA%\Android\Sdk` con las herramientas de línea de comandos (v23); Java de Android Studio (JBR 25). `sdkmanager` está deprecado: los paquetes se instalan con `android sdk install` y nombres con `/` (por ejemplo `platforms/android-37.0`). La compilación de prueba usa solo `x86_64` (la arquitectura del emulador) para tardar menos.
 
 ## D-22 · Sin react-native-reanimated
 La plantilla de Expo trae `react-native-reanimated` y `react-native-worklets`, pero la app no los usa y en Expo Router son opcionales. En Windows su código C++ supera el límite de 260 caracteres de ruta y rompe la compilación de Android. Se quitan del `package.json` y, como npm igual los instala como dependencias pares (de `react-native-drawer-layout` y `expo-modules-core`), `react-native.config.js` los excluye del autolinking: no se compila su código nativo. En el JS de la app no se importan (Expo Router solo los usa en Drawer y en sus mocks de pruebas). Resultado: menos peso y compilación más rápida. Si más adelante hace falta animar algo, primero se usa la API `Animated` de React Native.
+
+## D-24 · Consejos del día con fundamento (pedido del usuario, 2026-11-24)
+Cada consejo del día (los 7 del prototipo, sin cambios) suma un "Por qué:" que explica el mecanismo agronómico: qué le pasa a la raíz, a la planta o a la plaga y por qué funciona la recomendación. Los textos están en `tipsPorque` (i18n). No se citan fuentes puntuales para no atribuir datos a publicaciones no verificadas; si se quieren citas (por ejemplo INTA ProHuerta), las revisa el usuario.
+
+## D-25 · Aprender, Agente y Plan mientras no hay servidor ni cuentas
+Para que no haya pestañas vacías en el APK de prueba:
+- **Aprender** (H3) está completo y funciona sin conexión. La sección Exámenes muestra la lista, el estado y la ficha de cada examen; el botón "Empezar el examen" queda deshabilitado con el aviso "Los exámenes se habilitan en la próxima versión de prueba…" hasta H4 (Supabase).
+- **Agente**: responde con las reglas del prototipo (`src/reglas/agente.ts`) y muestra el aviso del prototipo "Modo de ejemplo sin conexión…". En H5 pasa a Claude conservando esas reglas.
+- **Plan**: como en el prototipo, elegir Pro cambia el plan solo en el teléfono ("El cobro real se conecta después…"), para poder probar las funciones Pro. En H5 lo reemplaza RevenueCat. La prueba local de 14 días del prototipo no se agrega: en la app es una oferta de las tiendas (CLAUDE.md).
+- Privacidad dice "tu teléfono" en lugar de "tu navegador": es lo cierto en esta versión (todo queda en el dispositivo).
 
 ## D-23 · Compilación de Android en GitHub Actions
 En Windows, otros módulos (por ejemplo `react-native-gesture-handler`) también superan los 260 caracteres de ruta al compilar en `C:\Users\…\Desktop\BROTA`; mover el proyecto no alcanza (las rutas llegan a ~350). Se probó que CMake acortara las rutas con `CMAKE_OBJECT_PATH_MAX`, pero el plugin de React Native lo fija en 1024 y no se puede cambiar sin pelear contra él. Activar las rutas largas de Windows requiere cambiar el registro como administrador.

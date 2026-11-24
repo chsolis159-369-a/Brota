@@ -21,6 +21,12 @@ const NUEVOS = new Set([
   'clima.diasSemana.3',
   'cultivo.fotos.ayuda',
   'cultivo.fotos.agregar',
+  // Fundamento de los consejos del día, pedido por el usuario (D-24).
+  'clima.porQue',
+  ...[0, 1, 2, 3, 4, 5, 6].map((i) => `tipsPorque.${i}`),
+  // Versión interina de Aprender, Agente y Plan sin servidor (D-25).
+  'examenes.proximamente',
+  'privacidad.items.1',
 ]);
 
 /** Hojas de un objeto de textos, con su clave completa. */

@@ -15,6 +15,9 @@ import { useDatos } from '@/store/datos';
 
 import { abrirBaseDePrueba } from './ayudas/sqlite-node';
 
+// Estas pruebas montan pantallas completas con SQLite real: en una máquina cargada pueden pasar de 5 s.
+jest.setTimeout(20000);
+
 const mockRouter = { push: jest.fn(), navigate: jest.fn(), back: jest.fn(), replace: jest.fn(), setParams: jest.fn() };
 let mockParams: Record<string, string> = {};
 jest.mock('expo-router', () => ({

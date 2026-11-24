@@ -7,7 +7,154 @@
   "planes": {
     "gratis": "Gratis",
     "pro": "Pro",
-    "verPlanes": "Ver planes"
+    "verPlanes": "Ver planes",
+    "precioGratis": "US$ 0",
+    "precioPro": "US$ 5.99 / mes · o US$ 49.99 / año (ahorrás cerca de 30 %)",
+    "recomendado": "Recomendado",
+    "itemsGratis": {
+      "cultivos": "Hasta {{n}} cultivos propios",
+      "bitacora": "Bitácora y registro rápido",
+      "tareas": "Tareas diarias, logros y racha",
+      "modulos": "{{n}} módulos con test: huerta, nutrición, hidroponía, sustrato inerte, luz y plagas",
+      "examenes": "3 exámenes con nota y repaso de errores",
+      "agente": "Agente con consejos generales"
+    },
+    "itemsPro": [
+      "Todo lo de Gratis, con cultivos ilimitados",
+      "Módulo de diagnóstico avanzado de plagas y carencias",
+      "Examen final con constancia y nivel Maestro de cultivo",
+      "Exportar la bitácora como texto para copiar",
+      "Agente que usa el historial de cada cultivo"
+    ],
+    "actual": "Plan actual",
+    "elegir": "Elegir {{plan}}",
+    "elegirMensual": "Elegir Pro mensual · US$ 5.99",
+    "elegirAnual": "Elegir Pro anual · US$ 49.99",
+    "cobroLocal": "El cobro real se conecta después. Por ahora el cambio es solo local."
+  },
+  "opinion": {
+    "titulo": "Tu opinión de la prueba",
+    "pregunta": "¿Qué tan útil te resulta BROTA hasta ahora?",
+    "placeholder": "¿Qué te gustó? ¿Qué falló o te confundió?",
+    "copiar": "Copiar mi opinión",
+    "aviso": "La app no envía nada sola: pegá el texto en el formulario o mensaje que te indiquemos.",
+    "plan": "Plan: {{plan}}",
+    "mensual": " mensual",
+    "anual": " anual",
+    "calificacion": "Calificación: {{c}}",
+    "sinCalificar": "sin calificar",
+    "cultivos": "Cultivos propios: {{n}}",
+    "modulos": "Módulos aprobados: {{a}} de {{n}}",
+    "examenes": "Exámenes aprobados: {{a}} de {{n}}",
+    "errores": "Errores capturados: {{e}}",
+    "ninguno": "ninguno",
+    "comentario": "Comentario:",
+    "sinComentario": "(sin comentario)"
+  },
+  "privacidad": {
+    "titulo": "Privacidad",
+    "ver": "Ver cómo tratamos tus datos",
+    "ocultar": "Ocultar",
+    "tusDatos": "Tus datos",
+    "version": "Versión de prueba. El texto final de privacidad se publica antes del lanzamiento.",
+    "items": [
+      "Guardamos lo que cargás: cultivos, registros, mediciones, fotos, progreso y resultados de exámenes.",
+      "En esta versión de prueba, los datos quedan en tu teléfono y no se envían a un servidor.",
+      "Podés borrar tu cuenta y todos los datos desde esta pantalla."
+    ],
+    "borrar": "Borrar mi cuenta y todos los datos",
+    "confirmarTexto": "Se eliminan cultivos, bitácora, progreso, exámenes y tareas de este dispositivo. No se puede deshacer.",
+    "confirmar": "Confirmar borrado"
+  },
+  "agente": {
+    "saludo": "Hola, soy tu guía de cultivo. Preguntame lo que quieras o usá las preguntas rápidas.",
+    "preguntasRapidas": "Preguntas rápidas",
+    "chat": "Chat",
+    "placeholder": "Escribí tu pregunta",
+    "enviar": "Enviar",
+    "modoReglas": "Modo de ejemplo sin conexión: las respuestas salen de reglas simples. El guía real se conecta con el backend.",
+    "rapidas": {
+      "0": "Hojas amarillas",
+      "1": "Plagas",
+      "2": "Nutrientes",
+      "3": "Sustrato inerte",
+      "4": "Hidroponía y pH",
+      "5": "Huerta y compost",
+      "6": "Luz LED"
+    },
+    "respuestas": {
+      "negativa": "Solo puedo orientarte sobre cultivo. No doy información sobre dosis, consumo ni venta.",
+      "amarillas": "Las hojas amarillas suelen indicar exceso o falta de riego, carencia de nitrógeno o estrés por luz. Revisá primero el riego y la distancia a la lámpara. Si sigue empeorando, consultá a un especialista.",
+      "plagas": "Revisá el envés de las hojas y aislá la planta afectada mientras investigás. Si la infestación avanza, un especialista puede recomendarte el tratamiento adecuado.",
+      "diagnostico": "Para diagnosticar, ordená las pistas: ¿las hojas afectadas son nuevas o viejas?, ¿el problema es parejo o en manchas?, ¿cómo están el riego, el pH y la luz? Descartá primero lo más simple (riego, luz, pH) antes de pensar en carencias o plagas, y cambiá una sola cosa por vez para saber qué funcionó.",
+      "nutrientes": "Los nutrientes se dividen en macronutrientes (N, P, K, calcio, magnesio y azufre) y micronutrientes (hierro, boro, zinc, etc.). Los móviles (N, P, K y Mg) se notan primero en las hojas viejas; los poco móviles (Ca, Fe y B), en las nuevas. Antes de fertilizar, revisá riego, luz y pH: muchas \"carencias\" son en realidad problemas de pH o de riego.",
+      "inerte": "En sustratos inertes el sustrato no aporta nutrientes, así que el riego con solución es clave. Regá seguido con volúmenes moderados y dejá algo de drenaje para evitar acumulación de sales.",
+      "hidro": "En hidroponía, medí pH y EC de la solución con regularidad (el pH suele mantenerse entre 5,5 y 6,5), ajustá según la etapa y renová la solución para que no se agote ni se concentre. Si la bomba o la aireación fallan, actuá rápido: las raíces se dañan en pocas horas.",
+      "dli": "El DLI es la luz total que recibe la planta en un día: PPFD × horas de luz × 3600 ÷ 1.000.000. Por ejemplo, 300 µmol/m²/s durante 16 horas dan unos 17 mol/m²/día. Como referencia, las hortalizas de hoja suelen andar en 12 a 17 y las de fruto en 20 a 30.",
+      "germinacion": "Sembrá a una profundidad de 2 a 3 veces el diámetro de la semilla y mantené el sustrato húmedo, sin encharcar. Antes de trasplantar afuera, endurecé las plántulas durante 1 a 2 semanas: de a poco más horas al aire libre y menos protección.",
+      "calendario": "Las heladas son el límite de muchos cultivos de verano: tomate, albahaca, pepino y zapallo son muy sensibles. Fijate en qué fecha cae el último riesgo de helada en tu zona (en Argentina, ProHuerta del INTA publica calendarios de siembra por región) y sembrá o trasplantá después, o protegé las plantas con cobertura.",
+      "huerta": "En la huerta, el compost y el acolchado ayudan mucho: mejoran la estructura del suelo y conservan la humedad. Rotá las familias de cultivos año tras año para reducir plagas y enfermedades.",
+      "riego": "Antes de regar, revisá si la tierra o el sustrato está seco a unos centímetros. Regar de más y de menos dan síntomas parecidos, por eso conviene anotar cada riego.",
+      "luz": "Para la luz LED importan la intensidad (PPFD), la altura y las horas de luz. Cada etapa tiene su rango. Cargá la medición y la app te avisa si está fuera de lo recomendado.",
+      "masDatos": "Contame un poco más: qué tipo de planta es, en qué etapa está y qué observás. Mientras tanto, un consejo: {{consejo}}"
+    },
+    "lluvia": " Hay lluvia prevista para mañana: revisá el drenaje de tus plantas de exterior.",
+    "proCultivos": " (Plan {{plan}}: tengo en cuenta tus {{n}} cultivo(s).)",
+    "proUltimo": " En {{nombre}} ({{etapa}}), tu último registro fue: \"{{nota}}\"."
+  },
+  "aprender": {
+    "tuNivel": "Tu nivel",
+    "pts": "pts",
+    "pendiente": "Tenés los puntos para Maestro de cultivo. Para obtenerlo, aprobá el Examen final (Pro).",
+    "faltan": "Te faltan {{n}} puntos para {{nivel}}",
+    "hastaMaestro": " y aprobar el Examen final (Pro)",
+    "maximo": "Llegaste al nivel máximo.",
+    "resumen": "Módulos aprobados: {{a}} de {{n}} · Exámenes aprobados: {{e}} de {{t}}",
+    "nivelChip": "{{t}} · {{min}}",
+    "modulos": "Módulos",
+    "examenes": "Exámenes",
+    "glosario": "Glosario",
+    "bloqueado": "Bloqueado",
+    "aprobadoPrefijo": "✓ Aprobado · ",
+    "sinAprobarPrefijo": "Sin aprobar · ",
+    "mejor": "Mejor: {{pts}} de {{max}} pts",
+    "sinIntentar": "Sin intentar · hasta {{max}} pts",
+    "volverModulos": "← Módulos",
+    "volverAprender": "← Aprender",
+    "leccion": "Lección {{i}} de {{n}}",
+    "comoAprobar": "Para aprobar el módulo tenés que acertar {{a}} de {{n}}. Podés repetir el test: las preguntas cambian.",
+    "hacerTest": "Hacer el test ({{n}} preguntas)",
+    "siguienteLeccion": "Siguiente lección"
+  },
+  "test": {
+    "salir": "Salir del test",
+    "pregunta": "Pregunta {{i}} de {{n}}",
+    "dificultad": {
+      "1": "Básica",
+      "2": "Intermedia",
+      "3": "Trampa"
+    },
+    "etiqueta": "{{dificultad}} · {{pts}} pts",
+    "correcto": "Correcto.",
+    "casi": "Casi.",
+    "siguiente": "Siguiente pregunta",
+    "verPuntaje": "Ver mi puntaje",
+    "resultado": "Resultado · {{modulo}}",
+    "aciertos": "{{a}} de {{n}}",
+    "aprobado": "Módulo aprobado",
+    "sinAprobar": "Sin aprobar todavía",
+    "puntosNuevos": "+{{gan}} pts nuevos · tu mejor marca: {{mejor}} de {{max}}",
+    "mejorMarca": "Solo cuenta tu mejor resultado en cada módulo: repetir el test sirve para aprender, no para sumar de más.",
+    "mensajes": {
+      "perfecto": "Perfecto. Ganaste el bonus de {{bonus}} puntos.",
+      "aprobado": "Aprobaste. Repasá la pregunta que fallaste.",
+      "unAcierto": "Todavía no aprobás: necesitás {{a}} de {{n}}. Volvé a leer las lecciones.",
+      "ninguno": "No pasa nada. Necesitás {{a}} de {{n}} para aprobar: leé el módulo otra vez y probá de nuevo."
+    },
+    "repetir": "Repetir test",
+    "yaPodesRendir": "Ya podés rendir: {{examen}}",
+    "seguirCon": "Seguir con {{modulo}}",
+    "volver": "Volver a módulos"
   },
   "pestanas": {
     "hoy": "Hoy",
@@ -103,7 +250,29 @@
     "huerta": { "t": "Examen de Huerta", "d": "Suelo, compost, germinación, rotación y calendario." },
     "hidro": { "t": "Examen de Hidroponía y nutrición", "d": "Nutrientes, sistemas, solución nutritiva, sustratos y riego." },
     "luzplagas": { "t": "Examen de Luz, ambiente y plagas", "d": "PPFD, DLI, VPD, plagas, MIP y diagnóstico." },
-    "final": { "t": "Examen final BROTA", "d": "Todo el temario, con casos y trampas. Habilita el nivel Maestro de cultivo y la constancia." }
+    "final": { "t": "Examen final BROTA", "d": "Todo el temario, con casos y trampas. Habilita el nivel Maestro de cultivo y la constancia." },
+    "titulo": "Exámenes",
+    "intro": "Miden si de verdad aprendiste: preguntas al azar con las opciones mezcladas, tiempo límite y trampas. Cada acierto suma según su dificultad, cada error resta un tercio y \"No lo sé\" no resta. Se aprueba con {{pct}} %.",
+    "estadoAprobado": "✓ Aprobado · mejor {{pct}} %",
+    "estadoMejor": "Mejor resultado: {{pct}} %",
+    "estadoDisponible": "Disponible · sin intentar",
+    "motivos": {
+      "pro": "Disponible en el plan Pro",
+      "preExamenes": "Primero aprobá: {{lista}}",
+      "modulos": "Aprobá antes el test de: {{lista}}",
+      "agotado": "Ya hiciste {{n}} intentos hoy. Volvé mañana y repasá los módulos."
+    },
+    "volver": "← Exámenes",
+    "reglas": {
+      "preguntas": "{{n}} preguntas elegidas al azar entre {{total}}: cada intento es distinto.",
+      "tiempo": "Tiempo: {{min}} minutos. Si se acaba, se corrige lo que respondiste.",
+      "nota": "Se aprueba con {{pct}} % o más. Cada acierto suma según su dificultad, cada error resta un tercio de ese valor y \"No lo sé\" no suma ni resta.",
+      "intentos": "No se puede volver atrás. Tenés {{n}} intentos por día (hoy llevás {{hoy}}).",
+      "puntos": "La primera vez que aprobás ganás +{{pts}} puntos.",
+      "maestro": "Al aprobar se habilita el nivel Maestro de cultivo y la constancia."
+    },
+    "empezar": "Empezar el examen",
+    "proximamente": "Los exámenes se habilitan en la próxima versión de prueba: necesitan conexión con el servidor."
   },
   "logros": {
     "primero": "Primer registro",
@@ -121,6 +290,7 @@
     "dia": "{{dia}} {{t}} · {{lluvia}}%",
     "grados": "{{t}}°",
     "consejoDelDia": "Consejo del día.",
+    "porQue": "Por qué:",
     "sinPronostico": "Pronóstico no disponible sin conexión.",
     "desc": {
       "soleado": "Soleado",
@@ -141,6 +311,15 @@
     "Anotá cada riego y cada cambio. En un mes vas a ver patrones que hoy no ves.",
     "Con calor fuerte, regá temprano para que la planta tenga agua antes del mediodía.",
     "Si una hoja cambia de color, mirá también la raíz y el riego antes de sumar fertilizante."
+  ],
+  "tipsPorque": [
+    "Las raíces necesitan aire además de agua. Si regás con el sustrato todavía húmedo, los poros quedan llenos de agua, la raíz se asfixia y aparecen pudriciones. En maceta, regar de más es una de las causas más comunes de pérdida de plantas.",
+    "Pulgones, araña roja, mosca blanca y trips se refugian en el envés, protegidos del sol, y ahí ponen sus huevos. Con calor sus poblaciones crecen en pocos días: detectarlas cuando son pocas permite controlarlas con medidas suaves, como retirar hojas o lavar con agua.",
+    "La perlita, la fibra de coco y la lana de roca retienen menos agua que la tierra y no guardan nutrientes. Riegos chicos y seguidos mantienen la humedad y la solución estables, y un poco de drenaje evita que se acumulen sales.",
+    "La intensidad de la luz baja mucho al alejarse de la lámpara. Si medís más arriba o más abajo, el valor no es el que recibe la planta y podés corregir la altura en el sentido equivocado.",
+    "Los síntomas suelen aparecer días después de la causa. Con registros podés relacionar un cambio de riego, fertilizante o luz con lo que pasó después, y no repetir el error.",
+    "A la mañana se evapora menos agua y la planta la tiene disponible para las horas de más calor, cuando más transpira. Regar al mediodía desperdicia agua por evaporación, y regar de noche deja hojas y suelo húmedos más tiempo, lo que favorece hongos.",
+    "El exceso de riego o una raíz dañada impiden absorber nutrientes y dan síntomas parecidos a una carencia. Si se agrega fertilizante en ese caso, suben las sales y el problema empeora."
   ],
   "cultivos": {
     "stats": {

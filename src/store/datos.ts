@@ -4,6 +4,7 @@ import {
   actualizarPerfil,
   agregarFoto as agregarFotoBD,
   alternarTarea as alternarTareaBD,
+  borrarTodosLosDatos,
   cambiarEtapa as cambiarEtapaBD,
   contarCultivosPropios,
   crearCultivo as crearCultivoBD,
@@ -17,8 +18,10 @@ import {
   listarFotos,
   listarMediciones,
   listarRegistros,
+  marcarEstudio,
   medicionVacia,
   obtenerPerfil,
+  registrarResultadoTest,
   sumarAlLedger,
   todasLasTareas,
   type BaseDatos,
@@ -29,7 +32,8 @@ import {
   type Registro,
 } from '@/db';
 import { limiteAlcanzado, notaRegistro, prepararNuevoCultivo, sumaPuntos } from '@/reglas/cultivos';
-import { TOPE_MED_DIA, TOPE_REG_DIA, type Etapa, type PerfilCultivo, type TipoRegistro, type Ubicacion } from '@/reglas/dominio';
+import { TOPE_MED_DIA, TOPE_REG_DIA, type Etapa, type PerfilCultivo, type Plan, type TipoRegistro, type Ubicacion } from '@/reglas/dominio';
+import type { ResultadoTest } from '@/reglas/test';
 import { fechaHora, hoyStr } from '@/reglas/fechas';
 import { numero } from '@/reglas/mediciones';
 import type { EstadoExamen, Ledger, ProgresoModulo } from '@/reglas/puntos';
@@ -76,6 +80,15 @@ type EstadoDatos = {
   medir: (cultivoId: string, f: FormMedicion) => Promise<boolean>;
   agregarFoto: (cultivoId: string, uri: string) => Promise<void>;
   alternarTarea: (tareaId: string) => Promise<void>;
+  /** Preguntas del último test de cada módulo (para no repetirlas). Solo en memoria, como el prototipo. */
+  vistasTest: Record<string, string[]>;
+  recordarVistas: (moduloId: string, preguntas: string[]) => void;
+  /** Guarda el resultado de un test: mejor marca, día de estudio y evento. Devuelve los puntos nuevos. */
+  terminarTest: (moduloId: string, r: ResultadoTest) => Promise<{ gan: number; mejor: number }>;
+  /** Cambio de plan solo en el teléfono (versión de prueba, D-25). */
+  elegirPlanLocal: (plan: Plan) => Promise<void>;
+  /** Borra todos los datos del dispositivo, incluidas las fotos. */
+  borrarTodo: () => Promise<void>;
 };
 
 const PERFIL_INICIAL: Perfil = { onboarded: false, perfil: null, plan: 'gratis', cultivosCreados: 0 };
@@ -203,6 +216,34 @@ export const useDatos = create<EstadoDatos>()((set, get) => ({
 
   async alternarTarea(tareaId) {
     await alternarTareaBD(base(), hoyStr(deps.ahora()), tareaId);
+    await get().recargar();
+  },
+
+  vistasTest: {},
+  recordarVistas(moduloId, preguntas) {
+    set({ vistasTest: { ...get().vistasTest, [moduloId]: preguntas } });
+  },
+
+  async terminarTest(moduloId, r) {
+    const bd = base();
+    const ahora = deps.ahora();
+    const { antes, despues } = await registrarResultadoTest(bd, moduloId, r.aciertos, r.total, ahora);
+    await marcarEstudio(bd, hoyStr(ahora));
+    registrarEvento('modulo_test_fin', { modulo: moduloId, aciertos: r.aciertos, aprobado: r.aprobado, puntos: r.total });
+    await get().recargar();
+    return { gan: Math.max(0, r.total - (antes?.mejorPuntos ?? 0)), mejor: despues.mejorPuntos };
+  },
+
+  async elegirPlanLocal(plan) {
+    await actualizarPerfil(base(), { plan }, deps.ahora());
+    await get().recargar();
+  },
+
+  async borrarTodo() {
+    const fotos = get().cultivos.flatMap((c) => c.fotos.map((f) => f.uri));
+    await borrarTodosLosDatos(base(), deps.ahora());
+    fotos.forEach((u) => deps.borrarArchivo(u));
+    set({ vistasTest: {} });
     await get().recargar();
   },
 }));

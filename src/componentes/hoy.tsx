@@ -91,8 +91,10 @@ export function ClimaConsejo({ ahora }: { ahora: Date }) {
   const { t } = useTranslation();
   const { clima, ciudad } = useClima();
   const tips = t('tips', { returnObjects: true }) as string[];
+  const porque = t('tipsPorque', { returnObjects: true }) as string[];
   const dias = t('clima.diasSemana', { returnObjects: true }) as string[];
-  const tip = tips[ahora.getDate() % tips.length];
+  const i = ahora.getDate() % tips.length;
+  const tip = tips[i];
   return (
     <Tarjeta>
       {clima ? (
@@ -116,6 +118,14 @@ export function ClimaConsejo({ ahora }: { ahora: Date }) {
         <Texto variante="cuerpo">
           <Texto variante="cuerpoFuerte">{t('clima.consejoDelDia')}</Texto> {tip}
         </Texto>
+        {porque[i] ? (
+          <Texto variante="secundario" color="fg" style={estilos.porque}>
+            <Texto variante="secundario" color="fg" style={estilos.negrita}>
+              {t('clima.porQue')}
+            </Texto>{' '}
+            {porque[i]}
+          </Texto>
+        ) : null}
       </Explicacion>
     </Tarjeta>
   );
@@ -190,5 +200,7 @@ const estilos = StyleSheet.create({
   climaFila: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 },
   dias: { marginTop: 6 },
   motivo: { marginTop: 6 },
+  porque: { marginTop: 8 },
+  negrita: { fontFamily: 'NunitoSans_700Bold' },
   botonTarjeta: { marginTop: 8, marginBottom: 0 },
 });

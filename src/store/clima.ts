@@ -23,8 +23,11 @@ async function ubicacion(): Promise<{ lat: number; lon: number; ciudad: string }
     let permiso = await Location.getForegroundPermissionsAsync();
     if (permiso.status === 'undetermined' && permiso.canAskAgain) permiso = await Location.requestForegroundPermissionsAsync();
     if (permiso.status !== 'granted') return UBICACION_POR_DEFECTO;
+    // Sin el diálogo de Google para activar la ubicación precisa: si el GPS está apagado, falla y se
+    // usa la ubicación por defecto en lugar de interrumpir al usuario.
     const pos =
-      (await Location.getLastKnownPositionAsync()) ?? (await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low }));
+      (await Location.getLastKnownPositionAsync()) ??
+      (await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low, mayShowUserSettingsDialog: false }));
     const { latitude: lat, longitude: lon } = pos.coords;
     let ciudad = UBICACION_POR_DEFECTO.ciudad;
     try {
