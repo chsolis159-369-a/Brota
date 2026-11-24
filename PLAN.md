@@ -6,7 +6,7 @@ Cerrado el 2026-11-23 sobre el prototipo v9 (`prueba 0.9`). Reglas en `CLAUDE.md
 |---|---|
 | H0 · Referencias, contenido, auditoría y pruebas del prototipo | hecho |
 | H1 · Base Expo, tema, navegación y datos locales | hecho |
-| H2 · Hoy y Cultivos | hecho (Jest); flujos de Maestro en GitHub Actions |
+| H2 · Hoy y Cultivos | hecho (Jest 440, Maestro 4/4 en GitHub Actions) |
 | H3 · Reglas y Aprender | pendiente |
 | H4 · Exámenes en el servidor y constancia | pendiente |
 | H5 · Plan y Agente | pendiente |
@@ -22,7 +22,7 @@ Cerrado el 2026-11-23 sobre el prototipo v9 (`prueba 0.9`). Reglas en `CLAUDE.md
 | Expo Go en tu teléfono | ver la app en H1 (sin compras ni módulos nativos propios) | H1 | opcional |
 | Android Studio + SDK + emulador | emulador local; compilar en esta PC exige rutas largas de Windows (D-23) | H2 | instalado |
 | Maestro CLI | flujos móviles en Android | H2 | instalado (2.12.1) |
-| GitHub (repositorio privado) + Actions | compilar el APK y correr Maestro en Linux (D-23) | H2 | en curso |
+| GitHub (repositorio privado) + Actions | compilar el APK y correr Maestro en Linux (D-23) | H2 | funcionando |
 | Docker Desktop | Supabase local (`supabase start`) para probar Edge Functions | H4 | falta |
 
 Sin Mac: los builds de iOS se hacen en EAS y los flujos de Maestro en iOS corren en EAS Workflows.
