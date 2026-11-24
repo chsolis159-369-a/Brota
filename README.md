@@ -10,20 +10,20 @@ Bitácora de cultivo con aprendizaje, exámenes y suscripción Pro, para iOS y A
 
 ## Requisitos
 
-- Node.js LTS (probado con 26.13.1) y npm
-- Android: Android Studio (su Java, JBR) y el SDK en `%LOCALAPPDATA%\Android\Sdk` con
-  `platforms/android-37.0`, `build-tools/37.0.0`, `ndk/27.1.12297006` y un emulador
-  (`system-images/android-36/google_apis/x86_64`). Variables `ANDROID_HOME` y `JAVA_HOME`.
-- Maestro CLI para los flujos (`.maestro/`)
+- Node.js LTS (probado con 26.13.1), npm, Git y la CLI de GitHub (`gh`)
+- No hace falta Android Studio en la PC: el APK y los flujos de Maestro se compilan y corren en
+  GitHub Actions (D-21, D-23). Para probar en un teléfono, se descarga el artefacto `brota-apk`.
 
 ## Primeros pasos
 
 ```bash
 npm install
-npm run android          # development build en el emulador + Metro
-npm run android:release  # build release con el JS incluido (para Maestro)
-npm run test:e2e         # flujos de Maestro (con el emulador abierto y la app instalada)
+npm run verificar        # tipos, lint, contenido y pruebas, como en GitHub
+git push                 # dispara GitHub Actions: APK + Maestro
 ```
+
+Si alguna vez se instala Android localmente: `npm run android` (development build en el emulador),
+`npm run android:release` (build con el JS incluido) y `npm run test:e2e` (Maestro).
 
 ## Scripts
 

@@ -20,10 +20,10 @@ Cerrado el 2026-11-23 sobre el prototipo v9 (`prueba 0.9`). Reglas en `CLAUDE.md
 | Node.js LTS (26.13.1) + npm | Expo, Jest, scripts | H1 | instalado |
 | Git (2.56.1) | un commit por hito | H1 | instalado |
 | Expo Go en tu teléfono | ver la app en H1 (sin compras ni módulos nativos propios) | H1 | opcional |
-| Android Studio + SDK + emulador | emulador local; compilar en esta PC exige rutas largas de Windows (D-23) | H2 | instalado |
-| Maestro CLI | flujos móviles en Android | H2 | instalado (2.12.1) |
+| Android Studio + SDK + emulador | no se usan en la PC: el APK se compila en GitHub Actions (D-21, D-23) | H2 | desinstalado |
+| Maestro CLI | flujos móviles en Android, en GitHub Actions | H2 | en CI |
 | GitHub (repositorio privado) + Actions | compilar el APK y correr Maestro en Linux (D-23) | H2 | funcionando |
-| Docker Desktop | Supabase local (`supabase start`) para probar Edge Functions | H4 | falta |
+| Supabase local (Docker) | probar Edge Functions; corre en GitHub Actions, no en la PC (poco disco) | H4 | en CI |
 
 Sin Mac: los builds de iOS se hacen en EAS y los flujos de Maestro en iOS corren en EAS Workflows.
 
