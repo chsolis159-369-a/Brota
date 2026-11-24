@@ -1,0 +1,66 @@
+# Edge Functions y base de datos de Supabase (D-27).
+# - revisar: siempre; chequea con Deno el código de las funciones.
+# - desplegar: solo si el repositorio tiene configurado el proyecto de Supabase (variables y secretos de
+#   GitHub, ver README): aplica las migraciones, carga los secretos de las funciones y las publica.
+name: Supabase
+
+on:
+  push:
+    branches: [main]
+    paths: ['supabase/**', '.github/workflows/supabase.yml']
+  workflow_dispatch:
+
+concurrency:
+  group: supabase-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  revisar:
+    name: Chequeo de las funciones (Deno)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Tipos de la función agente
+        run: deno check --config supabase/functions/agente/deno.json supabase/functions/agente/index.ts
+
+  desplegar:
+    name: Migraciones, secretos y publicación
+    needs: revisar
+    if: ${{ vars.SUPABASE_PROJECT_REF != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      PROYECTO: ${{ vars.SUPABASE_PROJECT_REF }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: supabase/setup-cli@v3
+        with:
+          version: 3.3.0
+      - name: Vincular el proyecto
+        run: supabase link --project-ref "$PROYECTO" --password "$SUPABASE_DB_PASSWORD"
+      - name: Migraciones de la base
+        run: supabase db push --password "$SUPABASE_DB_PASSWORD"
+      - name: Secretos de las funciones (nunca van en la app)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
+          REVENUECAT_SECRET_KEY: ${{ secrets.REVENUECAT_SECRET_KEY }}
+        run: |
+          archivo="$RUNNER_TEMP/funciones.env"
+          : > "$archivo"
+          [ -n "$ANTHROPIC_API_KEY" ] && printf 'ANTHROPIC_API_KEY=%s\n' "$ANTHROPIC_API_KEY" >> "$archivo"
+          [ -n "$ANTHROPIC_MODEL" ] && printf 'ANTHROPIC_MODEL=%s\n' "$ANTHROPIC_MODEL" >> "$archivo"
+          [ -n "$REVENUECAT_SECRET_KEY" ] && printf 'REVENUECAT_SECRET_KEY=%s\n' "$REVENUECAT_SECRET_KEY" >> "$archivo"
+          if [ -s "$archivo" ]; then supabase secrets set --env-file "$archivo" --project-ref "$PROYECTO"; fi
+          rm -f "$archivo"
+      - name: Publicar la función agente
+        run: supabase functions deploy agente --project-ref "$PROYECTO"

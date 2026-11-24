@@ -58,6 +58,9 @@ jobs:
         working-directory: android
         env:
           NODE_ENV: production
+          # Públicas (van en la app): con ellas se activa el Agente con IA. Sin ellas, la app funciona sin servidor.
+          EXPO_PUBLIC_SUPABASE_URL: ${{ vars.EXPO_PUBLIC_SUPABASE_URL }}
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.EXPO_PUBLIC_SUPABASE_ANON_KEY }}
         run: ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a,x86_64 --no-daemon
 
       - name: Guardar el APK

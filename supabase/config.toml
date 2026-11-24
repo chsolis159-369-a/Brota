@@ -1,0 +1,7 @@
+# Configuración mínima de Supabase para BROTA. El proyecto real se vincula en GitHub Actions
+# con `supabase link --project-ref` (ver .github/workflows/supabase.yml).
+project_id = "brota"
+
+[functions.agente]
+# Exige un JWT válido de Supabase (sesión anónima o con cuenta).
+verify_jwt = true

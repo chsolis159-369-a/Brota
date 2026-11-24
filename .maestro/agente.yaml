@@ -1,4 +1,6 @@
-# Agente por reglas (D-25): pregunta rápida y negativa ante dosis, consumo o venta.
+# Agente: pregunta rápida y negativa ante dosis, consumo o venta.
+# Con servidor responde la IA (texto variable) y sin servidor, las reglas (D-25, D-27): el flujo verifica
+# lo que es igual en los dos modos. La negativa siempre la resuelve la app, sin llamar a la IA.
 appId: com.brota.app
 ---
 - runFlow: comun/onboarding.yaml
@@ -8,9 +10,9 @@ appId: com.brota.app
       id: "pregunta-0"
 - tapOn:
     id: "pregunta-0"
-- scrollUntilVisible:
-    element:
-      text: "Las hojas amarillas suelen indicar.*"
+- extendedWaitUntil:
+    notVisible: "Pensando…"
+    timeout: 30000
 - scrollUntilVisible:
     element:
       id: "campo-pregunta"

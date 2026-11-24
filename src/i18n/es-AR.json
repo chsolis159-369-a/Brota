@@ -73,6 +73,10 @@
     "placeholder": "Escribí tu pregunta",
     "enviar": "Enviar",
     "modoReglas": "Modo de ejemplo sin conexión: las respuestas salen de reglas simples. El guía real se conecta con el backend.",
+    "modoIA": "El guía usa inteligencia artificial y responde solo sobre cultivo. Puede equivocarse: ante un problema grave, consultá a un técnico.",
+    "pensando": "Pensando…",
+    "limite": "Llegaste al límite de preguntas al guía por hoy. Mañana podés seguir; mientras tanto, repasá los módulos de Aprender.",
+    "sinConexion": "No pude conectarme con el guía. Te respondo con reglas simples:",
     "rapidas": {
       "0": "Hojas amarillas",
       "1": "Plagas",

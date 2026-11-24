@@ -27,6 +27,11 @@ const NUEVOS = new Set([
   // Versión interina de Aprender, Agente y Plan sin servidor (D-25).
   'examenes.proximamente',
   'privacidad.items.1',
+  // Agente con IA (D-27).
+  'agente.modoIA',
+  'agente.pensando',
+  'agente.limite',
+  'agente.sinConexion',
 ]);
 
 /** Hojas de un objeto de textos, con su clave completa. */

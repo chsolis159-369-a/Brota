@@ -48,6 +48,26 @@ Si alguna vez se instala Android localmente: `npm run android` (development buil
 
 En Windows la compilación local de Android choca con el límite de 260 caracteres de ruta (D-23); por eso se compila en Linux.
 
+## Activar el Agente con IA (Supabase + Claude)
+
+El Agente responde con IA a través de la Edge Function `agente` (D-27). Para activarlo:
+
+1. **Supabase** (https://supabase.com): crear un proyecto. En *Authentication → Sign In / Providers*, activar **Allow anonymous sign-ins**.
+2. **Anthropic** (https://console.anthropic.com): crear una API key y, recomendado, fijar un límite de gasto mensual.
+3. **GitHub** → el repositorio → *Settings → Secrets and variables → Actions*:
+   - Pestaña **Variables** (públicas):
+     - `SUPABASE_PROJECT_REF`: el *Reference ID* del proyecto (está en la URL: `https://<ref>.supabase.co`).
+     - `EXPO_PUBLIC_SUPABASE_URL`: `https://<ref>.supabase.co`.
+     - `EXPO_PUBLIC_SUPABASE_ANON_KEY`: la clave pública (*publishable* o *anon*) de *Project Settings → API Keys*.
+   - Pestaña **Secrets** (privados):
+     - `SUPABASE_ACCESS_TOKEN`: de *Account → Access Tokens* en Supabase.
+     - `SUPABASE_DB_PASSWORD`: la contraseña de la base que se eligió al crear el proyecto.
+     - `ANTHROPIC_API_KEY`: la API key de Anthropic.
+4. Correr el workflow **Supabase** (*Actions → Supabase → Run workflow*): aplica la migración, carga los secretos y publica la función.
+5. El siguiente APK que compile GitHub ya trae el Agente con IA.
+
+Las claves secretas nunca se pegan en el código ni en el chat: van solo en *Secrets* de GitHub. También se pueden cargar desde la terminal con `gh secret set NOMBRE` (pide el valor sin mostrarlo).
+
 ## Variables de entorno
 
 Se cargan desde `.env` (ver `.env.example`). Nunca se commitean valores.

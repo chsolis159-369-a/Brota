@@ -9,7 +9,7 @@ Cerrado el 2026-11-23 sobre el prototipo v9 (`prueba 0.9`). Reglas en `CLAUDE.md
 | H2 · Hoy y Cultivos | hecho (Jest 440, Maestro 4/4 en GitHub Actions) |
 | H3 · Reglas y Aprender | hecho (más Agente por reglas y Plan sin servidor, D-25) |
 | H4 · Exámenes en el servidor y constancia | pendiente |
-| H5 · Plan y Agente | pendiente |
+| H5 · Plan y Agente | Agente con IA listo (falta cargar las cuentas, D-27); RevenueCat pendiente |
 | H6 · Sincronización, cuenta, observabilidad y builds | pendiente |
 
 ## 0. Prerrequisitos
