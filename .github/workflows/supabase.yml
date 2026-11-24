@@ -54,10 +54,12 @@ jobs:
             -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H 'Content-Type: application/json' \
             -d '{"external_anonymous_users_enabled": true}')
           if [ "$estado" -ge 200 ] && [ "$estado" -lt 300 ]; then echo "Sesiones anónimas activadas."; else echo "::warning::No se pudieron activar las sesiones anónimas (HTTP $estado): activalas a mano en Supabase."; fi
+      # CLI 3: los comandos sobre el proyecto usan el vinculado (o --remote) y los cambios en el servidor
+      # piden confirmación, que en GitHub se da con --yes.
       - name: Vincular el proyecto
-        run: supabase link --project-ref "$PROYECTO" --password "$SUPABASE_DB_PASSWORD"
+        run: supabase link --project-ref "$PROYECTO"
       - name: Migraciones de la base
-        run: supabase db push --password "$SUPABASE_DB_PASSWORD"
+        run: supabase db push --remote --password "$SUPABASE_DB_PASSWORD" --yes
       - name: Secretos de las funciones (nunca van en la app)
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -69,7 +71,7 @@ jobs:
           [ -n "$ANTHROPIC_API_KEY" ] && printf 'ANTHROPIC_API_KEY=%s\n' "$ANTHROPIC_API_KEY" >> "$archivo"
           [ -n "$ANTHROPIC_MODEL" ] && printf 'ANTHROPIC_MODEL=%s\n' "$ANTHROPIC_MODEL" >> "$archivo"
           [ -n "$REVENUECAT_SECRET_KEY" ] && printf 'REVENUECAT_SECRET_KEY=%s\n' "$REVENUECAT_SECRET_KEY" >> "$archivo"
-          if [ -s "$archivo" ]; then supabase secrets set --env-file "$archivo" --project-ref "$PROYECTO"; fi
+          if [ -s "$archivo" ]; then supabase secrets set --env-file "$archivo" --yes; fi
           rm -f "$archivo"
       - name: Publicar la función agente
-        run: supabase functions deploy agente --project-ref "$PROYECTO"
+        run: supabase functions deploy agente --use-api --yes
