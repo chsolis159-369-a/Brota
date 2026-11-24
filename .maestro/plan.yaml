@@ -1,0 +1,31 @@
+# Plan (D-25): elegir Pro (cambio local de la versión de prueba) y borrar la cuenta con confirmación (D-26).
+appId: com.brota.app
+---
+- runFlow: comun/onboarding.yaml
+- tapOn: "Plan"
+- assertVisible: "Planes"
+- scrollUntilVisible:
+    element:
+      id: "elegir-pro-mensual"
+- tapOn:
+    id: "elegir-pro-mensual"
+- scrollUntilVisible:
+    element:
+      text: "Plan actual"
+- scrollUntilVisible:
+    element:
+      id: "borrar-cuenta"
+- tapOn:
+    id: "borrar-cuenta"
+- scrollUntilVisible:
+    element:
+      text: "Se eliminan cultivos, bitácora, progreso, exámenes y tareas de este dispositivo.*"
+- scrollUntilVisible:
+    element:
+      id: "confirmar-borrado"
+- tapOn:
+    id: "confirmar-borrado"
+- tapOn: "Hoy"
+- scrollUntilVisible:
+    element:
+      text: "Todavía no tenés cultivos. Creá uno para recibir tareas diarias."

@@ -139,8 +139,9 @@ export function TarjetasRecomendacion({ r, intentado }: { r: Recomendacion; inte
   const empezar = (id: string) => (
     <Boton
       texto={intentado(id) ? t('recomendacion.retomar') : t('recomendacion.empezar')}
-      onPress={() => router.navigate('/aprender')}
+      onPress={() => router.navigate({ pathname: '/aprender/modulo/[id]', params: { id } })}
       style={estilos.botonTarjeta}
+      testID={`empezar-${id}`}
     />
   );
   return (
@@ -172,7 +173,12 @@ export function TarjetasRecomendacion({ r, intentado }: { r: Recomendacion; inte
           <Texto variante="secundario">{t('recomendacion.yaPodesRendir')}</Texto>
           <Texto variante="cuerpoFuerte">{t(`examenes.${r.examen.id}.t`)}</Texto>
           <Texto variante="secundario">{t(`examenes.${r.examen.id}.d`)}</Texto>
-          <Boton texto={t('recomendacion.verExamen')} variante="fantasma" onPress={() => router.navigate('/aprender')} style={estilos.botonTarjeta} />
+          <Boton
+            texto={t('recomendacion.verExamen')}
+            variante="fantasma"
+            onPress={() => router.navigate({ pathname: '/aprender/examen/[id]', params: { id: r.examen!.id } })}
+            style={estilos.botonTarjeta}
+          />
         </Tarjeta>
       ) : null}
     </>

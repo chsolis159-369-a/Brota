@@ -13,11 +13,13 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
 import { NOMBRE_BD, prepararBaseDatos } from '@/db';
+import { capturarErrores } from '@/servicios/errores';
 import { borrarArchivo } from '@/servicios/fotos';
 import { useDatos } from '@/store/datos';
 import { useTema } from '@/tema/useTema';
 
 void SplashScreen.preventAutoHideAsync();
+capturarErrores();
 
 /** Carga los datos locales (perfil, cultivos, actividad y progreso) al abrir la app. */
 function CargarDatos() {

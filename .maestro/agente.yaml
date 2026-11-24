@@ -1,0 +1,28 @@
+# Agente por reglas (D-25): pregunta rápida y negativa ante dosis, consumo o venta.
+appId: com.brota.app
+---
+- runFlow: comun/onboarding.yaml
+- tapOn: "Agente"
+- scrollUntilVisible:
+    element:
+      id: "pregunta-0"
+- tapOn:
+    id: "pregunta-0"
+- scrollUntilVisible:
+    element:
+      text: "Las hojas amarillas suelen indicar.*"
+- scrollUntilVisible:
+    element:
+      id: "campo-pregunta"
+- tapOn:
+    id: "campo-pregunta"
+- inputText: "que dosis uso"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "enviar-pregunta"
+- tapOn:
+    id: "enviar-pregunta"
+- scrollUntilVisible:
+    element:
+      text: "Solo puedo orientarte sobre cultivo. No doy información sobre dosis, consumo ni venta."

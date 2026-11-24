@@ -115,3 +115,6 @@ Para que no haya pestañas vacías en el APK de prueba:
 - **Agente**: responde con las reglas del prototipo (`src/reglas/agente.ts`) y muestra el aviso del prototipo "Modo de ejemplo sin conexión…". En H5 pasa a Claude conservando esas reglas.
 - **Plan**: como en el prototipo, elegir Pro cambia el plan solo en el teléfono ("El cobro real se conecta después…"), para poder probar las funciones Pro. En H5 lo reemplaza RevenueCat. La prueba local de 14 días del prototipo no se agrega: en la app es una oferta de las tiendas (CLAUDE.md).
 - Privacidad dice "tu teléfono" en lugar de "tu navegador": es lo cierto en esta versión (todo queda en el dispositivo).
+
+## D-26 · Borrar la cuenta: enlace chico con confirmación (pedido del usuario, 2026-11-24)
+En el prototipo "Borrar mi cuenta y todos los datos" es un botón grande. A pedido del usuario, en la app es un enlace de texto chico, en rojo y subrayado, al final de Plan, para que no se toque sin querer. Mantiene el área táctil de 44 px (accesibilidad) y siempre pide confirmación ("Se eliminan cultivos, bitácora, progreso, exámenes y tareas de este dispositivo. No se puede deshacer." → "Confirmar borrado"). El texto no cambia.

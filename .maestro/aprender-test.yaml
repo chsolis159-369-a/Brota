@@ -1,0 +1,48 @@
+# Aprender: abrir un módulo, leer las lecciones, hacer el test de 3 preguntas y ver el resultado.
+# Las opciones se mezclan en cada aparición: el flujo elige la primera y verifica el resultado, no la nota.
+appId: com.brota.app
+---
+- runFlow: comun/onboarding.yaml
+- tapOn: "Aprender"
+- assertVisible: "Tu nivel"
+- assertVisible: "Te faltan 60 puntos para Aprendiz."
+- scrollUntilVisible:
+    element:
+      id: "modulo-suelo"
+- tapOn:
+    id: "modulo-suelo"
+- assertVisible: "Lección 1 de 3"
+- repeat:
+    times: 3
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "leccion-siguiente"
+      - tapOn:
+          id: "leccion-siguiente"
+- repeat:
+    times: 3
+    commands:
+      - tapOn:
+          id: "opcion-0"
+      - scrollUntilVisible:
+          element:
+            id: "test-siguiente"
+      - tapOn:
+          id: "test-siguiente"
+- assertVisible: "Resultado · Suelo, compost y acolchado"
+- scrollUntilVisible:
+    element:
+      text: "Solo cuenta tu mejor resultado en cada módulo.*"
+- scrollUntilVisible:
+    element:
+      id: "volver-modulos"
+- tapOn:
+    id: "volver-modulos"
+- assertVisible: "Tu nivel"
+- scrollUntilVisible:
+    element:
+      id: "glosario"
+- tapOn:
+    id: "glosario"
+- assertVisible: "PPFD"

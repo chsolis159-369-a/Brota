@@ -7,7 +7,7 @@ Cerrado el 2026-11-23 sobre el prototipo v9 (`prueba 0.9`). Reglas en `CLAUDE.md
 | H0 · Referencias, contenido, auditoría y pruebas del prototipo | hecho |
 | H1 · Base Expo, tema, navegación y datos locales | hecho |
 | H2 · Hoy y Cultivos | hecho (Jest 440, Maestro 4/4 en GitHub Actions) |
-| H3 · Reglas y Aprender | pendiente |
+| H3 · Reglas y Aprender | hecho (más Agente por reglas y Plan sin servidor, D-25) |
 | H4 · Exámenes en el servidor y constancia | pendiente |
 | H5 · Plan y Agente | pendiente |
 | H6 · Sincronización, cuenta, observabilidad y builds | pendiente |
