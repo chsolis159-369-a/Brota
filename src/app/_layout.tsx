@@ -12,21 +12,19 @@ import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
-import { NOMBRE_BD, obtenerPerfil, prepararBaseDatos } from '@/db';
-import { useApp } from '@/store/app';
+import { NOMBRE_BD, prepararBaseDatos } from '@/db';
+import { borrarArchivo } from '@/servicios/fotos';
+import { useDatos } from '@/store/datos';
 import { useTema } from '@/tema/useTema';
 
 void SplashScreen.preventAutoHideAsync();
 
-/** Lee el perfil local y carga el plan en el estado de la app. */
-function CargarPerfil() {
+/** Carga los datos locales (perfil, cultivos, actividad y progreso) al abrir la app. */
+function CargarDatos() {
   const db = useSQLiteContext();
-  const setPlan = useApp((s) => s.setPlan);
   useEffect(() => {
-    void obtenerPerfil(db).then((p) => {
-      if (p) setPlan(p.plan);
-    });
-  }, [db, setPlan]);
+    void useDatos.getState().cargar(db, { borrarArchivo });
+  }, [db]);
   return null;
 }
 
@@ -54,7 +52,7 @@ export default function RaizLayout() {
   return (
     <SQLiteProvider databaseName={NOMBRE_BD} onInit={prepararBaseDatos}>
       <ThemeProvider value={temaNavegacion}>
-        <CargarPerfil />
+        <CargarDatos />
         <StatusBar style={modo === 'oscuro' ? 'light' : 'dark'} />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg } }} />
       </ThemeProvider>

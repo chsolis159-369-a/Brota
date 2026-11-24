@@ -6,7 +6,7 @@ Cerrado el 2026-11-23 sobre el prototipo v9 (`prueba 0.9`). Reglas en `CLAUDE.md
 |---|---|
 | H0 · Referencias, contenido, auditoría y pruebas del prototipo | hecho |
 | H1 · Base Expo, tema, navegación y datos locales | hecho |
-| H2 · Hoy y Cultivos | pendiente |
+| H2 · Hoy y Cultivos | hecho (Jest); flujos de Maestro en GitHub Actions |
 | H3 · Reglas y Aprender | pendiente |
 | H4 · Exámenes en el servidor y constancia | pendiente |
 | H5 · Plan y Agente | pendiente |
@@ -20,8 +20,9 @@ Cerrado el 2026-11-23 sobre el prototipo v9 (`prueba 0.9`). Reglas en `CLAUDE.md
 | Node.js LTS (26.13.1) + npm | Expo, Jest, scripts | H1 | instalado |
 | Git (2.56.1) | un commit por hito | H1 | instalado |
 | Expo Go en tu teléfono | ver la app en H1 (sin compras ni módulos nativos propios) | H1 | opcional |
-| Android Studio + JDK 17 + emulador | development build local y Maestro en Android | H2 | falta |
-| Maestro CLI | flujos móviles en Android | H2 | falta |
+| Android Studio + SDK + emulador | emulador local; compilar en esta PC exige rutas largas de Windows (D-23) | H2 | instalado |
+| Maestro CLI | flujos móviles en Android | H2 | instalado (2.12.1) |
+| GitHub (repositorio privado) + Actions | compilar el APK y correr Maestro en Linux (D-23) | H2 | en curso |
 | Docker Desktop | Supabase local (`supabase start`) para probar Edge Functions | H4 | falta |
 
 Sin Mac: los builds de iOS se hacen en EAS y los flujos de Maestro en iOS corren en EAS Workflows.
@@ -115,6 +116,7 @@ Scripts: `npm test`, `npm run lint:contenido`, `npm run contenido:check` (modulo
 - Puntos de tareas, registros y mediciones a través del ledger con topes. Cultivos de ejemplo según D-11.
 - Eventos `cultivo_creado` y `registro_creado`.
 - **Pruebas**: Jest de tareas, ledger, racha, logros, VPD/PPFD y salud del cultivo (portadas de las secciones 3 a 6 y 18 de las pruebas del prototipo). Maestro: onboarding, crear cultivo, registrar, medir, tope de 2 cultivos.
+- **Hecho además**: `src/reglas` ya incluye niveles, desbloqueo de módulos, habilitación de exámenes, logros y recomendación (Hoy los necesita); en H3 se suma el test de módulo y el resto de la aceptación. Compilación y Maestro en GitHub Actions (D-23).
 
 ### H3 — Reglas y Aprender
 - `src/reglas/` completo. Las comprobaciones de reglas de `reference/pruebas-prototipo-v9.js` se portan a Jest contra `src/reglas` (`__tests__/aceptacion/`, con los mismos nombres), incluidas las 3 de "Discrepancias", que ahí tienen que pasar.

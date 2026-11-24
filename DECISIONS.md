@@ -55,6 +55,12 @@ Estos textos describen limitaciones del prototipo web. Se reemplazan cuando lleg
 | "Se eliminan cultivos, bitácora, progreso, exámenes y tareas de este dispositivo." | "…de este dispositivo y de nuestros servidores." | H6 |
 | "La app no envía nada sola: pegá el texto en el formulario o mensaje que te indiquemos." | "Enviar mi opinión" (tabla `feedback`) | H6 |
 
+**Textos nuevos (no están en el prototipo)**, aprobados por el mismo criterio. `__tests__/textos.test.ts` exige que cada uno figure en su lista:
+- "Agregar foto" (botón; el prototipo usaba el selector de archivos del navegador).
+- "Pronóstico no disponible sin conexión." (sin pronóstico guardado).
+- Clima: "Niebla", "Nieve", "Tormenta" y los días "Lun", "Mar", "Mié" (D-19).
+- Permisos del sistema (en `app.json`; iOS los exige): "BROTA usa tu ubicación aproximada para mostrar el pronóstico del clima de tu zona." y "BROTA usa tus fotos para que sigas la evolución de tus cultivos." Cámara y micrófono quedan apagados.
+
 ## D-13 · Identidad de git
 Los commits se firman con `user.name = chsol` y el email de la cuenta del usuario, configurados solo en este repo (`git config --local`). Se cambia con `git config user.name "…"` y `git config user.email "…"`.
 
@@ -75,3 +81,25 @@ Por ahora se usan los íconos de la plantilla de Expo, con los colores de fondo 
 
 ## D-18 · Pruebas de la base de datos
 Los repositorios reciben un `BaseDatos` con la forma de expo-sqlite. En Jest se usa un adaptador sobre `node:sqlite` (SQLite real en memoria, incluido en Node), así que las pruebas verifican el SQL, las restricciones `CHECK`, las claves foráneas y las transacciones sin módulos nativos.
+
+## D-19 · Clima
+- Proveedor: Open-Meteo detrás de `ProveedorClima` (`src/servicios/clima.ts`). Su plan gratis es no comercial: hay que cambiarlo antes de publicar con suscripciones.
+- Ubicación: se pide el permiso de ubicación aproximada la primera vez que se abre Hoy. Sin permiso (o si falla), se usa Buenos Aires.
+- El pronóstico se guarda (almacén clave-valor de expo-sqlite) y se vuelve a pedir si tiene más de una hora. Sin conexión se muestra el último guardado; si nunca hubo uno, "Pronóstico no disponible sin conexión."
+- "Mañana hay lluvia" (tarea de drenaje) usa la probabilidad máxima de lluvia de mañana ≥ 60 %, como el prototipo.
+- Descripciones del tiempo (códigos WMO) con las palabras del prototipo: Soleado, Parcialmente nublado, Nublado y Lluvia (también para llovizna y chaparrones). Se suman Niebla, Nieve y Tormenta.
+- En la lista de días se muestra la máxima de cada día.
+
+## D-20 · Flujos de Maestro
+Los flujos (`.maestro/`) corren sobre un build release con el JS incluido (`npm run android:release`), sin depender de Metro ni del menú de desarrollo, con `clearState` y todos los permisos denegados (el clima usa la ubicación por defecto). Las tareas dependen del pronóstico real, así que los flujos no cuentan tareas: verifican los puntos.
+
+## D-21 · Entorno Android en Windows
+SDK en `%LOCALAPPDATA%\Android\Sdk` con las herramientas de línea de comandos (v23); Java de Android Studio (JBR 25). `sdkmanager` está deprecado: los paquetes se instalan con `android sdk install` y nombres con `/` (por ejemplo `platforms/android-37.0`). La compilación de prueba usa solo `x86_64` (la arquitectura del emulador) para tardar menos.
+
+## D-22 · Sin react-native-reanimated
+La plantilla de Expo trae `react-native-reanimated` y `react-native-worklets`, pero la app no los usa y en Expo Router son opcionales. En Windows su código C++ supera el límite de 260 caracteres de ruta y rompe la compilación de Android. Se quitan del `package.json` y, como npm igual los instala como dependencias pares (de `react-native-drawer-layout` y `expo-modules-core`), `react-native.config.js` los excluye del autolinking: no se compila su código nativo. En el JS de la app no se importan (Expo Router solo los usa en Drawer y en sus mocks de pruebas). Resultado: menos peso y compilación más rápida. Si más adelante hace falta animar algo, primero se usa la API `Animated` de React Native.
+
+## D-23 · Compilación de Android en GitHub Actions
+En Windows, otros módulos (por ejemplo `react-native-gesture-handler`) también superan los 260 caracteres de ruta al compilar en `C:\Users\…\Desktop\BROTA`; mover el proyecto no alcanza (las rutas llegan a ~350). Se probó que CMake acortara las rutas con `CMAKE_OBJECT_PATH_MAX`, pero el plugin de React Native lo fija en 1024 y no se puede cambiar sin pelear contra él. Activar las rutas largas de Windows requiere cambiar el registro como administrador.
+Decisión del usuario (2026-11-24): compilar y probar en **GitHub Actions** (Linux, sin ese límite y con más memoria), en un repositorio privado. `.github/workflows/android.yml` corre `npm run verificar`, compila el APK release y corre los flujos de Maestro en un emulador; el APK y los resultados quedan como artefactos. Si alguna vez se quiere compilar en esta PC, hay que activar `LongPathsEnabled` (CMake 3.31.6 con ninja 1.12.1 ya está instalada en el SDK).
+

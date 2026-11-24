@@ -1,4 +1,8 @@
+import type { DiaLedger, Ledger } from '@/reglas/puntos';
+
 import type { BaseDatos } from '../tipos';
+
+export type { DiaLedger, Ledger };
 
 /* ---------- Tareas hechas (tareasPorDia del prototipo) ---------- */
 
@@ -29,9 +33,6 @@ export async function alternarTarea(db: BaseDatos, dia: string, tareaId: string)
 }
 
 /* ---------- Ledger de puntos por día (no se pierde al borrar un cultivo) ---------- */
-
-export type DiaLedger = { r: number; m: number };
-export type Ledger = { dias: Record<string, DiaLedger>; creados: number };
 
 export async function leerLedger(db: BaseDatos): Promise<Ledger> {
   const filas = await db.getAllAsync<{ dia: string; r: number; m: number }>('SELECT dia, r, m FROM ledger_dias');

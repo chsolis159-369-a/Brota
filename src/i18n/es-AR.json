@@ -6,7 +6,8 @@
   },
   "planes": {
     "gratis": "Gratis",
-    "pro": "Pro"
+    "pro": "Pro",
+    "verPlanes": "Ver planes"
   },
   "pestanas": {
     "hoy": "Hoy",
@@ -21,6 +22,241 @@
     "agente": "Agente",
     "aprender": "Aprender",
     "plan": "Planes"
+  },
+  "comun": {
+    "cancelar": "Cancelar",
+    "ejemplo": "ejemplo",
+    "pro": "Pro"
+  },
+  "onboarding": {
+    "pasos": [
+      {
+        "t": "Bienvenido a BROTA",
+        "x": "Es tu cuaderno de cultivo: registrás lo que hacés con tus plantas y entendés por qué pasa lo que pasa."
+      },
+      {
+        "t": "Tareas, registros y logros",
+        "x": "Cada día tenés tareas sencillas para tus cultivos. Registrar, medir y completar tareas suma puntos y mantiene tu racha."
+      },
+      {
+        "t": "Aprendizaje y un guía",
+        "x": "Módulos cortos con tests que suman puntos y, al terminar un bloque, exámenes con nota para comprobar lo que aprendiste. Un guía te da consejos para tus cultivos."
+      },
+      {
+        "t": "¿Qué cultivás?",
+        "x": "Elegimos los primeros módulos según tu forma de cultivar. Podés cambiarlo cuando quieras."
+      }
+    ],
+    "perfiles": {
+      "huerta": "Huerta",
+      "hidro": "Hidroponía",
+      "interior": "Interior con LED",
+      "exterior": "Exterior o balcón"
+    },
+    "siguiente": "Siguiente",
+    "empezar": "Empezar"
+  },
+  "hoy": {
+    "hechasDe": "{{hechas}} de {{total}}",
+    "tareasDeHoy": "tareas de hoy",
+    "puntos": "puntos",
+    "diasSeguidos": "días seguidos",
+    "nivel": "nivel",
+    "tituloTareas": "Tareas de hoy",
+    "sinCultivos": "Todavía no tenés cultivos. Creá uno para recibir tareas diarias.",
+    "crearPrimero": "Crear mi primer cultivo",
+    "todasHechas": "Completaste todas las tareas de hoy. Buen trabajo.",
+    "topeTareas": "Tareas de hoy: {{pts}} de {{tope}} pts posibles por día. Registros, mediciones y estudio suman aparte.",
+    "tusCultivos": "Tus cultivos",
+    "logros": "Logros",
+    "climaYConsejo": "Clima y consejo"
+  },
+  "tareas": {
+    "riego": "Revisar la humedad de {{nombre}}",
+    "obs": "Observar el envés de las hojas de {{nombre}}",
+    "med": "Medir luz y temperatura de {{nombre}}",
+    "dren": "Revisar el drenaje de {{nombre}} (mañana hay lluvia)",
+    "puntos": "+{{pts}} · {{dificultad}}",
+    "dificultad": {
+      "facil": "Fácil",
+      "media": "Media",
+      "dificil": "Difícil"
+    }
+  },
+  "recomendacion": {
+    "propio": "Recomendado para tu forma de cultivar",
+    "mientrasTanto": "Mientras tanto, para sumar puntos",
+    "siguiente": "Siguiente módulo para aprobar",
+    "retomar": "Retomar este módulo (te falta aprobar el test)",
+    "empezar": "Empezar este módulo",
+    "bloqueado": "{{motivo}}. Sumá puntos con tareas, registros y otros módulos.",
+    "yaPodesRendir": "Ya podés rendir",
+    "verExamen": "Ver el examen"
+  },
+  "motivos": {
+    "puntos": "Se desbloquea al llegar a {{nivel}} ({{req}} pts)",
+    "pre": "Primero aprobá: {{lista}}",
+    "pro": "Disponible en el plan Pro",
+    "cannabis": "Próximamente: sujeto a revisión legal"
+  },
+  "examenes": {
+    "huerta": { "t": "Examen de Huerta", "d": "Suelo, compost, germinación, rotación y calendario." },
+    "hidro": { "t": "Examen de Hidroponía y nutrición", "d": "Nutrientes, sistemas, solución nutritiva, sustratos y riego." },
+    "luzplagas": { "t": "Examen de Luz, ambiente y plagas", "d": "PPFD, DLI, VPD, plagas, MIP y diagnóstico." },
+    "final": { "t": "Examen final BROTA", "d": "Todo el temario, con casos y trampas. Habilita el nivel Maestro de cultivo y la constancia." }
+  },
+  "logros": {
+    "primero": "Primer registro",
+    "constante": "Constante: 3 días seguidos",
+    "led": "Primera medición de luz",
+    "cultivador": "Cultivador: 3 cultivos creados",
+    "explorador": "Explorador: 3 módulos aprobados",
+    "test": "Test perfecto",
+    "examen": "Primer examen aprobado",
+    "maestro": "Examen final aprobado"
+  },
+  "clima": {
+    "hoyEn": "Hoy en {{ciudad}}",
+    "lluviaViento": "Lluvia {{lluvia}}% · viento {{viento}} km/h",
+    "dia": "{{dia}} {{t}} · {{lluvia}}%",
+    "grados": "{{t}}°",
+    "consejoDelDia": "Consejo del día.",
+    "sinPronostico": "Pronóstico no disponible sin conexión.",
+    "desc": {
+      "soleado": "Soleado",
+      "parcial": "Parcialmente nublado",
+      "nublado": "Nublado",
+      "niebla": "Niebla",
+      "lluvia": "Lluvia",
+      "nieve": "Nieve",
+      "tormenta": "Tormenta"
+    },
+    "diasSemana": ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+  },
+  "tips": [
+    "Antes de regar, metí un dedo en la tierra o el sustrato. Si está seca a unos centímetros, regá.",
+    "Revisá el envés de las hojas: ahí se esconden la mayoría de las plagas.",
+    "En sustratos inertes, regá seguido con volúmenes moderados. Se secan más rápido que la tierra.",
+    "Medí la luz a la altura de las hojas, no en el aire.",
+    "Anotá cada riego y cada cambio. En un mes vas a ver patrones que hoy no ves.",
+    "Con calor fuerte, regá temprano para que la planta tenga agua antes del mediodía.",
+    "Si una hoja cambia de color, mirá también la raíz y el riego antes de sumar fertilizante."
+  ],
+  "cultivos": {
+    "stats": {
+      "cultivos": "cultivos",
+      "enCosecha": "en cosecha",
+      "conAlertas": "con alertas"
+    },
+    "limiteTitulo": "Llegaste al límite del plan Gratis",
+    "limiteTexto": "Incluye 2 cultivos propios. Pro es ilimitado.",
+    "nuevo": "+ Nuevo cultivo",
+    "form": {
+      "nombre": "Nombre (ej. Albahaca 1)",
+      "tipo": "Tipo de planta",
+      "ubicacion": "Ubicación",
+      "etapa": "Etapa",
+      "fecha": "Fecha de siembra (AAAA-MM-DD)",
+      "guardar": "Guardar cultivo"
+    },
+    "ubicaciones": {
+      "interior": "interior",
+      "exterior": "exterior"
+    },
+    "filtros": {
+      "todos": "Todos",
+      "interior": "Interior",
+      "exterior": "Exterior",
+      "alertas": "Con alertas"
+    },
+    "sinCoincidencias": "Ningún cultivo coincide con este filtro.",
+    "vacio": "Todavía no tenés cultivos. Creá el primero o empezá con una plantilla.",
+    "empezarRapido": "Empezar rápido",
+    "oCrea": "O creá un cultivo propio con el botón de arriba.",
+    "plantilla": "{{tipo}} · {{ubicacion}}",
+    "dia": "Día {{n}}",
+    "linea": "{{tipo}} · {{ubicacion}} · {{etapa}}",
+    "ultimo": "Último: {{nota}}",
+    "sinRegistros": "Todavía sin registros",
+    "salud": {
+      "luz": "Revisá la luz: hay una medición fuera de rango",
+      "sinRegistros": "Sin registros todavía",
+      "diasSinRegistro": "Sin registros hace {{dias}} días",
+      "enOrden": "Todo en orden por ahora"
+    },
+    "proximo": {
+      "primerRegistro": "Hacé tu primer registro para empezar la bitácora",
+      "regar": "Toca regar: no hay un riego reciente registrado",
+      "cosecha": "Registrá la cantidad cosechada",
+      "alDia": "Todo al día. Seguí con las tareas de hoy"
+    }
+  },
+  "cultivo": {
+    "volver": "← Cultivos",
+    "info": "{{tipo}} · {{ubicacion}} · Día {{dia}} desde {{fecha}}",
+    "proximoPaso": "Próximo paso",
+    "guia": {
+      "Siembra": "Mantené el sustrato húmedo sin encharcar y dale luz suave y constante.",
+      "Crecimiento": "Es la etapa de más riego y observación. Subí la luz de a poco y revisá el envés de las hojas.",
+      "Floración": "Vigilá humedad y temperatura para evitar hongos. Aumentá la intensidad de luz según el rango de la etapa.",
+      "Cosecha": "Registrá lo cosechado. Según la especie, reducí el fertilizante antes de cosechar."
+    },
+    "stats": {
+      "registros": "registros",
+      "riegos": "riegos",
+      "hoy": "Hoy",
+      "diaDesde": "día desde el último",
+      "diasDesde": "días desde el último"
+    },
+    "etapa": "Etapa",
+    "registroRapido": "Registro rápido",
+    "detalle": "Detalle (opcional): qué hiciste u observaste",
+    "puntosRegistro": "Cada registro suma 2 pts (hoy {{r}} de {{tope}}).",
+    "puntosMedicion": " Cada medición de luz suma 4 pts (hoy {{m}} de {{tope}}).",
+    "luzYAmbiente": "Luz y ambiente",
+    "medicionAyuda": "Cargá una medición cuando quieras; la app la compara con la etapa.",
+    "campos": {
+      "watts": "Potencia de la lámpara (W)",
+      "altura": "Altura sobre la planta (cm)",
+      "horas": "Horas de luz por día",
+      "ppfd": "PPFD medido (µmol/m²/s)",
+      "temp": "Temperatura (°C)",
+      "humedad": "Humedad relativa (%)"
+    },
+    "guardarMedicion": "Guardar medición",
+    "ultimaMedicion": "Última medición",
+    "ppfd": {
+      "poca": "Poca luz para {{etapa}} (recomendado {{min}}–{{max}}). Acercá la lámpara o subí la potencia.",
+      "mucha": "Demasiada luz para {{etapa}} (recomendado {{min}}–{{max}}). Alejá la lámpara para evitar estrés lumínico.",
+      "ok": "Intensidad dentro del rango recomendado ({{min}}–{{max}})."
+    },
+    "altura": {
+      "cerca": "La lámpara está muy cerca (menos de 20 cm). Riesgo de quemaduras.",
+      "ok": "Altura razonable. Confirmá la recomendación del fabricante."
+    },
+    "vpd": "VPD {{v}} kPa · zona orientativa 0,8 a 1,2 kPa",
+    "evolucionPPFD": "Evolución del PPFD",
+    "ppfdRegistrado": "PPFD registrado (del más viejo al más nuevo): {{valores}}",
+    "exterior": "En exterior, el clima viene del pronóstico. Lo ves en la pestaña Hoy.",
+    "fotos": {
+      "titulo": "Fotos del cultivo",
+      "ayuda": "Subí una foto cada semana para ver la evolución. Las fotos se guardan en este dispositivo.",
+      "agregar": "Agregar foto",
+      "primera": "Primera · {{fecha}}",
+      "ultima": "Última · {{fecha}}",
+      "altPrimera": "Primera foto del cultivo",
+      "altUltima": "Foto más reciente del cultivo",
+      "alt": "Foto del cultivo"
+    },
+    "bitacora": "Bitácora",
+    "todas": "Todas",
+    "sinRegistros": "Sin registros",
+    "sinRegistrosTodas": " todavía. Tocá un registro rápido para empezar.",
+    "sinRegistrosTipo": " de este tipo.",
+    "entrada": "{{fecha}} · {{tipo}}",
+    "zonaPeligro": "Zona de peligro",
+    "eliminar": "Eliminar este cultivo",
+    "confirmarEliminar": "Sí, eliminar y perder su bitácora"
   },
   "categorias": {
     "todas": "Todas",

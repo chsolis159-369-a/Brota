@@ -1,0 +1,44 @@
+# Crear un cultivo, registrar y medir: puntos con topes y evaluación de la luz.
+appId: com.brota.app
+---
+- runFlow: comun/onboarding.yaml
+- tapOn: "Cultivos"
+- assertVisible: "Mis cultivos"
+- runFlow:
+    file: comun/crear-cultivo.yaml
+    env:
+      NOMBRE: "Lechuga Maestro"
+- tapOn:
+    id: "cultivo-Lechuga Maestro"
+- assertVisible: "Hacé tu primer registro para empezar la bitácora"
+- tapOn:
+    id: "registro-Riego"
+- assertVisible: "Registro rápido: riego"
+- assertVisible: "Cada registro suma 2 pts (hoy 1 de 5). Cada medición de luz suma 4 pts (hoy 0 de 2)."
+- scrollUntilVisible:
+    element:
+      id: "medicion-ppfd"
+- tapOn:
+    id: "medicion-ppfd"
+- inputText: "400"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "guardar-medicion"
+- tapOn:
+    id: "guardar-medicion"
+- scrollUntilVisible:
+    element:
+      text: "Demasiada luz para siembra.*"
+- assertVisible: "Demasiada luz para siembra (recomendado 150–300). Alejá la lámpara para evitar estrés lumínico."
+- scrollUntilVisible:
+    element:
+      text: "Zona de peligro"
+- tapOn:
+    id: "eliminar-cultivo"
+- tapOn:
+    id: "confirmar-eliminar"
+- assertVisible: "Mis cultivos"
+- assertNotVisible: "Lechuga Maestro"
+- tapOn: "Hoy"
+- assertVisible: "6"

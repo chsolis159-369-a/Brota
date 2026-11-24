@@ -7,6 +7,22 @@ import esAR from '@/i18n/es-AR.json';
 
 const HTML = readFileSync(join(__dirname, '..', 'reference', 'brota-v9-prototipo.html'), 'utf8');
 
+/**
+ * Textos que no están en el prototipo porque reemplazan limitaciones del prototipo web o cubren
+ * casos que el prototipo no tenía (DECISIONS D-12 y D-19). Todo texto nuevo tiene que figurar acá.
+ */
+const NUEVOS = new Set([
+  'clima.sinPronostico',
+  'clima.desc.niebla',
+  'clima.desc.nieve',
+  'clima.desc.tormenta',
+  'clima.diasSemana.1',
+  'clima.diasSemana.2',
+  'clima.diasSemana.3',
+  'cultivo.fotos.ayuda',
+  'cultivo.fotos.agregar',
+]);
+
 /** Hojas de un objeto de textos, con su clave completa. */
 function hojas(obj: unknown, prefijo = ''): [string, string][] {
   if (typeof obj === 'string') return [[prefijo, obj]];
@@ -19,7 +35,12 @@ describe('textos', () => {
     expect(i18n.t('titulos.cultivos')).toBe('Mis cultivos');
   });
 
-  it.each(hojas(esAR))('"%s" sale del prototipo', (_clave, texto) => {
+  it('los textos nuevos existen', () => {
+    const claves = new Set(hojas(esAR).map(([k]) => k));
+    NUEVOS.forEach((k) => expect(claves.has(k)).toBe(true));
+  });
+
+  it.each(hojas(esAR).filter(([k]) => !NUEVOS.has(k)))('"%s" sale del prototipo', (_clave, texto) => {
     // Los fragmentos fijos (sin {{variables}}) tienen que aparecer tal cual en el prototipo.
     texto
       .split(/\{\{[^}]+\}\}/)

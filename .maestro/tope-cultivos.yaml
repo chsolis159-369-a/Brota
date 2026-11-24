@@ -1,0 +1,20 @@
+# Plan Gratis: hasta 2 cultivos propios; los de ejemplo no cuentan. El tercero muestra el límite.
+appId: com.brota.app
+---
+- runFlow: comun/onboarding.yaml
+- tapOn: "Cultivos"
+- runFlow:
+    file: comun/crear-cultivo.yaml
+    env:
+      NOMBRE: "Propio uno"
+- runFlow:
+    file: comun/crear-cultivo.yaml
+    env:
+      NOMBRE: "Propio dos"
+- assertVisible: "Llegaste al límite del plan Gratis"
+- assertVisible: "Incluye 2 cultivos propios. Pro es ilimitado."
+- assertNotVisible:
+    id: "nuevo-cultivo"
+- tapOn:
+    id: "ver-planes-limite"
+- assertVisible: "Planes"

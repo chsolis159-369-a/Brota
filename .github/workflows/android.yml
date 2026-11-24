@@ -1,0 +1,100 @@
+# Verificación, compilación de Android y flujos de Maestro en Linux (D-23).
+# El APK release (x86_64, firmado con la clave de depuración) y los resultados de Maestro quedan como artefactos.
+name: Android
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    name: Tipos, lint, contenido y pruebas
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+      - run: npm run verificar
+
+  android:
+    name: APK release y Maestro
+    needs: verificar
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v6
+      - run: npm ci
+
+      - name: Generar el proyecto Android (Continuous Native Generation)
+        run: npx expo prebuild --platform android --no-install
+
+      - name: Compilar el APK release (x86_64, la arquitectura del emulador)
+        working-directory: android
+        env:
+          NODE_ENV: production
+        run: ./gradlew assembleRelease -PreactNativeArchitectures=x86_64 --no-daemon
+
+      - name: Guardar el APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: brota-release-x86_64
+          path: android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+      - name: Habilitar KVM para el emulador
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Instalar Maestro
+        env:
+          MAESTRO_VERSION: 2.12.1
+        run: |
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+
+      - name: Flujos de Maestro en el emulador
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot
+          script: |
+            adb install -r android/app/build/outputs/apk/release/app-release.apk
+            maestro test .maestro --format junit --output maestro-resultados.xml
+
+      - name: Guardar los resultados de Maestro
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: maestro
+          path: |
+            maestro-resultados.xml
+            ~/.maestro/tests/
+          if-no-files-found: ignore

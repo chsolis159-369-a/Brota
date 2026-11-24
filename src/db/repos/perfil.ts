@@ -1,6 +1,8 @@
+import type { Plan } from '@/reglas/dominio';
+
 import type { BaseDatos, PerfilCultivo } from '../tipos';
 
-export type Plan = 'gratis' | 'pro';
+export type { Plan };
 
 export type Perfil = {
   onboarded: boolean;

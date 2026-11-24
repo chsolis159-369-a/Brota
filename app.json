@@ -7,7 +7,10 @@
     "icon": "./assets/images/icon.png",
     "scheme": "brota",
     "userInterfaceStyle": "automatic",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "ios": {
       "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.brota.app",
@@ -34,6 +37,21 @@
           "dark": {
             "backgroundColor": "#121A14"
           }
+        }
+      ],
+      "expo-asset",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "BROTA usa tu ubicación aproximada para mostrar el pronóstico del clima de tu zona."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "BROTA usa tus fotos para que sigas la evolución de tus cultivos.",
+          "cameraPermission": false,
+          "microphonePermission": false
         }
       ]
     ],

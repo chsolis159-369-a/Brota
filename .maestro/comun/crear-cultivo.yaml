@@ -1,0 +1,12 @@
+# Subflujo: crea un cultivo de interior con el nombre ${NOMBRE} desde la pestaña Cultivos.
+appId: com.brota.app
+---
+- tapOn:
+    id: "nuevo-cultivo"
+- tapOn:
+    id: "campo-nombre"
+- inputText: ${NOMBRE}
+- hideKeyboard
+- tapOn:
+    id: "guardar-cultivo"
+- assertVisible: ${NOMBRE}

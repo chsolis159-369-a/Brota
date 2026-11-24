@@ -1,7 +1,9 @@
+import type { ProgresoModulo } from '@/reglas/puntos';
+
 import type { BaseDatos } from '../tipos';
 
 /** Mejor marca de un módulo. Aciertos y puntos se guardan por separado, como en el prototipo. */
-export type ProgresoModulo = { mejorAciertos: number; mejorPuntos: number };
+export type { ProgresoModulo };
 
 type Fila = { modulo_id: string; mejor_aciertos: number; mejor_puntos: number };
 

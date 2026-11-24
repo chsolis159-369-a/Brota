@@ -1,0 +1,9 @@
+# Onboarding completo: 4 pasos, perfil, y la pantalla Hoy con el plan gratis y la recomendación.
+appId: com.brota.app
+---
+- runFlow: comun/onboarding.yaml
+- assertVisible: "Plan gratis"
+- assertVisible: "Recomendado para tu forma de cultivar"
+- assertVisible: "Qué es la hidroponía"
+- assertVisible: "Mientras tanto, para sumar puntos"
+- assertVisible: "Albahaca 1"

@@ -11,13 +11,18 @@ Bitácora de cultivo con aprendizaje, exámenes y suscripción Pro, para iOS y A
 ## Requisitos
 
 - Node.js LTS (probado con 26.13.1) y npm
-- Para ver la app: Expo Go (H1) o un development build (desde H2, con Android Studio o EAS)
+- Android: Android Studio (su Java, JBR) y el SDK en `%LOCALAPPDATA%\Android\Sdk` con
+  `platforms/android-37.0`, `build-tools/37.0.0`, `ndk/27.1.12297006` y un emulador
+  (`system-images/android-36/google_apis/x86_64`). Variables `ANDROID_HOME` y `JAVA_HOME`.
+- Maestro CLI para los flujos (`.maestro/`)
 
 ## Primeros pasos
 
 ```bash
 npm install
-npx expo start          # Expo Go o development build
+npm run android          # development build en el emulador + Metro
+npm run android:release  # build release con el JS incluido (para Maestro)
+npm run test:e2e         # flujos de Maestro (con el emulador abierto y la app instalada)
 ```
 
 ## Scripts
@@ -32,6 +37,16 @@ npx expo start          # Expo Go o development build
 | `npm run typecheck` | TypeScript estricto |
 | `npm run lint` | ESLint |
 | `npm run verificar` | Todo lo anterior en orden |
+| `npm run test:e2e` | Flujos de Maestro en el emulador |
+
+## Integración continua (GitHub Actions)
+
+`.github/workflows/android.yml` corre en cada push a `main`, en cada pull request y a mano:
+1. `npm run verificar` (tipos, lint, contenido y pruebas).
+2. Compila el APK release para x86_64 y lo guarda como artefacto `brota-release-x86_64`.
+3. Levanta un emulador Android 16 y corre los flujos de Maestro; los resultados quedan en el artefacto `maestro`.
+
+En Windows la compilación local de Android choca con el límite de 260 caracteres de ruta (D-23); por eso se compila en Linux.
 
 ## Variables de entorno
 
