@@ -43,7 +43,7 @@ npm run test:e2e         # flujos de Maestro (con el emulador abierto y la app i
 
 `.github/workflows/android.yml` corre en cada push a `main`, en cada pull request y a mano:
 1. `npm run verificar` (tipos, lint, contenido y pruebas).
-2. Compila el APK release para x86_64 y lo guarda como artefacto `brota-release-x86_64`.
+2. Compila el APK release para arm64-v8a (teléfonos) y x86_64 (emulador) y lo guarda como artefacto `brota-apk`. Está firmado con la clave de depuración: sirve para instalar a mano en un teléfono de prueba, no para la tienda (eso es H6, con EAS).
 3. Levanta un emulador Android 16 y corre los flujos de Maestro; los resultados quedan en el artefacto `maestro`.
 
 En Windows la compilación local de Android choca con el límite de 260 caracteres de ruta (D-23); por eso se compila en Linux.
