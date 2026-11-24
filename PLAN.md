@@ -9,7 +9,7 @@ Cerrado el 2026-11-23 sobre el prototipo v9 (`prueba 0.9`). Reglas en `CLAUDE.md
 | H2 · Hoy y Cultivos | hecho (Jest 440, Maestro 4/4 en GitHub Actions) |
 | H3 · Reglas y Aprender | hecho (más Agente por reglas y Plan sin servidor, D-25) |
 | H4 · Exámenes en el servidor y constancia | pendiente |
-| H5 · Plan y Agente | Agente con IA listo (falta cargar las cuentas, D-27); RevenueCat pendiente |
+| H5 · Plan y Agente | Agente con IA activo en Supabase (D-27); RevenueCat pendiente |
 | H6 · Sincronización, cuenta, observabilidad y builds | pendiente |
 
 ## 0. Prerrequisitos
@@ -35,7 +35,7 @@ Sin Mac: los builds de iOS se hacen en EAS y los flujos de Maestro en iOS corren
 | Apple Developer (US$ 99/año) | App ID, Sign in with Apple, productos de suscripción, TestFlight | H5 |
 | Google Play Console (US$ 25) | app, productos de suscripción, prueba interna | H5 |
 | RevenueCat | proyecto, claves públicas iOS/Android, clave secreta, entitlement `pro`, offering con `brota_pro_mensual` y `brota_pro_anual` | H5 |
-| Anthropic | `ANTHROPIC_API_KEY` | H5 |
+| Anthropic | `ANTHROPIC_API_KEY` (cargada en GitHub) | H5 |
 | URLs públicas de términos y privacidad | enlaces del paywall y de la pantalla de privacidad | H5 |
 | Google Cloud | OAuth client para login con Google | H6 |
 | Sentry y PostHog | DSN y API key | H6 |

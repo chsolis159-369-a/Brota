@@ -50,10 +50,10 @@ En Windows la compilación local de Android choca con el límite de 260 caracter
 
 ## Activar el Agente con IA (Supabase + Claude)
 
-El Agente responde con IA a través de la Edge Function `agente` (D-27). Para activarlo:
+El Agente responde con IA a través de la Edge Function `agente` (D-27). La forma más simple de activarlo es crear las cuentas de Supabase y Anthropic (pasos 1 y 2) y correr `powershell -ExecutionPolicy Bypass -File toolscargar-claves.ps1`: pide cada dato, abre la página de donde sacarlo, lo carga en GitHub y publica la función. A mano:
 
-1. **Supabase** (https://supabase.com): crear un proyecto. En *Authentication → Sign In / Providers*, activar **Allow anonymous sign-ins**.
-2. **Anthropic** (https://console.anthropic.com): crear una API key y, recomendado, fijar un límite de gasto mensual.
+1. **Supabase** (https://supabase.com): crear un proyecto. Las sesiones anónimas las activa el workflow (si falla, en *Authentication → Sign In / Providers → Allow anonymous sign-ins*).
+2. **Anthropic** (https://console.anthropic.com): cargar crédito en *Billing* (la API no usa la suscripción de claude.ai), crear una API key y, recomendado, fijar un límite de gasto mensual.
 3. **GitHub** → el repositorio → *Settings → Secrets and variables → Actions*:
    - Pestaña **Variables** (públicas):
      - `SUPABASE_PROJECT_REF`: el *Reference ID* del proyecto (está en la URL: `https://<ref>.supabase.co`).
