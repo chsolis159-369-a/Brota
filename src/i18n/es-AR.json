@@ -1,0 +1,47 @@
+{
+  "marca": "BROTA",
+  "encabezado": {
+    "planGratis": "Plan gratis",
+    "prueba": "Prueba"
+  },
+  "planes": {
+    "gratis": "Gratis",
+    "pro": "Pro"
+  },
+  "pestanas": {
+    "hoy": "Hoy",
+    "cultivos": "Cultivos",
+    "agente": "Agente",
+    "aprender": "Aprender",
+    "plan": "Plan"
+  },
+  "titulos": {
+    "hoy": "Hoy",
+    "cultivos": "Mis cultivos",
+    "agente": "Agente",
+    "aprender": "Aprender",
+    "plan": "Planes"
+  },
+  "categorias": {
+    "todas": "Todas",
+    "huerta": "Huerta",
+    "nutricion": "Nutrición",
+    "hidro": "Hidroponía",
+    "inerte": "Sustrato inerte",
+    "luz": "Luz y ambiente",
+    "plagas": "Plagas y diagnóstico"
+  },
+  "etapas": {
+    "Siembra": "Siembra",
+    "Crecimiento": "Crecimiento",
+    "Floración": "Floración",
+    "Cosecha": "Cosecha"
+  },
+  "tiposRegistro": {
+    "Riego": "Riego",
+    "Fertilizante": "Fertilizante",
+    "Poda": "Poda",
+    "Plaga": "Plaga",
+    "Observación": "Observación"
+  }
+}

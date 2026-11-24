@@ -5,7 +5,7 @@ Cerrado el 2026-11-23 sobre el prototipo v9 (`prueba 0.9`). Reglas en `CLAUDE.md
 | Hito | Estado |
 |---|---|
 | H0 · Referencias, contenido, auditoría y pruebas del prototipo | hecho |
-| H1 · Base Expo, tema, navegación y datos locales | en curso |
+| H1 · Base Expo, tema, navegación y datos locales | hecho |
 | H2 · Hoy y Cultivos | pendiente |
 | H3 · Reglas y Aprender | pendiente |
 | H4 · Exámenes en el servidor y constancia | pendiente |

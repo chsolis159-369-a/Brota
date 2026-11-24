@@ -1,0 +1,76 @@
+{
+  "name": "brota",
+  "version": "0.9.0",
+  "main": "expo-router/entry",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "test": "jest",
+    "test:prototipo": "node reference/pruebas-prototipo-v9.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "expo lint",
+    "lint:contenido": "node tools/auditoria-contenido.js",
+    "contenido:extraer": "node tools/extraer-contenido.js",
+    "contenido:check": "node tools/extraer-contenido.js --check",
+    "verificar": "npm run typecheck && npm run lint && npm run lint:contenido && npm run contenido:check && npm test && npm run test:prototipo"
+  },
+  "dependencies": {
+    "@expo-google-fonts/fraunces": "^0.4.1",
+    "@expo-google-fonts/nunito-sans": "^0.4.2",
+    "expo": "~58.0.26",
+    "expo-constants": "~58.0.16",
+    "expo-dev-client": "~58.0.21",
+    "expo-font": "~58.0.12",
+    "expo-image": "~58.0.18",
+    "expo-linking": "~58.0.17",
+    "expo-localization": "~58.0.5",
+    "expo-router": "~58.0.32",
+    "expo-splash-screen": "~58.0.14",
+    "expo-sqlite": "~58.0.18",
+    "expo-status-bar": "~58.0.5",
+    "expo-symbols": "~58.0.5",
+    "expo-system-ui": "~58.0.7",
+    "expo-web-browser": "~58.1.0",
+    "i18next": "^27.2.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-i18next": "^18.0.3",
+    "react-native": "0.88.1",
+    "react-native-gesture-handler": "~3.3.0",
+    "react-native-reanimated": "4.7.1",
+    "react-native-safe-area-context": "~5.11.1",
+    "react-native-screens": "~4.30.1",
+    "react-native-worklets": "0.13.0",
+    "zustand": "^5.1.0"
+  },
+  "devDependencies": {
+    "@testing-library/react-native": "^14.1.0",
+    "@types/jest": "30.0.0",
+    "@types/react": "~19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-expo": "~58.0.4",
+    "jest": "~30.5.2",
+    "jest-expo": "~58.0.15",
+    "typescript": "~6.0.3"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg)"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.test.[jt]s?(x)"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/reference/"
+    ],
+    "moduleNameMapper": {
+      "^@/assets/(.*)$": "<rootDir>/assets/$1",
+      "^@/(.*)$": "<rootDir>/src/$1",
+      "^@content/(.*)$": "<rootDir>/content/$1"
+    }
+  }
+}

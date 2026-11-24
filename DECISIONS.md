@@ -57,3 +57,21 @@ Estos textos describen limitaciones del prototipo web. Se reemplazan cuando lleg
 
 ## D-13 · Identidad de git
 Los commits se firman con `user.name = chsol` y el email de la cuenta del usuario, configurados solo en este repo (`git config --local`). Se cambia con `git config user.name "…"` y `git config user.email "…"`.
+
+## D-14 · Contraste AA sobre los colores del prototipo
+Tres pares del prototipo no llegan a 4,5:1. Se ajusta lo mínimo y el resto de los tokens queda igual (lo verifica `__tests__/tema.test.ts`):
+- Claro, `gold` `#B8862B` → `#8A6420`: puntos de tareas, estrellas y etiqueta "Recomendado" (3,0 → 4,95 sobre el fondo).
+- Claro, `muted` `#66756B` → `#606E65`: texto secundario sobre `accent-soft` (4,13 → 4,56).
+- Oscuro, texto sobre `accent` `#FFFFFF` → `#121A14`: botones y chips activos (1,95 → 9,08).
+
+## D-15 · Identificadores de la app
+`com.brota.app` para iOS (bundle identifier) y Android (package). Se puede cambiar hasta la primera subida a las tiendas; después queda fijo.
+
+## D-16 · Pestañas nativas con íconos
+Las pestañas usan `NativeTabs` de Expo Router (barra nativa de iOS y Android). Su prop `disabled` bloquea las otras pestañas durante un examen. El prototipo solo tiene texto; las barras nativas necesitan ícono, así que se suman SF Symbols en iOS y Material en Android (Hoy: sol, Cultivos: hoja, Agente: globos de diálogo, Aprender: libro, Plan: estrella). Los textos de las pestañas no cambian.
+
+## D-17 · Íconos de la app y pantalla de carga
+Por ahora se usan los íconos de la plantilla de Expo, con los colores de fondo de BROTA en la pantalla de carga (`#F4F7F2` claro, `#121A14` oscuro). Hace falta un ícono propio antes de subir a las tiendas (H6).
+
+## D-18 · Pruebas de la base de datos
+Los repositorios reciben un `BaseDatos` con la forma de expo-sqlite. En Jest se usa un adaptador sobre `node:sqlite` (SQLite real en memoria, incluido en Node), así que las pruebas verifican el SQL, las restricciones `CHECK`, las claves foráneas y las transacciones sin módulos nativos.
