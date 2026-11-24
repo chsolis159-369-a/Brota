@@ -93,7 +93,7 @@ Los repositorios reciben un `BaseDatos` con la forma de expo-sqlite. En Jest se 
 - En la lista de días se muestra la máxima de cada día.
 
 ## D-20 · Flujos de Maestro
-Los flujos (`.maestro/`) corren sobre un build release con el JS incluido (`npm run android:release`), sin depender de Metro ni del menú de desarrollo, con `clearState` y todos los permisos denegados (el clima usa la ubicación por defecto). Las tareas dependen del pronóstico real, así que los flujos no cuentan tareas: verifican los puntos.
+Los flujos (`.maestro/`) corren sobre un build release con el JS incluido (`npm run android:release`), sin depender de Metro ni del menú de desarrollo, con `clearState`, todos los permisos denegados salvo la ubicación, que se concede de entrada para que el diálogo del sistema no aparezca en un momento variable y tape la pantalla. Las tareas dependen del pronóstico real, así que los flujos no cuentan tareas: verifican los puntos.
 
 ## D-21 · Entorno Android en Windows
 SDK en `%LOCALAPPDATA%\Android\Sdk` con las herramientas de línea de comandos (v23); Java de Android Studio (JBR 25). `sdkmanager` está deprecado: los paquetes se instalan con `android sdk install` y nombres con `/` (por ejemplo `platforms/android-37.0`). La compilación de prueba usa solo `x86_64` (la arquitectura del emulador) para tardar menos.

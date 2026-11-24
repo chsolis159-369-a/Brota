@@ -1,10 +1,13 @@
 # Subflujo: abre la app desde cero y completa el onboarding eligiendo Hidroponía.
 appId: com.brota.app
 ---
+# La ubicación se concede de entrada: si no, Android muestra el diálogo en un momento variable y
+# tapa la pantalla (carrera de tiempos). El clima usa la ubicación del emulador.
 - launchApp:
     clearState: true
     permissions:
       all: deny
+      location: allow
 - assertVisible: "Bienvenido a BROTA"
 - tapOn: "Siguiente"
 - assertVisible: "Tareas, registros y logros"
@@ -15,7 +18,7 @@ appId: com.brota.app
 - tapOn:
     id: "perfil-hidro"
 - tapOn: "Empezar"
-# Hoy pide la ubicación para el clima; se rechaza y se usa la ubicación por defecto (D-19).
+# Red de seguridad: si igual aparece el diálogo de ubicación, se rechaza (D-19).
 - tapOn:
     text: "Don.t allow|No permitir"
     optional: true
