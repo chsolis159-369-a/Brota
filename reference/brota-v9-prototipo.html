@@ -1,0 +1,3535 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>BROTA</title>
+<style>
+/* Composición: columna de teléfono centrada, pestañas abajo, datos de ejemplo marcados. */
+:root {
+  --bg: #F4F7F2;
+  --surface: #FFFFFF;
+  --fg: #1F2A22;
+  --muted: #66756B;
+  --accent: #2F6B3A;
+  --accent-soft: #E3F0E5;
+  --border: #D5DED6;
+  --alert: #B5552B;
+  --ok: #2F6B3A;
+  --gold: #B8862B;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121A14; --surface: #1B2620; --fg: #E6EDE7; --muted: #9AAA9E;
+    --accent: #8CC79A; --accent-soft: #22332A; --border: #2E3D33; --alert: #E08B63; --ok: #8CC79A; --gold: #E0B45C;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121A14; --surface: #1B2620; --fg: #E6EDE7; --muted: #9AAA9E;
+  --accent: #8CC79A; --accent-soft: #22332A; --border: #2E3D33; --alert: #E08B63; --ok: #8CC79A; --gold: #E0B45C;
+  color-scheme: dark;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 15px/1.5 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+button, input, textarea { font: inherit; color: inherit; }
+.app { max-width: 420px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+header.top { padding: 16px 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.brand { font: 600 24px/1 var(--display); color: var(--accent); letter-spacing: 0.02em; }
+.main { flex: 1; min-width: 0; padding-bottom: 92px; }
+h2 { font: 600 22px/1.2 var(--display); margin: 8px 0 12px; text-wrap: balance; }
+h3 { font: 600 16px/1.3 var(--body); margin: 18px 0 8px; }
+.muted { color: var(--muted); font-size: 13px; }
+.num { font-variant-numeric: tabular-nums; }
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  padding: 14px; margin-bottom: 10px; text-align: left; width: 100%; display: block; box-sizing: border-box;
+}
+button.card { cursor: pointer; }
+.hero { display: flex; gap: 14px; align-items: center; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 10px 8px; text-align: center; }
+.stat strong { display: block; font-size: 18px; color: var(--accent); }
+.tag {
+  display: inline-block; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; margin-left: 6px;
+}
+.tag.rec { color: var(--gold); border-color: var(--gold); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 12px; }
+.chip {
+  border: 1px solid var(--border); background: var(--surface); border-radius: 999px;
+  padding: 6px 12px; cursor: pointer; min-height: 32px;
+}
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.quick {
+  border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent);
+  border-radius: 12px; padding: 10px 12px; cursor: pointer; font-weight: 600; flex: 1 1 30%; min-width: 0;
+}
+.quick:active { transform: scale(0.97); }
+.input {
+  width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 10px;
+  padding: 11px 12px; background: var(--surface); margin-bottom: 10px;
+}
+.btn {
+  width: 100%; box-sizing: border-box; background: var(--accent); color: #fff; border: 0; border-radius: 12px;
+  padding: 13px; font-weight: 600; cursor: pointer; margin-bottom: 10px; display: block;
+}
+.btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.btn.danger { background: transparent; color: var(--alert); border: 1px solid var(--alert); }
+.alert { color: var(--alert); font-weight: 600; margin: 4px 0; }
+.okmsg { color: var(--ok); margin: 4px 0; font-weight: 600; }
+.bubble { max-width: 85%; padding: 10px 12px; border-radius: 14px; margin-bottom: 8px; line-height: 1.45; }
+.bubble.agente { background: var(--surface); border: 1px solid var(--border); }
+.bubble.vos { background: var(--accent-soft); margin-left: auto; }
+.tabs {
+  position: fixed; bottom: 0; left: 0; right: 0; max-width: 420px; margin: 0 auto;
+  display: flex; background: var(--surface); border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom, 0px); z-index: 5;
+}
+.tabs button {
+  flex: 1; background: none; border: 0; padding: 12px 2px; cursor: pointer; color: var(--muted); font-size: 12px;
+}
+.tabs button[aria-current="page"] { color: var(--accent); font-weight: 700; }
+.step { min-height: 62vh; display: flex; flex-direction: column; justify-content: center; }
+.step h2 { font-size: 28px; }
+.dots { display: flex; justify-content: center; gap: 8px; margin: 18px 0; }
+.dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+.dots span.on { background: var(--accent); }
+.seg { display: flex; gap: 4px; margin: 8px 0; }
+.seg span { flex: 1; height: 6px; border-radius: 999px; background: var(--border); }
+.seg span.on { background: var(--accent); }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; background: var(--muted); }
+.dot.ok { background: var(--ok); }
+.dot.alerta { background: var(--alert); }
+.dot.aviso { background: var(--gold); }
+.task {
+  display: flex; align-items: center; gap: 10px; width: 100%; box-sizing: border-box; text-align: left;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 8px; cursor: pointer;
+}
+.task .check {
+  width: 24px; height: 24px; border-radius: 8px; border: 2px solid var(--accent); display: grid; place-items: center;
+  flex: 0 0 24px; font-size: 14px; color: #fff; font-weight: 700;
+}
+.task .pts { margin-left: auto; color: var(--gold); font-weight: 600; font-size: 13px; }
+.task.done { background: var(--accent-soft); }
+.task.done .check { background: var(--accent); }
+.task.done span:nth-child(2) { text-decoration: line-through; color: var(--muted); }
+.badges { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.badge {
+  border: 1px dashed var(--border); border-radius: 12px; padding: 10px; font-size: 13px; color: var(--muted); text-align: center;
+}
+.badge.ok { border: 1px solid var(--gold); color: var(--fg); background: var(--surface); font-weight: 600; }
+.stages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 6px 0 12px; }
+.stage {
+  border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 10px; cursor: pointer; text-align: center;
+}
+.stage.past { border-color: var(--accent); color: var(--accent); }
+.stage.cur { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+.entry { display: flex; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 8px; }
+.letra {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent);
+  display: grid; place-items: center; font-weight: 700; flex: 0 0 28px;
+}
+.gauge { position: relative; height: 10px; border-radius: 999px; background: var(--border); margin: 12px 0 6px; }
+.gauge .band { position: absolute; top: 0; bottom: 0; background: var(--accent-soft); border-radius: 999px; }
+.gauge .mark { position: absolute; top: -4px; width: 4px; height: 18px; background: var(--fg); border-radius: 2px; transform: translateX(-2px); }
+.bar { height: 8px; background: var(--border); border-radius: 999px; overflow: hidden; margin: 8px 0; }
+.bar > span { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width 0.3s; }
+.nivel { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.nivel strong { font: 600 18px/1.2 var(--display); }
+.stars { color: var(--gold); letter-spacing: 2px; font-size: 16px; }
+.plan-box { border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; background: var(--surface); }
+.plan-box.active { border: 2px solid var(--accent); }
+.plan-box ul { margin: 8px 0 0; padding-left: 18px; }
+.plan-box li { margin-bottom: 4px; }
+.price { font: 600 22px/1.1 var(--display); margin: 4px 0 6px; }
+.nota-legal { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 8px; }
+.opt { text-align: left; width: 100%; box-sizing: border-box; margin-bottom: 8px; cursor: pointer; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+.opt.ok { border-color: var(--ok); background: var(--accent-soft); }
+.opt.mal { border-color: var(--alert); }
+.expl { background: var(--accent-soft); border-radius: 12px; padding: 12px 14px; margin: 6px 0 12px; line-height: 1.5; }
+.sub-nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+.checklist li { margin-bottom: 8px; line-height: 1.5; }
+.card.locked { opacity: 0.55; }
+.comp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+.fotos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+figure { margin: 0; min-width: 0; }
+figure img { width: 100%; max-width: 100%; border-radius: 12px; display: block; }
+.niveles { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.nv { font-size: 12px; border: 1px solid var(--border); border-radius: 999px; padding: 3px 9px; color: var(--muted); }
+.nv.on { border-color: var(--gold); color: var(--fg); font-weight: 700; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+.prox { display: flex; gap: 8px; align-items: flex-start; margin-top: 6px; font-weight: 600; }
+.proxcard { border-left: 4px solid var(--accent); }
+.plantillas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 8px 0; }
+.pl { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px; text-align: left; color: var(--fg); display: flex; flex-direction: column; gap: 4px; font: inherit; cursor: pointer; }
+.pl strong { font-size: 15px; }
+.opt.sel { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.tabs button:disabled { opacity: 0.35; cursor: not-allowed; }
+.big { font: 600 44px/1.1 var(--display); }
+.rev { border: 1px solid var(--alert); border-radius: 12px; padding: 12px; margin-bottom: 10px; background: var(--surface); }
+.rev.ok { border-color: var(--ok); }
+.rev .expl { margin: 8px 0 0; }
+.tag.ok { color: var(--ok); border-color: var(--ok); }
+</style>
+
+<div class="app" id="app"></div>
+
+<script>
+/* ---------- Datos ---------- */
+const ETAPAS = ['Siembra', 'Crecimiento', 'Floración', 'Cosecha'];
+const PPFD = { Siembra: [150, 300], Crecimiento: [300, 600], 'Floración': [500, 900] };
+const TIPOS_REG = ['Riego', 'Fertilizante', 'Poda', 'Plaga', 'Observación'];
+const CATS = [["todas","Todas"],["huerta","Huerta"],["nutricion","Nutrición"],["hidro","Hidroponía"],["inerte","Sustrato inerte"],["luz","Luz y ambiente"],["plagas","Plagas y diagnóstico"],["cannabis","Cannabis (Pro)"]];
+
+const MODULOS = [
+ {
+  "id": "suelo",
+  "cat": "huerta",
+  "req": 0,
+  "t": "Suelo, compost y acolchado",
+  "d": "Textura, materia orgánica, pH y acolchado.",
+  "lec": [
+   {
+    "t": "Textura y materia orgánica",
+    "x": "El suelo tiene arena, limo y arcilla. Un suelo franco (mezcla equilibrada) retiene agua y deja pasar el aire. La materia orgánica mejora la estructura, la retención de agua y la vida del suelo."
+   },
+   {
+    "t": "Compost y acolchado",
+    "x": "El compost es materia orgánica descompuesta que aporta nutrientes de liberación lenta. El acolchado (paja, hojas secas) reduce la evaporación, controla malezas y evita que la tierra salpique las hojas al regar."
+   },
+   {
+    "t": "Leer tu suelo: puñado y pH",
+    "x": "Apretá un puñado de tierra: si forma un bloque que se desarma al tocarlo, la humedad es buena; si gotea, está muy húmeda; si no se une, está seca. Para la mayoría de las hortalizas conviene un pH ligeramente ácido a neutro (aproximadamente 6 a 7). Si el suelo se encharca (arcilloso) o se seca enseguida (arenoso), sumar materia orgánica de forma regular ayuda a mejorar su estructura."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Qué caracteriza a un suelo franco?",
+    "ok": "Una mezcla equilibrada de arena, limo y arcilla",
+    "no": [
+     "Mucha arena y muy poca arcilla, con drenaje muy rápido",
+     "Arcilla dominante, con muy poco aire entre partículas",
+     "Piedras grandes y casi nada de partículas finas"
+    ],
+    "e": "El equilibrio entre partículas permite retener agua y dejar pasar el aire."
+   },
+   {
+    "d": 2,
+    "p": "Un vendedor dice: \"El compost reemplaza por completo el riego y la fertilización\". ¿Qué es más preciso?",
+    "ok": "Mejora el suelo y aporta nutrientes lentamente, pero no reemplaza el riego",
+    "no": [
+     "Es correcto: con compost ya no hace falta regar ni fertilizar",
+     "Sirve para corregir el pH, pero no aporta nutrientes",
+     "Reemplaza el riego, pero necesita fertilizante adicional cada semana"
+    ],
+    "e": "El compost ayuda mucho, pero no es una solución total ni sustituye al agua."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál afirmación sobre el acolchado es FALSA?",
+    "ok": "Con acolchado ya no hace falta regar en épocas de calor",
+    "no": [
+     "Reduce la evaporación del agua en la superficie del suelo",
+     "Ayuda a frenar el crecimiento de malezas",
+     "Evita que la tierra salpique las hojas al regar"
+    ],
+    "e": "El acolchado conserva humedad, pero no reemplaza el riego. Esa es la afirmación falsa."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Apretás un puñado de tierra y te gotea agua entre los dedos. ¿Qué indica?",
+    "ok": "Hay exceso de humedad: conviene esperar antes de volver a regar",
+    "no": [
+     "Está en su punto justo y forma un bloque que se desarma",
+     "Está seca y necesita riego inmediato para no endurecerse",
+     "Tiene demasiada arena, por eso el agua pasa tan rápido"
+    ],
+    "e": "Si gotea, hay exceso de agua. En el punto justo forma un bloque que se desarma al tocarlo."
+   },
+   {
+    "d": 2,
+    "p": "La mayoría de las hortalizas rinde mejor en un suelo con pH...",
+    "ok": "Ligeramente ácido a neutro (aprox. 6 a 7)",
+    "no": [
+     "Fuertemente ácido, por debajo de 4,5",
+     "Fuertemente alcalino, por encima de 8,5",
+     "Indiferente: el pH no influye en la absorción de nutrientes"
+    ],
+    "e": "Fuera del rango adecuado, algunos nutrientes quedan poco disponibles aunque estén en el suelo."
+   },
+   {
+    "d": 3,
+    "p": "Tu suelo es muy arcilloso y se encharca. ¿Qué mejora su estructura a lo largo del tiempo?",
+    "ok": "Incorporar compost u otra materia orgánica de forma regular",
+    "no": [
+     "Compactar la tierra con una pala hasta dejarla firme",
+     "Regar con más frecuencia para ablandarla",
+     "Retirar la materia orgánica para que drene más rápido"
+    ],
+    "e": "La materia orgánica mejora la estructura de forma sostenida; compactar o regar más empeora el encharcamiento."
+   },
+   {
+    "d": 3,
+    "p": "Tu suelo es arenoso y el agua se pierde enseguida. ¿Qué conviene hacer?",
+    "ok": "Incorporar compost y cubrir con acolchado para retener humedad",
+    "no": [
+     "Agregar más arena gruesa para que el agua circule mejor",
+     "Regar una sola vez por semana con un volumen muy grande de agua",
+     "Quitar el acolchado para que el sol seque y desinfecte la superficie"
+    ],
+    "e": "La materia orgánica retiene agua y nutrientes en suelos arenosos, y el acolchado reduce la evaporación."
+   }
+  ]
+ },
+ {
+  "id": "germinacion",
+  "cat": "huerta",
+  "req": 0,
+  "t": "Germinación y almácigos",
+  "d": "De la semilla a un plantín sano.",
+  "lec": [
+   {
+    "t": "Qué necesita una semilla",
+    "x": "Para germinar, una semilla necesita humedad, una temperatura adecuada y aire (oxígeno). La luz no es necesaria en todas las especies: algunas la piden y otras germinan mejor tapadas. Como regla práctica, se siembra a una profundidad de 2 o 3 veces el diámetro de la semilla; las semillas muy chicas se dejan casi en superficie."
+   },
+   {
+    "t": "Almácigos y mal del semillero",
+    "x": "Un almácigo es un semillero donde se crían plantines para trasplantarlos después. El exceso de riego, el sustrato pesado y la poca ventilación favorecen el \"mal del semillero\" (damping-off): un conjunto de hongos y organismos parecidos que pudre el tallo de la plántula en la base. Para prevenirlo, usá sustrato liviano y limpio, recipientes limpios, regá lo justo y ventilá."
+   },
+   {
+    "t": "Endurecimiento y trasplante",
+    "x": "Antes de pasar los plantines al exterior hay que endurecerlos: durante una o dos semanas se los expone de a poco al sol, al viento y a las temperaturas de afuera. Trasplantá en un día nublado o al atardecer y regá bien. Los cultivos sensibles al frío se trasplantan recién cuando pasó el riesgo de heladas."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Qué necesita una semilla para germinar?",
+    "ok": "Humedad, temperatura adecuada y oxígeno",
+    "no": [
+     "Luz solar directa, fertilizante y viento fuerte",
+     "Fertilizante, luz intensa y suelo muy compactado",
+     "Agua en exceso, calor extremo y oscuridad total"
+    ],
+    "e": "La semilla ya trae sus reservas: necesita agua, una temperatura apropiada y aire. El fertilizante recién importa después."
+   },
+   {
+    "d": 2,
+    "p": "Las plántulas del almácigo se caen y el tallo se pudre a la altura del sustrato. ¿Qué es más probable?",
+    "ok": "Mal del semillero, favorecido por exceso de humedad y poco aire",
+    "no": [
+     "Falta de agua: hay que regar más seguido y tapar el almácigo",
+     "Exceso de luz: conviene dejarlas a sombra total hasta que se recuperen",
+     "Falta de nitrógeno: hay que fertilizar enseguida con una dosis fuerte"
+    ],
+    "e": "El tallo podrido en la base es típico del mal del semillero. Más riego o más fertilizante lo empeoran."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál afirmación sobre la siembra es FALSA?",
+    "ok": "Todas las semillas necesitan luz para germinar, por eso no se tapan",
+    "no": [
+     "Conviene sembrar a unas 2 o 3 veces el diámetro de la semilla",
+     "Algunas especies germinan mejor con luz y otras, tapadas",
+     "Un sustrato liviano y limpio previene hongos en el semillero"
+    ],
+    "e": "Algunas semillas piden luz y otras germinan mejor tapadas. \"Todas\" delata la afirmación falsa."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Vas a pasar a la huerta unos plantines criados adentro de casa. ¿Qué hacés antes?",
+    "ok": "Endurecerlos: sacarlos de a poco al aire libre 1 o 2 semanas",
+    "no": [
+     "Sacarlos de golpe a pleno sol para que se adapten rápido",
+     "Regarlos al máximo y trasplantarlos al mediodía",
+     "Fertilizarlos con una dosis doble para darles fuerza antes"
+    ],
+    "e": "El endurecimiento los acostumbra al sol, al viento y a la temperatura de afuera y reduce el estrés del trasplante."
+   },
+   {
+    "d": 2,
+    "p": "Vas a sembrar semillas muy chicas, como las de lechuga. ¿Qué profundidad conviene?",
+    "ok": "Casi en superficie, apenas cubiertas",
+    "no": [
+     "Entre 5 y 10 cm de profundidad, bien tapadas",
+     "Lo más hondo posible, para que no las coman los pájaros",
+     "En el fondo del recipiente, con tierra compactada encima"
+    ],
+    "e": "Las semillas chicas tienen pocas reservas y no logran emerger si quedan muy profundas."
+   },
+   {
+    "d": 3,
+    "p": "Un almácigo está siempre empapado y casi sin ventilación. ¿Qué cambio es MÁS adecuado?",
+    "ok": "Regar solo al secarse la superficie y ventilar más",
+    "no": [
+     "Regar más seguido para que no se seque el centro del sustrato",
+     "Taparlo con plástico cerrado para conservar calor y humedad",
+     "Agregar fertilizante para que las plántulas resistan el hongo"
+    ],
+    "e": "El exceso de humedad con poco aire favorece el mal del semillero. Hay que bajar la humedad y ventilar."
+   },
+   {
+    "d": 3,
+    "p": "Tenés plantines de tomate listos para trasplantar, pero se anuncia una helada esta semana. ¿Qué es más prudente?",
+    "ok": "Esperar a que pase el riesgo de heladas: el tomate es muy sensible al frío",
+    "no": [
+     "Trasplantar igual: el tomate resiste heladas fuertes sin problema",
+     "Trasplantar y regar mucho antes de la helada, porque el agua los protege del frío",
+     "Trasplantar y fertilizar, así el frío no los afecta tanto"
+    ],
+    "e": "Según las guías de ProHuerta, el tomate es muy sensible a las heladas: se trasplanta cuando pasó ese riesgo."
+   }
+  ]
+ },
+ {
+  "id": "rotacion",
+  "cat": "huerta",
+  "req": 0,
+  "t": "Rotación y asociaciones",
+  "d": "Planificar la huerta ciclo tras ciclo.",
+  "lec": [
+   {
+    "t": "Rotación de cultivos",
+    "x": "Repetir la misma familia de plantas en el mismo lugar, ciclo tras ciclo, favorece que se acumulen plagas y enfermedades compartidas y agota los mismos nutrientes. Tomate, pimiento, berenjena y papa son solanáceas; repollo, brócoli y rabanito son crucíferas; zapallo, pepino y melón son cucurbitáceas; arveja, poroto y haba son leguminosas."
+   },
+   {
+    "t": "Asociaciones y compañeros",
+    "x": "Muchas asociaciones se basan en la tradición: algunas tienen respaldo (las leguminosas pueden aportar nitrógeno gracias a las bacterias de sus raíces) y otras tienen poca evidencia. Lo seguro: no juntes plantas que compiten por luz, agua o nutrientes y no repitas la misma familia en el mismo lugar. Anotar qué sembraste y dónde ayuda a planificar."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Por qué conviene rotar los cultivos?",
+    "ok": "Corta ciclos de plagas y reparte el uso de nutrientes",
+    "no": [
+     "Hace que el suelo se acidifique de a poco y las plantas rindan más",
+     "Permite reducir los riegos a la mitad durante los meses de verano",
+     "Acelera la germinación de las semillas que se siembran en el ciclo siguiente"
+    ],
+    "e": "Rotar corta el ciclo de muchas plagas y reparte el uso de nutrientes."
+   },
+   {
+    "d": 2,
+    "p": "Tomate y papa son de la misma familia. ¿Qué se deduce?",
+    "ok": "Comparten plagas y enfermedades: conviene no plantar uno donde estuvo el otro",
+    "no": [
+     "Conviene sembrarlos en el mismo cantero para que se protejan entre sí",
+     "No hay relación: cada especie tiene sus propias plagas y enfermedades",
+     "Comparten nutrientes pero no plagas ni enfermedades, da lo mismo"
+    ],
+    "e": "Ambos son solanáceas: comparten plagas y enfermedades."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál de estos pares es de la MISMA familia botánica?",
+    "ok": "Tomate y berenjena",
+    "no": [
+     "Papa y batata",
+     "Lechuga y zanahoria",
+     "Albahaca y tomate"
+    ],
+    "e": "Tomate y berenjena son solanáceas. La papa es solanácea, pero la batata no; lechuga y zanahoria son familias distintas, igual que albahaca y tomate."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Cultivaste tomates en un cantero durante el verano. ¿Qué conviene plantar ahí en el próximo ciclo?",
+    "ok": "Una leguminosa, como arveja o poroto",
+    "no": [
+     "Papa, que aprovecha los nutrientes que dejó el tomate",
+     "Berenjena, que no comparte nada con el tomate",
+     "Pimiento, que es de otra familia botánica"
+    ],
+    "e": "Papa, berenjena y pimiento son solanáceas, como el tomate. Las leguminosas no comparten esas plagas y pueden aportar nitrógeno."
+   },
+   {
+    "d": 3,
+    "p": "Repollo, brócoli y rabanito...",
+    "ok": "Son crucíferas: no conviene repetirlas en el mismo lugar",
+    "no": [
+     "Son de familias distintas, así que pueden repetirse en el mismo lugar sin riesgo",
+     "Son leguminosas y dejan nitrógeno disponible para el cultivo siguiente",
+     "El repollo y el brócoli comparten plagas, pero el rabanito no"
+    ],
+    "e": "Aunque el rabanito sea una raíz, es crucífera como el repollo y el brócoli."
+   },
+   {
+    "d": 3,
+    "p": "Un blog afirma: \"Está comprobado que toda planta tiene un compañero ideal\". ¿Qué postura es más prudente?",
+    "ok": "Algunas asociaciones tienen respaldo y otras apenas son tradición",
+    "no": [
+     "Es correcto: todas las asociaciones entre plantas están demostradas por experimentos",
+     "Las asociaciones son un mito: ninguna tiene efecto real sobre las plantas",
+     "Valen las asociaciones entre plantas de la misma familia botánica"
+    ],
+    "e": "Hay asociaciones con respaldo y otras con poca evidencia. Las frases absolutas (\"toda\") son una señal de alerta."
+   },
+   {
+    "d": 2,
+    "p": "Las leguminosas (arveja, poroto, haba) se incluyen en las rotaciones porque...",
+    "ok": "Pueden dejar nitrógeno disponible gracias a bacterias de sus raíces",
+    "no": [
+     "Tienen raíces muy profundas que airean y descompactan el suelo del cantero",
+     "Repelen las plagas de las plantas que crecen cerca de ellas en el cantero",
+     "Aportan fósforo y potasio en grandes cantidades al suelo del cantero"
+    ],
+    "e": "Las bacterias de sus raíces fijan nitrógeno del aire, que luego puede quedar disponible para el cultivo siguiente."
+   }
+  ]
+ },
+ {
+  "id": "compost",
+  "cat": "huerta",
+  "req": 60,
+  "pre": [
+   "suelo"
+  ],
+  "t": "Compostaje paso a paso",
+  "d": "Marrones, verdes, humedad y madurez.",
+  "lec": [
+   {
+    "t": "Marrones y verdes",
+    "x": "El compost se hace con materiales ricos en carbono (\"marrones\": hojas secas, cartón, paja, aserrín) y ricos en nitrógeno (\"verdes\": restos de verduras y frutas, césped fresco). Una relación carbono:nitrógeno de 25:1 a 30:1 es una buena referencia. En la práctica suele equivaler a más material seco que verde (por ejemplo, 2 o 3 partes de marrón por 1 de verde, según los materiales)."
+   },
+   {
+    "t": "Humedad, aire y calor",
+    "x": "La pila tiene que estar húmeda como una esponja escurrida (50 a 60 % de humedad, orientativo) y recibir aire: se voltea cuando se calienta de más o se compacta. Cuando trabajan los microorganismos, la pila se calienta: de 55 a 60 °C es lo ideal, y mantener unos 55 °C durante varios días ayuda a eliminar patógenos. Evitá carnes, lácteos, grasas y heces de perros y gatos."
+   },
+   {
+    "t": "Compost maduro",
+    "x": "El compost está listo cuando es oscuro, de textura fina, huele a tierra húmeda y ya no se recalienta después de voltearlo. Puede tardar desde un par de meses hasta casi un año según el clima, el tamaño de la pila y cuánto la voltees. Un compost inmaduro puede dañar las plántulas, así que dejalo madurar."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Cuál de estos materiales es un \"marrón\" (rico en carbono)?",
+    "ok": "Hojas secas",
+    "no": [
+     "Césped recién cortado",
+     "Restos de verduras de la cocina",
+     "Cáscaras de frutas frescas"
+    ],
+    "e": "Hojas secas, cartón, paja y aserrín aportan carbono; el césped fresco y los restos de cocina aportan nitrógeno."
+   },
+   {
+    "d": 2,
+    "p": "La pila de compost huele mal (a podrido) y está pegajosa. ¿Qué es más probable?",
+    "ok": "Exceso de humedad y de verdes, con poco aire",
+    "no": [
+     "Falta de humedad y exceso de materiales secos",
+     "Ya está maduro y listo para usar en la huerta",
+     "Falta calor ambiental para que arranque"
+    ],
+    "e": "El mal olor y lo pegajoso indican poco aire, mucha agua y mucho nitrógeno. Conviene agregar marrones y voltear."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál afirmación sobre el compost es FALSA?",
+    "ok": "Se puede agregar cualquier resto de comida, incluso carnes y grasas",
+    "no": [
+     "Una pila más grande y bien armada conserva mejor el calor que una chica",
+     "Voltear la pila periódicamente aporta aire a los microorganismos que trabajan",
+     "Un compost inmaduro puede dañar a las plántulas si se usa directamente"
+    ],
+    "e": "Carnes, lácteos y grasas atraen plagas y dan mal olor; en el compost casero se evitan."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "¿Qué indica que el compost está maduro?",
+    "ok": "Color oscuro, olor a tierra y ya no se recalienta al voltearlo",
+    "no": [
+     "Está bien caliente, humea y tiene olor fuerte a amoníaco al voltearlo",
+     "Todavía se reconocen trozos grandes de restos de comida, pero ya no huele",
+     "Es muy húmedo y chorrea agua cuando se lo aprieta"
+    ],
+    "e": "El compost maduro es oscuro, estable y huele a tierra. Si todavía se calienta, sigue en proceso."
+   },
+   {
+    "d": 2,
+    "p": "En tu pila hay mucho césped fresco y restos de cocina, y casi nada seco. ¿Qué agregás?",
+    "ok": "Hojas secas, cartón o paja, ricos en carbono",
+    "no": [
+     "Más césped fresco para que se caliente todavía más",
+     "Más agua, para que la pila no se seque",
+     "Más restos de cocina para equilibrar la humedad"
+    ],
+    "e": "Falta carbono. Una referencia habitual es más material seco que verde (aprox. 2 o 3 partes de marrón por 1 de verde)."
+   },
+   {
+    "d": 3,
+    "p": "¿Por qué se evitan las carnes, los lácteos y las grasas en el compost casero?",
+    "ok": "Atraen plagas, dan mal olor y pueden traer patógenos",
+    "no": [
+     "Aportan demasiado carbono y frenan la descomposición",
+     "No se descomponen en ningún caso, ni siquiera en años",
+     "Bajan el pH de la pila a valores menores que 2"
+    ],
+    "e": "En una pila casera es difícil controlar esos riesgos, así que se evitan."
+   },
+   {
+    "d": 3,
+    "p": "Una pila de compost alcanza unos 70 °C. ¿Qué conviene hacer?",
+    "ok": "Voltearla para airearla y bajar la temperatura",
+    "no": [
+     "Dejarla así: cuanto más caliente, mejor",
+     "Taparla con plástico para que no se enfríe",
+     "Agregar más material fresco rico en nitrógeno"
+    ],
+    "e": "Por encima de unos 60 a 65 °C no es lo ideal: conviene voltear para airear y enfriar. Lo recomendable ronda los 55 a 60 °C."
+   }
+  ]
+ },
+ {
+  "id": "calendario",
+  "cat": "huerta",
+  "req": 60,
+  "pre": [
+   "germinacion"
+  ],
+  "t": "Cuándo sembrar en Argentina",
+  "d": "Estaciones, heladas y cultivos de cada época.",
+  "lec": [
+   {
+    "t": "Estaciones invertidas y heladas",
+    "x": "En Argentina las estaciones son opuestas a las del hemisferio norte: el verano va de diciembre a marzo. Muchas guías internacionales usan fechas del norte y no sirven acá. Además, el clima cambia mucho de una zona a otra: la fecha de la última helada de tu zona es el dato clave. Consultá el calendario de siembra de ProHuerta (INTA) de tu región."
+   },
+   {
+    "t": "Cultivos de frío y de calor",
+    "x": "Lechuga, espinaca, repollo, cebolla y zanahoria resisten mejor el frío y las heladas. Tomate, pepino, zapallo, berenjena y albahaca son muy sensibles: se siembran o trasplantan cuando pasó el riesgo de heladas y se adelantan en almácigos protegidos. El ajo, la arveja y la haba se siembran en otoño o invierno."
+   },
+   {
+    "t": "Un ejemplo para la zona templada",
+    "x": "Como referencia para el área de Buenos Aires: el tomate se arranca en almácigo protegido hacia julio o agosto y se pasa afuera con el calor, cuando el riesgo de heladas ya pasó. La lechuga se puede sembrar en gran parte del año, con variedades distintas según la estación. En otras zonas las fechas cambian: verificá con tu región."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Qué dato es clave para decidir cuándo trasplantar cultivos sensibles al frío?",
+    "ok": "Cuándo pasa el riesgo de heladas en tu zona",
+    "no": [
+     "Las fechas de un calendario del norte",
+     "El día en que compraste las semillas",
+     "La cantidad de plantines que tengas"
+    ],
+    "e": "Lo que manda es el clima de tu zona. Un calendario del norte tiene las estaciones invertidas."
+   },
+   {
+    "d": 2,
+    "p": "¿Cuál de estos cultivos es MUY sensible a las heladas?",
+    "ok": "Albahaca",
+    "no": [
+     "Espinaca",
+     "Cebolla",
+     "Zanahoria"
+    ],
+    "e": "Según ProHuerta, la albahaca, el tomate, el pepino y el zapallo son muy sensibles; las hojas verdes de invierno, la cebolla y la zanahoria resisten mejor."
+   },
+   {
+    "d": 3,
+    "p": "Una guía europea dice \"sembrá tomate en abril\". ¿Qué conviene concluir para Argentina?",
+    "ok": "Las estaciones son opuestas: conviene usar un calendario de tu zona",
+    "no": [
+     "Vale en todo el mundo: abril sirve para sembrar en cualquier lugar",
+     "Hay que sembrar en octubre en todo el país, sin excepción",
+     "El hemisferio no influye: lo que importa es el tipo de suelo"
+    ],
+    "e": "En el hemisferio sur las estaciones son opuestas, y el clima varía mucho entre zonas. Las fechas de otro hemisferio no sirven."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "El ajo, la arveja y la haba suelen sembrarse en...",
+    "ok": "Otoño o invierno",
+    "no": [
+     "Pleno verano, con el calor máximo",
+     "La misma época que el tomate y el pepino",
+     "Primavera avanzada, cuando ya no hay heladas"
+    ],
+    "e": "Son cultivos de estación fresca: se siembran en otoño o invierno, según la zona."
+   },
+   {
+    "d": 2,
+    "p": "¿Para qué se hacen almácigos protegidos de tomate antes de que termine el invierno?",
+    "ok": "Para tener plantines listos al pasar el riesgo de heladas",
+    "no": [
+     "Porque el tomate germina mejor con heladas intensas",
+     "Para no tener que regar los plantines durante la primavera",
+     "Porque el tomate necesita pasar frío extremo para crecer"
+    ],
+    "e": "Los almácigos protegidos adelantan el cultivo sin exponer los plantines al frío."
+   },
+   {
+    "d": 3,
+    "p": "Se anuncia una helada y tenés lechugas y tomates plantados. ¿Qué afirmación es más precisa?",
+    "ok": "La lechuga resiste mejor que el tomate, que es muy sensible",
+    "no": [
+     "Ambos resisten igual por ser hortalizas de hoja y de fruto",
+     "El tomate resiste mejor que la lechuga porque tiene más follaje",
+     "Ninguno se daña si se los riega bien antes de que llegue la helada"
+    ],
+    "e": "La lechuga es más resistente; el tomate es muy sensible. Regar no protege de una helada fuerte."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál afirmación sobre los calendarios de siembra es FALSA?",
+    "ok": "Un calendario de una región sirve igual en todo el país",
+    "no": [
+     "Las fechas cambian según la zona y también según el año",
+     "Conviene consultar el calendario de tu región antes de sembrar cada cultivo",
+     "La fecha de la última helada de tu zona es un dato clave"
+    ],
+    "e": "El clima cambia mucho de una zona a otra: las fechas de una región no se pueden aplicar sin ajustar."
+   }
+  ]
+ },
+ {
+  "id": "nutrientes",
+  "cat": "nutricion",
+  "req": 60,
+  "t": "Nutrientes: qué necesita cada planta",
+  "d": "NPK, etiquetas, nutrientes móviles y síntomas.",
+  "lec": [
+   {
+    "t": "Macro y micronutrientes",
+    "x": "Las plantas necesitan nutrientes minerales. Los macronutrientes principales son nitrógeno (N), fósforo (P) y potasio (K), que se necesitan en mayor cantidad. Calcio (Ca), magnesio (Mg) y azufre (S) son secundarios. Los micronutrientes (hierro, manganeso, zinc, cobre, boro, molibdeno, entre otros) se necesitan en cantidades muy pequeñas, pero faltan o sobran con facilidad, y en ambos casos causan problemas. Según la ley del mínimo, el crecimiento lo limita el recurso más escaso, aunque los demás sobren."
+   },
+   {
+    "t": "Leer la etiqueta N-P-K",
+    "x": "Los fertilizantes indican su contenido con tres números (N-P-K), en porcentaje de peso. Un fertilizante 20-10-20 tiene 20 % de nitrógeno, 10 % de fósforo (expresado como P₂O₅) y 20 % de potasio (expresado como K₂O). Por eso 1 kg de ese fertilizante contiene 200 g de nitrógeno. Seguí siempre la dosis del fabricante: más no es mejor, porque el exceso de sales quema raíces y puntas de hojas."
+   },
+   {
+    "t": "Nutrientes móviles e inmóviles",
+    "x": "Algunos nutrientes se mueven dentro de la planta (nitrógeno, fósforo, potasio, magnesio): si faltan, la planta los traslada desde las hojas viejas hacia las nuevas, así que los síntomas aparecen primero abajo. Otros casi no se mueven (calcio, hierro, boro): si faltan, el problema se ve primero en las hojas nuevas y en los brotes. Ejemplo: la falta de nitrógeno amarillea parejo las hojas viejas; la falta de hierro amarillea las hojas jóvenes entre las nervaduras. Ojo: muchos síntomas se parecen, y un pH fuera de rango puede bloquear nutrientes que sí están presentes."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Qué significan los tres números de un fertilizante 20-10-20?",
+    "ok": "El porcentaje de N, P y K que contiene",
+    "no": [
+     "Los días de aplicación en cada etapa del cultivo",
+     "El pH, la EC y la temperatura recomendados",
+     "Las dosis en gramos para tres plantas distintas"
+    ],
+    "e": "Son los porcentajes de nitrógeno, fósforo (como P₂O₅) y potasio (como K₂O) en peso."
+   },
+   {
+    "d": 2,
+    "p": "Tenés 500 g de un fertilizante 20-10-20. ¿Cuánto nitrógeno (N) contiene?",
+    "ok": "100 g",
+    "no": [
+     "200 g",
+     "50 g",
+     "20 g"
+    ],
+    "e": "El 20 % de 500 g es 100 g. Con 1 kg serían 200 g; con el 10 % serían 50 g."
+   },
+   {
+    "d": 3,
+    "p": "Las hojas de abajo se ponen amarillas de forma pareja y las nuevas están verdes. ¿Qué es más probable?",
+    "ok": "Falta de nitrógeno: es móvil y la planta lo toma de las hojas viejas",
+    "no": [
+     "Falta de hierro, cuya falta se nota primero en las hojas nuevas",
+     "Falta de calcio, cuya falta se ve primero en brotes y hojas jóvenes",
+     "Exceso de luz, que blanquea las hojas cercanas a la lámpara"
+    ],
+    "e": "Un nutriente móvil como el nitrógeno se traslada a lo nuevo, y por eso el amarilleo empieza en las hojas viejas."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "En hidroponía, las hojas nuevas se ponen amarillas con las nervaduras verdes y el pH de la solución está en 8. ¿Qué conviene hacer primero?",
+    "ok": "Bajar el pH al rango adecuado: a pH alto el hierro queda poco disponible",
+    "no": [
+     "Subir la dosis de nitrógeno, que es el nutriente que más amarillea las hojas",
+     "Acercar la lámpara para que la planta produzca más clorofila",
+     "Cambiar el sustrato, porque seguramente tiene hierro de más"
+    ],
+    "e": "Con pH alto el hierro se bloquea aunque esté en la solución. Primero se corrige el pH, no se agrega más fertilizante."
+   },
+   {
+    "d": 2,
+    "p": "¿Qué dice la ley del mínimo (Liebig)?",
+    "ok": "El crecimiento lo limita el recurso más escaso, aunque los demás sobren",
+    "no": [
+     "El crecimiento depende del nutriente que se aplica en mayor cantidad",
+     "Un nutriente en exceso compensa la falta de los demás",
+     "Cada nutriente aporta lo mismo, así que importa la suma total"
+    ],
+    "e": "Si falta un nutriente, abonar más con los otros no mejora el crecimiento."
+   },
+   {
+    "d": 3,
+    "p": "Un amigo duplica la dosis del fertilizante \"para que crezca el doble de rápido\". ¿Qué es más probable?",
+    "ok": "Puede acumular sales, quemar puntas y raíces y frenar el crecimiento",
+    "no": [
+     "Crecerá bastante más rápido, porque tendrá más alimento disponible",
+     "No pasará nada: la planta toma de la solución lo que necesita y deja el resto",
+     "Se perderá el exceso, pero la planta no sufrirá daños"
+    ],
+    "e": "El exceso de sales aumenta la EC y puede quemar raíces y puntas de las hojas."
+   },
+   {
+    "d": 3,
+    "p": "Las puntas de las hojas están marrones y crujientes en toda la planta, y la EC es el doble de la recomendada. ¿Qué es más probable?",
+    "ok": "Exceso de sales (quemadura por EC alta): conviene diluir la solución",
+    "no": [
+     "Falta de luz: hay que acercar la lámpara y dejarla más horas encendida",
+     "Falta de fósforo: hay que agregar más fertilizante para compensar",
+     "Aire muy seco: conviene mojar las hojas varias veces por día"
+    ],
+    "e": "Puntas quemadas con EC alta indican exceso de sales. Más fertilizante lo empeora."
+   }
+  ]
+ },
+ {
+  "id": "hidro-intro",
+  "cat": "hidro",
+  "req": 60,
+  "t": "Qué es la hidroponía",
+  "d": "Sin suelo: qué cambia, qué se complica y cómo hacerlo seguro.",
+  "lec": [
+   {
+    "t": "Cultivar sin suelo",
+    "x": "En hidroponía las raíces reciben agua con nutrientes disueltos, o un sustrato inerte que recibe esa solución. El control de nutrientes es más preciso y el consumo de agua suele ser menor que en el suelo. La planta absorbe los mismos nutrientes minerales que en tierra: cambia la forma de entregárselos."
+   },
+   {
+    "t": "Sin amortiguación: todo lo controlás vos",
+    "x": "En el suelo hay un \"colchón\" que suaviza los errores. En hidroponía no: pH, EC, oxígeno en la raíz, temperatura de la solución y limpieza son tu responsabilidad, y los errores se notan rápido. Una falla de la bomba o de la aireación puede dañar las raíces en poco tiempo."
+   },
+   {
+    "t": "Temperatura, oxígeno y seguridad",
+    "x": "El agua tibia contiene menos oxígeno disuelto y favorece hongos como el Pythium (pudrición de raíces). Como referencia, mantené la solución fresca (aproximadamente 18 a 22 °C) y aireada; por encima de unos 25 °C el riesgo sube. Seguridad: agua y electricidad no se mezclan. Usá protección diferencial (disyuntor), enchufes y transformadores lejos del agua y cables con un bucle hacia abajo antes del enchufe, para que el agua no llegue a la conexión."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "En hidroponía, los nutrientes llegan a las raíces...",
+    "ok": "Disueltos en el agua de la solución nutritiva",
+    "no": [
+     "A través de la luz de la lámpara, que aporta minerales",
+     "Desde el compost que se agrega al sustrato inerte",
+     "Con el aire húmedo que rodea las hojas del cultivo"
+    ],
+    "e": "La solución nutritiva es la fuente de los nutrientes minerales."
+   },
+   {
+    "d": 2,
+    "p": "En un cultivo en agua a 30 °C y sin aireación, las raíces se ponen marrones y huelen mal. ¿Qué es más probable?",
+    "ok": "Pudrición de raíces (como Pythium) por agua tibia y poco oxígeno",
+    "no": [
+     "Falta de nutrientes: hay que subir la EC cuanto antes para que se recuperen",
+     "Exceso de luz sobre las raíces, que se queman con el calor",
+     "Una etapa normal: las raíces sanas cambian de color al madurar"
+    ],
+    "e": "Raíces marrones con mal olor, agua tibia y poca aireación apuntan a pudrición por Pythium. Más EC lo empeora."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál afirmación sobre hidroponía es FALSA?",
+    "ok": "Al no haber suelo, no existen enfermedades que afecten las raíces",
+    "no": [
+     "Una falla de bomba o aireación puede dañar las raíces en poco tiempo",
+     "El Pythium puede aparecer cuando el agua está tibia y estancada",
+     "El agua fría contiene más oxígeno disuelto que el agua tibia"
+    ],
+    "e": "Sin suelo también hay riesgos: las raíces pueden enfermar en la solución."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Querés reducir el riesgo de Pythium en un cultivo en agua. ¿Qué medida es más útil?",
+    "ok": "Mantener la solución fresca y aireada, y el reservorio limpio",
+    "no": [
+     "Subir la temperatura del agua a más de 28 °C para acelerar el crecimiento",
+     "Reducir la aireación para que la solución no se mueva",
+     "Dejar entrar luz al reservorio para que las raíces la aprovechen"
+    ],
+    "e": "El agua fresca, oxigenada y limpia dificulta al Pythium. La luz en el reservorio favorece algas."
+   },
+   {
+    "d": 2,
+    "p": "Se derramó agua cerca de la bomba y del transformador conectados. ¿Qué hacés primero?",
+    "ok": "Cortar la corriente desde el tablero, sin tocar el agua ni los cables",
+    "no": [
+     "Desenchufar la bomba enseguida, aunque tengas las manos mojadas, para ahorrar tiempo",
+     "Secar el agua con un trapo mientras todo sigue enchufado",
+     "Esperar a que el agua se evapore para volver a conectar"
+    ],
+    "e": "Lo primero es cortar la corriente sin tocar el agua. Después se seca y se revisa todo antes de reconectar."
+   },
+   {
+    "d": 3,
+    "p": "La EC y el pH están correctos, pero las raíces están marrones y las hojas se marchitan al mediodía. La solución está a 29 °C. ¿Qué es más probable?",
+    "ok": "La temperatura alta reduce el oxígeno disuelto y estresa las raíces",
+    "no": [
+     "Falta de nitrógeno: conviene subir la EC al doble",
+     "Exceso de oxígeno en la solución, que quema las raíces",
+     "Como el pH y la EC están bien, el problema no puede estar en las raíces"
+    ],
+    "e": "Un pH y una EC correctos no garantizan raíces sanas: el agua tibia tiene menos oxígeno y favorece pudriciones."
+   },
+   {
+    "d": 3,
+    "p": "Comparás un cultivo en suelo con uno hidropónico. ¿Cuál afirmación es MÁS precisa?",
+    "ok": "La hidroponía da más control de nutrientes, pero exige más monitoreo",
+    "no": [
+     "La hidroponía rinde más siempre y no requiere ningún control",
+     "En hidroponía no se necesitan nutrientes añadidos porque el agua ya los tiene",
+     "En suelo se controla mejor la solución nutritiva que en hidroponía"
+    ],
+    "e": "Más control significa también más responsabilidad: hay que medir y mantener la solución."
+   }
+  ]
+ },
+ {
+  "id": "hidro-sistemas",
+  "cat": "hidro",
+  "req": 180,
+  "pre": [
+   "hidro-intro"
+  ],
+  "t": "Sistemas hidropónicos",
+  "d": "DWC, NFT, goteo, Kratky: cuál conviene y qué riesgos tiene.",
+  "lec": [
+   {
+    "t": "DWC, NFT, goteo e inundación",
+    "x": "DWC (cultivo en agua profunda): las raíces cuelgan sumergidas en la solución, con aireación constante. NFT: una película fina de solución corre por canales inclinados y moja las raíces. Goteo: una bomba envía solución a un sustrato inerte alrededor de cada planta. Inundación y drenaje: el sustrato se llena y se vacía por ciclos."
+   },
+   {
+    "t": "Sistemas pasivos: Kratky y mecha",
+    "x": "El método Kratky no usa bomba ni electricidad: la planta crece en un recipiente con solución y, a medida que baja el nivel, se forma una cámara de aire para las raíces superiores. Sirve para cultivos cortos como lechuga y hierbas. Los sistemas de mecha llevan la solución al sustrato por capilaridad."
+   },
+   {
+    "t": "Qué sistema para qué",
+    "x": "El NFT y el DWC se usan mucho con hojas verdes y hierbas. El NFT tiene poco \"colchón\": si la bomba se detiene, las raíces se secan rápido. El DWC tiene más volumen de agua y por eso mantiene más estables el pH y la EC, pero exige aireación y temperatura controlada. Los cultivos grandes, como tomate o pepino, suelen ir en goteo con sustrato."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Qué sistema deja las raíces sumergidas en la solución con aireación constante?",
+    "ok": "DWC",
+    "no": [
+     "NFT, con una película fina de solución",
+     "Goteo, con un sustrato alrededor de la raíz",
+     "Aeroponía, con las raíces en niebla"
+    ],
+    "e": "DWC significa cultivo en agua profunda: las raíces están sumergidas y aireadas."
+   },
+   {
+    "d": 2,
+    "p": "Se corta la luz y la bomba queda detenida varias horas. ¿Qué sistema sufre más rápido?",
+    "ok": "NFT, porque las raíces dependen de una película fina de solución",
+    "no": [
+     "DWC, porque el agua de un tanque grande se agota enseguida",
+     "Kratky, porque necesita electricidad para funcionar",
+     "Ninguno: todos los sistemas aguantan igual un corte de bomba"
+    ],
+    "e": "El NFT casi no tiene reserva de agua: sin bomba, las raíces se secan pronto."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál afirmación sobre sistemas hidropónicos es FALSA?",
+    "ok": "El método Kratky necesita una bomba para oxigenar las raíces",
+    "no": [
+     "El NFT tiene poco volumen de agua y es sensible a cortes de bomba",
+     "El DWC mantiene más estables el pH y la EC por su gran volumen",
+     "El goteo con sustrato se usa en cultivos grandes como el tomate"
+    ],
+    "e": "El Kratky es pasivo: no usa bomba; el aire llega por la cámara que se forma cuando baja el nivel."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "En un cultivo Kratky de lechuga baja el nivel de la solución con el tiempo. ¿Qué pasa con las raíces superiores?",
+    "ok": "Quedan en una cámara de aire húmedo y así reciben oxígeno",
+    "no": [
+     "Se secan y mueren, por eso hay que mantener el recipiente lleno hasta arriba",
+     "Se pudren, por eso hay que cambiar el agua cada dos días",
+     "No cambia nada: las raíces necesitan estar sumergidas para absorber agua"
+    ],
+    "e": "En Kratky la cámara de aire que se forma es justamente la que oxigena las raíces."
+   },
+   {
+    "d": 2,
+    "p": "Querés cultivar tomates grandes en hidroponía. ¿Qué sistema es más habitual?",
+    "ok": "Goteo sobre sustrato inerte, en bolsas o macetas grandes",
+    "no": [
+     "NFT con canales muy finos, que sostienen bien el peso de la planta",
+     "Kratky en un frasco chico, sin bomba",
+     "Aeroponía con raíces colgando en niebla, sin sustrato"
+    ],
+    "e": "Los cultivos de fruto grandes necesitan soporte y volumen de raíz: el goteo con sustrato es lo habitual."
+   },
+   {
+    "d": 2,
+    "p": "¿Para qué sirve la bomba de aire con piedra difusora en un DWC?",
+    "ok": "Para disolver oxígeno en la solución y moverla",
+    "no": [
+     "Para calentar el agua y acelerar el crecimiento",
+     "Para subir el pH de la solución de forma constante",
+     "Para agregar nutrientes a medida que la planta los pide"
+    ],
+    "e": "La aireación mantiene oxígeno disuelto para las raíces sumergidas."
+   },
+   {
+    "d": 3,
+    "p": "Un folleto dice: \"Nuestro kit hidropónico no necesita ningún control, solo agregar agua\". ¿Qué es más prudente pensar?",
+    "ok": "Que es exagerado: igual hay que medir pH y EC y vigilar la solución",
+    "no": [
+     "Que es verdad: los kits automáticos de hidroponía casi no fallan",
+     "Que es verdad si el kit es de una marca reconocida",
+     "Que alcanza con vigilar la bomba, porque lo demás se regula por sí mismo"
+    ],
+    "e": "Las promesas absolutas son una señal de alerta: la solución cambia con el consumo de la planta."
+   }
+  ]
+ },
+ {
+  "id": "solucion",
+  "cat": "hidro",
+  "req": 180,
+  "pre": [
+   "hidro-intro"
+  ],
+  "t": "Solución nutritiva, pH y EC",
+  "d": "Medir, ajustar y mantener lo que hay disuelto.",
+  "lec": [
+   {
+    "t": "pH: la llave de los nutrientes",
+    "x": "El pH indica si el agua es ácida o alcalina. Fuera del rango adecuado, la planta puede tener nutrientes disponibles y no absorberlos bien. En muchos cultivos hidropónicos el rango orientativo ronda entre 5,5 y 6,5; revisá el de tu cultivo. La escala es logarítmica: pH 5 es 10 veces más ácido que pH 6. Medí el pH después de mezclar los nutrientes, porque los fertilizantes lo modifican; ajustá de a poco y volvé a medir a los minutos. Si usás ácido concentrado, agregalo siempre al agua (nunca al revés) y usá guantes y protección ocular."
+   },
+   {
+    "t": "EC y PPM: cuánta sal hay",
+    "x": "La EC mide cuánta sal conduce la solución (mS/cm). Los medidores de PPM no miden \"partes por millón\" reales: convierten la EC con un factor (0,5 o 0,7 según el aparato), por eso dos medidores pueden dar números distintos para la misma solución. Ejemplo: 1,0 mS/cm equivale a 500 ppm (escala 0,5) o a 700 ppm (escala 0,7). Fijate en qué escala trabaja tu medidor. El agua de la canilla ya trae sales: si tu objetivo es 1,2 mS/cm y el agua tiene 0,4, el fertilizante debe aportar 0,8. Las plántulas toleran menos sales que las plantas adultas."
+   },
+   {
+    "t": "Calibrar y mantener",
+    "x": "Los medidores se calibran con soluciones patrón (buffer de pH 4 y 7; solución estándar de EC). El electrodo de pH no se guarda en agua destilada, sino en su solución de almacenamiento. Si las lecturas son erráticas, limpiá y recalibrá antes de tocar la solución. Los fertilizantes en dos partes (A y B) no se mezclan concentrados, porque el calcio puede precipitar con fosfatos y sulfatos: se agregan por separado al agua, mezclando entre una y otra. Renová la solución completa periódicamente."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Qué mide la EC de una solución nutritiva?",
+    "ok": "La cantidad de sales disueltas",
+    "no": [
+     "La acidez o alcalinidad",
+     "La temperatura del agua",
+     "La cantidad de oxígeno disuelto"
+    ],
+    "e": "El pH mide acidez; la EC mide sales disueltas."
+   },
+   {
+    "d": 2,
+    "p": "Tu medidor usa la escala 0,5 y marca 800 ppm. ¿Cuál es la EC aproximada?",
+    "ok": "1,6 mS/cm",
+    "no": [
+     "0,4 mS/cm",
+     "0,8 mS/cm",
+     "1,1 mS/cm"
+    ],
+    "e": "Con la escala 0,5, la EC es ppm ÷ 500: 800 ÷ 500 = 1,6 mS/cm. Con la escala 0,7 daría 1,1."
+   },
+   {
+    "d": 3,
+    "p": "Mezclaste el fertilizante en un balde de agua y querés ajustar el pH. ¿Cuál es el orden correcto?",
+    "ok": "Medir el pH, corregirlo de a poco y volver a medir",
+    "no": [
+     "Corregir el pH del agua sola y no volver a medir después de agregar los nutrientes",
+     "Agregar mucho ácido de una vez y medir recién al día siguiente",
+     "Medir el pH una sola vez, antes de comprar el fertilizante"
+    ],
+    "e": "Los nutrientes cambian el pH, así que se mide después de mezclarlos y se corrige gradualmente."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Para bajar el pH con ácido concentrado, ¿cómo se procede?",
+    "ok": "Agregar siempre el ácido al agua, de a poco y con protección en ojos y manos",
+    "no": [
+     "Verter el agua sobre el ácido para que se diluya rápido",
+     "Agregar todo el ácido de una vez y revolver bien después",
+     "Mezclarlo sin protección, porque en poca cantidad no es peligroso"
+    ],
+    "e": "Siempre se agrega el ácido al agua, nunca al revés, y con guantes y protección ocular."
+   },
+   {
+    "d": 2,
+    "p": "El agua de tu canilla tiene EC 0,4 mS/cm y querés una solución de 1,2 mS/cm. ¿Cuánta EC debe aportar el fertilizante?",
+    "ok": "0,8 mS/cm",
+    "no": [
+     "1,2 mS/cm",
+     "1,6 mS/cm",
+     "0,4 mS/cm"
+    ],
+    "e": "El agua ya aporta 0,4: 1,2 − 0,4 = 0,8 mS/cm."
+   },
+   {
+    "d": 3,
+    "p": "Un fertilizante viene en dos botellas (A y B). ¿Por qué no conviene mezclar los concentrados entre sí?",
+    "ok": "El calcio puede precipitar con fosfatos y sulfatos y quedar inutilizable",
+    "no": [
+     "Porque los dos concentrados se neutralizan y pierden todo el nitrógeno que tienen",
+     "Porque mezclados cambian de color, aunque funcionan igual",
+     "Porque la mezcla produce un gas que daña las raíces"
+    ],
+    "e": "En concentrado, el calcio puede formar precipitados con fosfatos y sulfatos. Diluidos en el agua, se agregan por separado."
+   },
+   {
+    "d": 3,
+    "p": "Tu medidor de pH da lecturas muy distintas cada vez que lo sumergís en la misma solución. ¿Qué hacés primero?",
+    "ok": "Limpiar el electrodo y recalibrarlo con soluciones patrón",
+    "no": [
+     "Corregir la solución con ácido hasta que la lectura se estabilice",
+     "Cambiar toda la solución por una nueva y volver a medir",
+     "Dejar el electrodo toda la noche en agua destilada"
+    ],
+    "e": "Si el medidor es errático, el problema suele estar en el aparato. Se limpia y se calibra antes de tocar la solución."
+   }
+  ]
+ },
+ {
+  "id": "inertes",
+  "cat": "inerte",
+  "req": 60,
+  "t": "Sustratos inertes",
+  "d": "Perlita, vermiculita, coco, lana de roca y LECA.",
+  "lec": [
+   {
+    "t": "Qué es un sustrato inerte",
+    "x": "Un sustrato inerte no aporta nutrientes. Sirve para sostener la planta, retener agua y dejar pasar el aire. Todos los nutrientes llegan por el riego, así que la solución nutritiva es clave. Dos propiedades importan: la retención de agua y la aireación (porosidad). Cuanto más retiene, menos aire tiene, y al revés."
+   },
+   {
+    "t": "Los más usados",
+    "x": "Perlita: muy aireada, poca retención de agua. Vermiculita: retiene agua y nutrientes, pero se compacta con el tiempo. Fibra de coco: buena retención y aireación; conviene lavarla y acondicionarla antes de usarla, porque puede traer sales. Lana de roca: muy común en hidroponía; de fábrica suele ser alcalina y requiere acondicionarla (remojarla en agua con pH ajustado). LECA (arcilla expandida): buen drenaje y reutilizable."
+   },
+   {
+    "t": "Mezclas y reutilización",
+    "x": "Se pueden combinar: por ejemplo, fibra de coco con perlita para sumar aire a una retención buena. Los sustratos reutilizables (como la LECA) se lavan y se desinfectan entre cultivos. No reutilices un sustrato que tuvo plagas o raíces enfermas sin desinfectarlo. La perlita suelta polvo fino: humedecela antes de manipularla."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "Un sustrato inerte...",
+    "ok": "No aporta nutrientes: llegan por el riego",
+    "no": [
+     "Aporta nutrientes de liberación lenta durante todo el ciclo",
+     "Reemplaza el agua de riego mientras retiene humedad",
+     "Es un material orgánico que se puede compostar al terminar el cultivo"
+    ],
+    "e": "Por eso la solución nutritiva es tan importante."
+   },
+   {
+    "d": 2,
+    "p": "¿Qué sustrato retiene mucha agua y nutrientes, aunque puede compactarse con el tiempo?",
+    "ok": "Vermiculita",
+    "no": [
+     "Perlita",
+     "LECA",
+     "Grava lavada"
+    ],
+    "e": "La perlita, la LECA y la grava airean mucho pero retienen poco; la vermiculita retiene más."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál afirmación sobre sustratos inertes es FALSA?",
+    "ok": "La fibra de coco nunca necesita lavado antes de usarse",
+    "no": [
+     "La perlita es muy aireada y retiene poca agua, por eso drena rápido",
+     "La LECA tiene buen drenaje y puede reutilizarse tras lavarla",
+     "La lana de roca suele necesitar acondicionamiento antes de usarla"
+    ],
+    "e": "El coco suele necesitar lavado y acondicionamiento antes de usarlo. La falsa es \"nunca\"."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Comprás lana de roca y el fabricante aclara que tiene pH alcalino de fábrica. ¿Qué hacés antes de usarla?",
+    "ok": "Remojarla en agua con pH ajustado (ácido) para acondicionarla",
+    "no": [
+     "Usarla tal cual: la planta ajusta sola el pH de la raíz",
+     "Secarla al sol dos días para que pierda la alcalinidad",
+     "Mezclarla con ceniza para estabilizar el pH"
+    ],
+    "e": "La lana de roca nueva suele ser alcalina y se acondiciona antes de plantar."
+   },
+   {
+    "d": 2,
+    "p": "Querés más aire en la zona de raíces de fibra de coco. ¿Qué mezcla es razonable?",
+    "ok": "Sumar perlita a la fibra de coco",
+    "no": [
+     "Sumar vermiculita fina, que es el sustrato que más aire aporta",
+     "Compactar bien la fibra de coco antes de plantar",
+     "Agregar arena fina, que mejora la aireación del coco"
+    ],
+    "e": "La perlita aporta porosidad. La vermiculita retiene agua y la arena fina o la compactación reducen el aire."
+   },
+   {
+    "d": 3,
+    "p": "Vas a reutilizar un sustrato inerte de un cultivo que tuvo raíces enfermas. ¿Qué es más prudente?",
+    "ok": "Desinfectarlo bien, o descartarlo si no se puede limpiar",
+    "no": [
+     "Reutilizarlo igual: los patógenos mueren al secarse unos minutos",
+     "Reutilizarlo mezclado con sustrato nuevo para diluir los problemas",
+     "Reutilizarlo y agregar más fertilizante para compensar"
+    ],
+    "e": "Los patógenos pueden sobrevivir en el sustrato: hay que desinfectar o descartar."
+   },
+   {
+    "d": 3,
+    "p": "Dos macetas del mismo tamaño, una con perlita y otra con fibra de coco, reciben el mismo riego. ¿Qué se espera?",
+    "ok": "La de perlita se seca más rápido y pide riegos más frecuentes",
+    "no": [
+     "La de perlita retiene más agua porque es más liviana",
+     "Las dos se secan igual: el sustrato no cambia el riego",
+     "La de coco se seca antes por ser más fibrosa"
+    ],
+    "e": "La perlita retiene poca agua; el coco retiene bastante más."
+   }
+  ]
+ },
+ {
+  "id": "riego-inerte",
+  "cat": "inerte",
+  "req": 180,
+  "pre": [
+   "inertes"
+  ],
+  "t": "Riego en sustrato inerte",
+  "d": "Frecuencia, volumen, drenaje y lectura del agua que sale.",
+  "lec": [
+   {
+    "t": "Riego frecuente, volúmenes chicos",
+    "x": "Los sustratos inertes retienen poca agua y se secan rápido. Suelen necesitar riegos más frecuentes que la tierra, pero con poco volumen. La frecuencia depende de la planta, la etapa, la temperatura y el tamaño del contenedor."
+   },
+   {
+    "t": "Drenaje y oxígeno",
+    "x": "En el primer riego conviene comprobar que haya algo de drenaje (un 10 a 20 %, orientativo) para evitar la acumulación de sales. Un sustrato siempre encharcado deja sin oxígeno a las raíces y favorece pudriciones como el Pythium."
+   },
+   {
+    "t": "Leer el agua que drena",
+    "x": "Medir la EC del agua que drena te dice qué pasa en la raíz. Si es mucho mayor que la de la solución que entra, se están acumulando sales: conviene regar con más volumen (o dar una pasada de lavado). Si es bastante menor, la planta está consumiendo más nutrientes que agua y puede convenir subir un poco la EC de entrada."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Cómo suelen ser los riegos en sustrato inerte?",
+    "ok": "Más seguidos y con menos volumen que en tierra",
+    "no": [
+     "Menos seguidos y con mucho volumen cada vez",
+     "Una vez por semana, con agua sin nutrientes",
+     "Iguales a los de tierra, sin diferencias"
+    ],
+    "e": "Se secan rápido: conviene regar seguido con volúmenes moderados."
+   },
+   {
+    "d": 2,
+    "p": "Regás un sustrato inerte y no sale nada de agua por abajo. ¿Qué indica?",
+    "ok": "Puede faltar riego: sin drenaje las sales se acumulan",
+    "no": [
+     "Que el sustrato está perfecto y no necesita más agua",
+     "Que el sustrato retiene todo y no hay riesgo de sales",
+     "Que conviene regar menos la próxima vez"
+    ],
+    "e": "Sin algo de drenaje, las sales se acumulan en el sustrato. Cero drenaje no es buena señal."
+   },
+   {
+    "d": 3,
+    "p": "El agua que drena sale con una EC mucho más alta que la solución que entra. ¿Qué conviene?",
+    "ok": "Regar con más volumen para arrastrar las sales acumuladas",
+    "no": [
+     "Subir todavía más la EC de la solución para que se equilibre con el drenaje",
+     "Regar menos, para que la raíz no pierda nutrientes",
+     "No hacer nada: el sustrato filtra las sales por su cuenta"
+    ],
+    "e": "Una EC alta en el drenaje indica acumulación de sales. Más fertilizante lo empeora."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Hace calor y las macetas de perlita se secan antes del mediodía. ¿Qué cambio es más adecuado?",
+    "ok": "Regar más veces al día, con volúmenes moderados",
+    "no": [
+     "Regar una vez por semana con un volumen enorme",
+     "Dejar de regar unos días para forzar a la raíz a buscar agua",
+     "Quitar la perlita y plantar directamente en agua estancada"
+    ],
+    "e": "El sustrato retiene poco: más riegos, pero cada uno chico."
+   },
+   {
+    "d": 2,
+    "p": "Un sustrato inerte está siempre encharcado. ¿Qué riesgo aumenta?",
+    "ok": "Falta de oxígeno en la raíz y pudriciones como el Pythium",
+    "no": [
+     "Quemadura de las hojas por exceso de luz sobre la copa de la planta",
+     "Aumento de la fotosíntesis, por tener más humedad disponible en la raíz",
+     "Falta de agua en el sustrato por exceso de drenaje"
+    ],
+    "e": "El encharcamiento deja sin oxígeno a las raíces y favorece las pudriciones."
+   },
+   {
+    "d": 3,
+    "p": "Regás 2 litros y recogés 0,3 litros de drenaje. ¿Qué porcentaje es y cómo se interpreta?",
+    "ok": "15 %: está dentro del rango orientativo (10 a 20 %)",
+    "no": [
+     "30 %: es demasiado y hay que reducir mucho el volumen del riego",
+     "6,7 %: es muy poco, así que conviene regar con más volumen",
+     "85 %: casi todo lo que regaste se perdió por el fondo"
+    ],
+    "e": "0,3 ÷ 2 = 0,15, es decir, 15 %. Entra en el rango orientativo."
+   },
+   {
+    "d": 3,
+    "p": "La EC del drenaje es bastante menor que la de la solución que entra. ¿Cómo se interpreta?",
+    "ok": "Las plantas consumen más nutrientes que agua: puede convenir subir la EC",
+    "no": [
+     "Se están acumulando sales: hay que regar con más volumen",
+     "La planta no absorbe nada, así que hay que cortar el fertilizante",
+     "El sustrato se está lavando solo y no hace falta ningún cambio"
+    ],
+    "e": "Cuando el drenaje sale más diluido, la raíz está tomando más nutrientes que agua."
+   }
+  ]
+ },
+ {
+  "id": "luz",
+  "cat": "luz",
+  "req": 0,
+  "t": "Luz LED y PPFD",
+  "d": "Intensidad, altura, rangos por etapa y señales de la planta.",
+  "lec": [
+   {
+    "t": "Qué es el PPFD",
+    "x": "El PPFD mide cuántos fotones útiles para las plantas llegan a un metro cuadrado cada segundo (µmol/m²/s). No mide calor ni brillo visible: una lámpara puede verse brillante y dar poca luz útil. Los lux miden lo que percibe el ojo humano y no sirven para comparar lámparas de cultivo."
+   },
+   {
+    "t": "Altura, horas y etapa",
+    "x": "Acercar la lámpara aumenta la intensidad, pero muy cerca quema las hojas; al alejarla, la intensidad baja rápido. Por eso conviene medir a la altura de las hojas, no en el aire. Las horas de luz dependen de la planta y la etapa. Las plántulas toleran menos intensidad; la floración o fructificación suele pedir más."
+   },
+   {
+    "t": "Rangos orientativos y señales",
+    "x": "Como referencia general (cambia según la especie): plántulas, 150 a 300 µmol/m²/s; crecimiento, 300 a 600; floración o fructificación, 500 a 900. Las hojas verdes (lechuga, hierbas) suelen conformarse con menos intensidad que los cultivos de fruto. Exceso de luz: bordes quemados y hojas blanqueadas cerca de la lámpara. Falta de luz: tallos largos y finos, estirados hacia la fuente, y hojas pálidas."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Qué mide el PPFD?",
+    "ok": "La luz útil que recibe una superficie cada segundo",
+    "no": [
+     "El calor que produce la lámpara sobre la superficie de la hoja",
+     "Las horas que la lámpara permanece encendida cada día",
+     "El brillo que percibe el ojo humano al mirar la lámpara"
+    ],
+    "e": "Mide los fotones útiles para la fotosíntesis que llegan a la superficie, por metro cuadrado y por segundo."
+   },
+   {
+    "d": 2,
+    "p": "Una lámpara dice \"10.000 lux\" y otra \"600 PPFD\". ¿Qué es correcto?",
+    "ok": "Miden cosas distintas: no se pueden comparar directamente",
+    "no": [
+     "Miden lo mismo con otra escala, así que se pueden convertir sin problemas",
+     "El lux es mejor para plantas, porque mide más cantidad de luz",
+     "Si el lux es alto, el PPFD también será alto"
+    ],
+    "e": "Lux mide lo que ve el ojo humano; PPFD, la luz útil para las plantas. Dos lámparas con los mismos lux pueden dar PPFD muy distintos."
+   },
+   {
+    "d": 3,
+    "p": "Las hojas más cercanas a la lámpara se ven blanqueadas con bordes quemados, y las de abajo están bien. ¿Qué es más probable?",
+    "ok": "Estrés lumínico: intensidad excesiva o lámpara demasiado cerca",
+    "no": [
+     "Falta de luz: hay que acercar la lámpara todavía más a la copa",
+     "Exceso de riego: las hojas de arriba reciben demasiada agua",
+     "Falta de nitrógeno, que blanquea primero las hojas nuevas"
+    ],
+    "e": "Daño localizado en lo más cercano a la lámpara es la firma del estrés por luz excesiva."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Medís 250 µmol/m²/s a la altura de las hojas de unas plántulas. ¿Cómo se interpreta?",
+    "ok": "Está dentro del rango orientativo de plántulas (150 a 300)",
+    "no": [
+     "Es muy poco: las plántulas necesitan más de 600",
+     "Es excesivo: las plántulas no toleran más de 100",
+     "No sirve: el PPFD no se usa con plántulas"
+    ],
+    "e": "El rango orientativo para plántulas va de 150 a 300 µmol/m²/s."
+   },
+   {
+    "d": 2,
+    "p": "Las plantas crecen con tallos largos y finos, estirados hacia la lámpara, y hojas pálidas. ¿Qué indica?",
+    "ok": "Poca luz (estiramiento): conviene acercar la lámpara o subir la intensidad",
+    "no": [
+     "Exceso de luz: conviene alejar la lámpara de la copa de las plantas",
+     "Falta de agua: el estiramiento aparece cuando las plantas tienen sed",
+     "Exceso de nutrientes, que estira los tallos hacia el techo"
+    ],
+    "e": "El estiramiento hacia la fuente de luz es una respuesta a recibir poca luz."
+   },
+   {
+    "d": 3,
+    "p": "Para ahorrar energía, subís la lámpara de 30 a 60 cm sin cambiar nada más. ¿Qué es lo más probable?",
+    "ok": "El PPFD que llega a las hojas baja y la planta puede estirarse",
+    "no": [
+     "El PPFD sube, porque la luz se reparte sobre más superficie",
+     "No cambia nada: la luz llega igual de lejos que antes",
+     "Aumenta la fotosíntesis, porque hay menos calor sobre las hojas"
+    ],
+    "e": "Al alejar la lámpara, la intensidad en las hojas cae, y con poca luz las plantas tienden a estirarse."
+   },
+   {
+    "d": 3,
+    "p": "Una lámpara dice \"alta potencia: 300 W\" en la caja. ¿Qué dato es más útil para saber si sirve para un cultivo?",
+    "ok": "El PPFD que entrega a la distancia de trabajo",
+    "no": [
+     "Los vatios que consume, sin importar nada más",
+     "El tamaño de la caja y del disipador de calor",
+     "Cuánto brilla al mirarla desde lejos"
+    ],
+    "e": "Los vatios miden consumo, no luz útil. Lo que importa es el PPFD a la altura de las hojas."
+   }
+  ]
+ },
+ {
+  "id": "dli",
+  "cat": "luz",
+  "req": 60,
+  "pre": [
+   "luz"
+  ],
+  "t": "DLI: la luz acumulada del día",
+  "d": "Intensidad por horas: cuánta luz recibe la planta en un día.",
+  "lec": [
+   {
+    "t": "Qué es el DLI",
+    "x": "El DLI (integral de luz diaria) es la cantidad total de luz útil que recibe una planta en un día, en mol/m²/día. Combina la intensidad y las horas. Se calcula así: DLI = PPFD × horas de luz × 3600 ÷ 1.000.000. Ejemplo: 300 µmol/m²/s durante 16 horas dan 300 × 16 × 3600 ÷ 1.000.000 ≈ 17,3 mol/m²/día."
+   },
+   {
+    "t": "Referencias y cómo ajustarlo",
+    "x": "Como referencia: lechuga y hojas verdes, aproximadamente 12 a 17 mol/m²/día; cultivos de fruto como tomate o pimiento, aproximadamente 20 a 30. Para llegar al DLI buscado se puede subir la intensidad o las horas, pero tiene límites: las plantas necesitan períodos de oscuridad y algunas especies, como el tomate, se dañan con luz continua. Si subís la intensidad, controlá también el calor y el riego."
+   },
+   {
+    "t": "Fotoperíodo estable",
+    "x": "El fotoperíodo son las horas de luz por día. En las plantas de día neutro (como tomate o pepino) no define cuándo florecen; en otras especies sí influye. Cambiar las horas modifica el DLI y puede estresar o inducir la floración en especies sensibles. Una vez elegido, mantené el fotoperíodo estable."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Qué combina el DLI?",
+    "ok": "La intensidad de la luz y las horas de luz del día",
+    "no": [
+     "La temperatura y la humedad del ambiente",
+     "El pH y la EC de la solución nutritiva",
+     "La potencia en vatios y el precio de la lámpara"
+    ],
+    "e": "El DLI es la luz total del día: intensidad (PPFD) por horas."
+   },
+   {
+    "d": 2,
+    "p": "Una lámpara da 400 µmol/m²/s durante 12 horas. ¿Cuál es el DLI aproximado?",
+    "ok": "17,3 mol/m²/día",
+    "no": [
+     "4,8 mol/m²/día",
+     "28,8 mol/m²/día",
+     "48,0 mol/m²/día"
+    ],
+    "e": "400 × 12 × 3600 ÷ 1.000.000 = 17,28 mol/m²/día."
+   },
+   {
+    "d": 3,
+    "p": "Con 12 horas de luz querés un DLI de 15 mol/m²/día. ¿Qué PPFD necesitás aproximadamente?",
+    "ok": "350 µmol/m²/s",
+    "no": [
+     "125 µmol/m²/s",
+     "700 µmol/m²/s",
+     "1.250 µmol/m²/s"
+    ],
+    "e": "PPFD = DLI × 1.000.000 ÷ (3600 × horas) = 15.000.000 ÷ 43.200 ≈ 347 µmol/m²/s."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Una lechuga recibe un DLI de 6 mol/m²/día. ¿Qué es más probable?",
+    "ok": "Está por debajo de lo habitual (12 a 17) y crecerá lento",
+    "no": [
+     "Está por encima del rango habitual y se quemará enseguida",
+     "Está justo en el rango ideal para hojas verdes",
+     "Es ideal para cultivos de fruto, que necesitan muy poca luz"
+    ],
+    "e": "Para hojas verdes se busca aproximadamente 12 a 17 mol/m²/día; con 6 el crecimiento será lento."
+   },
+   {
+    "d": 2,
+    "p": "¿Qué pasa con el DLI si pasás de 16 a 12 horas de luz con la misma lámpara?",
+    "ok": "Baja a las tres cuartas partes",
+    "no": [
+     "No cambia, porque la intensidad es la misma",
+     "Baja a la mitad del valor anterior",
+     "Sube, porque las plantas descansan más tiempo"
+    ],
+    "e": "El DLI es proporcional a las horas: 12 ÷ 16 = 0,75."
+   },
+   {
+    "d": 3,
+    "p": "Un amigo deja la lámpara 24 horas \"para que crezca más\". ¿Qué es más prudente decirle?",
+    "ok": "Que necesitan oscuridad y algunas, como el tomate, se dañan con luz continua",
+    "no": [
+     "Que está bien: a más horas de luz, más rápido crece, sin límite",
+     "Que da igual, porque la planta usa la luz que necesita y descarta el resto sin problemas",
+     "Que conviene si baja la intensidad a la mitad"
+    ],
+    "e": "Más horas no siempre es mejor: hay especies que se dañan con luz continua."
+   },
+   {
+    "d": 3,
+    "p": "Subiste la intensidad para alcanzar un DLI mayor y las hojas se arrugan y los bordes se queman. ¿Qué hacés?",
+    "ok": "Reducir la intensidad y revisar el calor y el riego",
+    "no": [
+     "Seguir subiendo la intensidad hasta que la planta se adapte",
+     "Agregar más fertilizante para que resista la luz",
+     "Regar menos para que las hojas no se mojen"
+    ],
+    "e": "Los bordes quemados indican exceso de luz o calor. Se baja la intensidad y se revisa el ambiente."
+   }
+  ]
+ },
+ {
+  "id": "vpd",
+  "cat": "luz",
+  "req": 180,
+  "pre": [
+   "luz"
+  ],
+  "t": "VPD y ambiente",
+  "d": "Temperatura y humedad, leídas juntas.",
+  "lec": [
+   {
+    "t": "Temperatura y humedad juntas",
+    "x": "El VPD (déficit de presión de vapor) combina temperatura y humedad y muestra cuánto demanda el aire el agua de la planta. Se mide en kPa y es más útil que mirar cada valor por separado. Se calcula con la presión de vapor de saturación (SVP) a la temperatura del aire: VPD = SVP × (1 − humedad relativa). Ejemplo: a 25 °C la SVP es de unos 3,17 kPa; con 60 % de humedad, el VPD es de unos 1,27 kPa."
+   },
+   {
+    "t": "VPD bajo y alto",
+    "x": "Un VPD muy bajo (aire húmedo y frío) favorece hongos y crecimiento lento. Uno muy alto (aire seco y caliente) puede cerrar los estomas y causar estrés hídrico. Como referencia general para crecimiento, la zona ronda 0,8 a 1,2 kPa; las plántulas suelen preferir valores algo menores y la floración o fructificación, algo mayores. El rango ideal cambia con la especie y la etapa."
+   },
+   {
+    "t": "Cómo corregirlo",
+    "x": "Con la misma humedad relativa, el aire más caliente da un VPD mayor. Para bajar el VPD: bajá la temperatura o subí la humedad. Para subirlo: hacé lo contrario. Ventilá para evitar bolsas de aire húmedo cerca de las hojas y hacé los cambios de a poco. La humedad relativa sola no alcanza: siempre leela junto con la temperatura."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "El VPD se calcula con...",
+    "ok": "La temperatura y la humedad relativa del aire",
+    "no": [
+     "La potencia de la lámpara y las horas de luz",
+     "El pH y la EC de la solución nutritiva",
+     "El PPFD y la altura de la lámpara sobre las plantas"
+    ],
+    "e": "Usa temperatura y humedad relativa."
+   },
+   {
+    "d": 2,
+    "p": "Con 25 °C y 90 % de humedad relativa, ¿qué se espera?",
+    "ok": "VPD bajo: el aire casi no absorbe agua y sube el riesgo de hongos",
+    "no": [
+     "VPD alto: el aire absorbe mucha agua y la planta se estresa",
+     "Un VPD ideal para la etapa de crecimiento",
+     "No se puede saber sin conocer la potencia de la lámpara"
+    ],
+    "e": "Con mucha humedad el VPD es bajo (unos 0,3 kPa), y eso favorece hongos."
+   },
+   {
+    "d": 3,
+    "p": "Con la misma humedad relativa (60 %), ¿qué pasa con el VPD si la temperatura sube de 22 a 30 °C?",
+    "ok": "Aumenta: el aire caliente puede contener más vapor y \"pide\" más agua",
+    "no": [
+     "Baja, porque el aire caliente se satura más rápido",
+     "No cambia: el VPD depende de la humedad relativa",
+     "Se vuelve negativo cuando la temperatura supera los 28 °C"
+    ],
+    "e": "A 22 °C el VPD es de unos 1,06 kPa y a 30 °C, de unos 1,70 kPa."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "En tu carpa hay hongos recurrentes, con 22 °C y 85 % de humedad. ¿Qué indica el VPD?",
+    "ok": "Es bajo (unos 0,4 kPa): conviene ventilar y bajar la humedad",
+    "no": [
+     "Es alto (más de 2 kPa): conviene subir todavía más la humedad",
+     "Es ideal (1,2 kPa): el hongo viene de otra causa",
+     "No se puede interpretar sin la potencia de la lámpara"
+    ],
+    "e": "A 22 °C y 85 % el VPD es de unos 0,4 kPa: demasiado bajo, favorece hongos."
+   },
+   {
+    "d": 2,
+    "p": "Una carpa está a 32 °C y 35 % de humedad. ¿Qué es más probable?",
+    "ok": "VPD muy alto: la planta pierde agua muy rápido",
+    "no": [
+     "VPD muy bajo: hay un riesgo alto de hongos por exceso de humedad",
+     "VPD ideal para floración, que pide ambientes cálidos y secos",
+     "El VPD no cambia con la temperatura, sino con la humedad"
+    ],
+    "e": "A 32 °C y 35 % el VPD es de unos 3,1 kPa, muy alto."
+   },
+   {
+    "d": 3,
+    "p": "Tu VPD está alto. ¿Qué cambio lo baja?",
+    "ok": "Subir la humedad o bajar la temperatura",
+    "no": [
+     "Bajar la humedad y subir la temperatura",
+     "Subir la temperatura y la potencia de la lámpara",
+     "Aumentar la ventilación de aire seco y caliente"
+    ],
+    "e": "Más humedad o menos temperatura reducen la demanda de agua del aire."
+   },
+   {
+    "d": 3,
+    "p": "Un higrómetro marca 70 % de humedad. ¿Alcanza ese dato para saber si el ambiente es adecuado?",
+    "ok": "No: hay que leerlo junto con la temperatura",
+    "no": [
+     "Sí: alcanza con la humedad relativa para decidir",
+     "Sí: 70 % es la humedad ideal para la etapa de crecimiento",
+     "No: el VPD depende de la luz, no de la humedad"
+    ],
+    "e": "La misma humedad relativa da VPD distintos según la temperatura."
+   }
+  ]
+ },
+ {
+  "id": "plagas",
+  "cat": "plagas",
+  "req": 0,
+  "t": "Plagas y prevención",
+  "d": "Detectar temprano, reconocerlas y prevenir sin alarmarse.",
+  "lec": [
+   {
+    "t": "Revisar, no esperar",
+    "x": "Revisá el envés de las hojas una vez por semana, mejor con una lupa. Pulgones, araña roja, trips y mosca blanca son frecuentes. Detectarlas cuando hay pocas simplifica el control. Las trampas amarillas pegajosas atrapan insectos voladores (mosca blanca, trips, mosquitos del sustrato) y avisan cuándo aparecen."
+   },
+   {
+    "t": "Quién es quién",
+    "x": "Pulgones: insectos chicos que chupan savia y dejan una melaza pegajosa que atrae hormigas. Araña roja: ácaros diminutos, con telarañas finas y puntitos amarillos en las hojas; prosperan en ambientes secos y calurosos. Trips: dejan rayas plateadas y puntos negros. Mosca blanca: insectos blancos que vuelan al mover la planta. Mosquitos del sustrato: las larvas viven en sustrato muy húmedo."
+   },
+   {
+    "t": "Prevención y hongos",
+    "x": "Ventilación, limpieza de herramientas, no excederse con el riego y aislar las plantas nuevas una o dos semanas antes de juntarlas con las demás ayudan a prevenir. El oídio (polvo blanco) y la botrytis (moho gris) aparecen con humedad alta y poca ventilación."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Dónde conviene revisar primero?",
+    "ok": "En el envés de las hojas",
+    "no": [
+     "En la parte de arriba de la maceta",
+     "En el tallo más alto de la planta",
+     "En las flores o frutos, antes de mirar las hojas"
+    ],
+    "e": "Muchas plagas se esconden en el envés."
+   },
+   {
+    "d": 2,
+    "p": "Aparece un polvo blanco que se limpia con el dedo sobre las hojas. ¿Qué es más probable?",
+    "ok": "Oídio, favorecido por humedad alta y poca ventilación",
+    "no": [
+     "Carencia de nitrógeno, que deja las hojas con manchas blancas",
+     "Quemadura por luz, que forma un polvo sobre la hoja",
+     "Telarañas de araña roja, que se ven como polvo blanco"
+    ],
+    "e": "El polvo blanco característico es oídio, un hongo."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál NO es una medida preventiva?",
+    "ok": "Mojar las hojas y dejar la humedad alta de noche",
+    "no": [
+     "Aislar las plantas nuevas antes de juntarlas con las demás",
+     "Mejorar la ventilación alrededor de las plantas",
+     "Limpiar las herramientas de poda entre una planta y otra"
+    ],
+    "e": "Mojar las hojas y mantener humedad alta favorece los hongos."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Ves telarañas finas y puntitos amarillos en el envés, con ambiente caluroso y seco. ¿Qué es más probable?",
+    "ok": "Araña roja, favorecida por ambientes secos y calurosos",
+    "no": [
+     "Oídio, favorecido por ambientes húmedos y fríos",
+     "Mosca blanca, que forma telarañas al volar",
+     "Pulgones, que dejan puntitos amarillos al picar"
+    ],
+    "e": "Las telarañas finas con puntitos amarillos son típicas de la araña roja."
+   },
+   {
+    "d": 2,
+    "p": "Las hojas y los tallos están pegajosos y hay hormigas subiendo por la planta. ¿Qué es más probable?",
+    "ok": "Pulgones, que dejan melaza azucarada y atraen hormigas",
+    "no": [
+     "Araña roja, que deja telarañas y no melaza",
+     "Exceso de riego, que vuelve pegajosas las hojas",
+     "Falta de calcio, que atrae a las hormigas"
+    ],
+    "e": "La melaza pegajosa y las hormigas son señal de pulgones."
+   },
+   {
+    "d": 3,
+    "p": "Comprás una planta nueva y la vas a poner junto a las demás. ¿Qué es más prudente?",
+    "ok": "Aislarla una o dos semanas y revisarla bien",
+    "no": [
+     "Juntarla ya mismo: una planta de vivero ya viene tratada",
+     "Rociarla con un insecticida fuerte y juntarla enseguida",
+     "Juntarla, porque si tuviera plagas ya se notarían"
+    ],
+    "e": "Una cuarentena corta evita contagiar a las demás."
+   },
+   {
+    "d": 3,
+    "p": "Aparecen mosquitos chicos volando sobre macetas siempre húmedas. ¿Qué acción ataca la causa?",
+    "ok": "Dejar secar la capa superior del sustrato entre riegos",
+    "no": [
+     "Regar más seguido para ahogar a las larvas con exceso de agua",
+     "Aumentar la humedad del ambiente para que no vuelen",
+     "Fumigar las hojas, porque las larvas viven en las hojas"
+    ],
+    "e": "Las larvas viven en sustrato muy húmedo; secarlo entre riegos corta su ciclo."
+   }
+  ]
+ },
+ {
+  "id": "mip",
+  "cat": "plagas",
+  "req": 180,
+  "pre": [
+   "plagas"
+  ],
+  "t": "Manejo integrado de plagas",
+  "d": "Prevenir, monitorear y controlar con la medida menos agresiva.",
+  "lec": [
+   {
+    "t": "Qué es el MIP",
+    "x": "El manejo integrado de plagas combina varias medidas, en orden: 1) prevenir (limpieza, ventilación, cuarentena); 2) monitorear (revisar, trampas amarillas, anotar en la bitácora); 3) decidir según cuánta plaga hay; 4) controlar con la medida menos agresiva que funcione. La idea no es eliminar todo, sino mantener la plaga en un nivel que no cause daño."
+   },
+   {
+    "t": "Opciones de control",
+    "x": "Primero lo mecánico y cultural: quitar hojas muy afectadas, lavar con agua, ajustar humedad y riego, trampas. Después lo biológico (enemigos naturales, como las mariquitas contra los pulgones) y los productos de bajo impacto, como el jabón potásico, siguiendo la etiqueta. Los productos fuertes son el último recurso, y su uso depende de la normativa y de si el cultivo es comestible."
+   },
+   {
+    "t": "Aplicar con cuidado",
+    "x": "Probá cualquier producto en pocas hojas y esperá 24 a 48 horas antes de aplicarlo en toda la planta. Aplicalo temprano o al atardecer, no bajo sol fuerte ni con calor intenso. Respetá la dosis y el plazo de carencia (los días que deben pasar entre la aplicación y la cosecha). No mezcles productos por tu cuenta y alterná los métodos: repetir siempre lo mismo favorece que la plaga se vuelva resistente. Anotá qué hiciste y cómo respondió."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Cuál es el primer paso del manejo integrado de plagas?",
+    "ok": "Prevenir y monitorear antes de que aparezca el problema",
+    "no": [
+     "Aplicar un producto fuerte cada semana, aunque no haya plagas",
+     "Esperar a que haya muchas plagas para recién ahí actuar",
+     "Podar la planta hasta dejar el tallo central"
+    ],
+    "e": "El MIP empieza por la prevención y el monitoreo."
+   },
+   {
+    "d": 2,
+    "p": "Encontrás pocos pulgones en dos hojas. ¿Qué es más acorde al MIP?",
+    "ok": "Quitar o lavar las hojas afectadas y seguir monitoreando",
+    "no": [
+     "Fumigar toda la huerta con un producto fuerte de inmediato",
+     "Ignorarlos: los pulgones nunca causan daño a las plantas",
+     "Arrancar la planta entera y tirarla a la basura"
+    ],
+    "e": "Con pocos individuos alcanza una medida mecánica y seguir observando."
+   },
+   {
+    "d": 3,
+    "p": "¿Qué conviene hacer antes de aplicar un producto nuevo?",
+    "ok": "Probarlo en pocas hojas y esperar 24 a 48 horas",
+    "no": [
+     "Aplicarlo en toda la planta al mediodía para que actúe más rápido",
+     "Duplicar la dosis de la etiqueta para asegurar el efecto",
+     "Mezclarlo con otro producto para que sea más potente"
+    ],
+    "e": "La prueba en pocas hojas detecta daños antes de tratar toda la planta."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Un producto indica un plazo de carencia de 7 días y tu cultivo es comestible. ¿Qué significa?",
+    "ok": "Que no podés cosechar para consumir hasta 7 días después de aplicarlo",
+    "no": [
+     "Que tenés que aplicarlo cada 7 días",
+     "Que podés cosechar el mismo día si lavás bien el producto",
+     "Que el producto recién actúa a los 7 días"
+    ],
+    "e": "El plazo de carencia es el tiempo mínimo entre la aplicación y la cosecha."
+   },
+   {
+    "d": 2,
+    "p": "¿Por qué conviene alternar los métodos de control?",
+    "ok": "Repetir siempre lo mismo genera plagas resistentes",
+    "no": [
+     "Porque así se gasta menos producto en cada aplicación",
+     "Porque las plagas cambian de color con la temporada",
+     "Porque los productos se vencen si se usan seguido"
+    ],
+    "e": "Repetir un solo método selecciona individuos resistentes."
+   },
+   {
+    "d": 3,
+    "p": "Tu trampa amarilla captura 2 o 3 insectos por semana desde hace un mes, sin daño visible. ¿Qué es más acorde al MIP?",
+    "ok": "Seguir monitoreando y anotar: es un nivel bajo que no justifica tratar",
+    "no": [
+     "Aplicar un insecticida fuerte cada semana por las dudas, antes de que aumenten",
+     "Sacar la trampa, porque ya cumplió su función y no hace falta seguir contando",
+     "Cortar la planta a la mitad para eliminar a los insectos y a sus huevos"
+    ],
+    "e": "El MIP busca mantener la plaga en un nivel que no cause daño, no eliminarla a cualquier costo."
+   },
+   {
+    "d": 3,
+    "p": "Un vendedor ofrece \"un spray que elimina todas las plagas para siempre y es 100 % seguro\". ¿Qué es más prudente?",
+    "ok": "Desconfiar: ningún producto es 100 % seguro ni definitivo",
+    "no": [
+     "Comprarlo: si es natural, no tiene riesgos para las plantas ni para las personas",
+     "Usarlo a doble dosis para que el efecto dure más",
+     "Comprarlo y dejar de revisar las plantas"
+    ],
+    "e": "Las promesas absolutas son una señal de alerta: todo producto tiene instrucciones y límites."
+   }
+  ]
+ },
+ {
+  "id": "diagnostico",
+  "cat": "plagas",
+  "pro": true,
+  "req": 350,
+  "pre": [
+   "plagas",
+   "nutrientes"
+  ],
+  "t": "Diagnóstico avanzado",
+  "d": "Un método para leer síntomas y descartar causas.",
+  "lec": [
+   {
+    "t": "Un método: observar, descartar, cambiar una cosa",
+    "x": "Diagnosticar es descartar causas. Mirá: 1) dónde aparece el síntoma (hojas viejas, nuevas, toda la planta); 2) si hay plagas u hongos visibles (envés, tallo, raíz); 3) cómo están el ambiente (temperatura, humedad, luz) y el riego; 4) cómo están el pH y la EC. Cambiá una sola variable por vez y anotá el resultado en la bitácora: si cambiás todo junto, no sabés qué funcionó."
+   },
+   {
+    "t": "Síntomas frecuentes",
+    "x": "Hojas de abajo amarillas y parejo: falta de nitrógeno. Amarilleo entre nervaduras en hojas nuevas: falta de hierro o pH alto que lo bloquea. Amarilleo entre nervaduras en hojas viejas: posible falta de magnesio. Puntas marrones crujientes: exceso de sales (EC alta) o aire muy seco. Hojas caídas con sustrato húmedo y raíces con mal olor: exceso de riego o raíces enfermas. Hojas caídas con sustrato seco: falta de agua. Hojas enrolladas hacia arriba: calor, luz muy intensa o aire seco. Podredumbre en la base del fruto del tomate: falta de calcio en el fruto, muchas veces por riego irregular."
+   },
+   {
+    "t": "Qué evitar",
+    "x": "Un mismo síntoma puede tener varias causas, y un pH fuera de rango imita carencias. Evitá fertilizar a ciegas ante un amarilleo, podar de más, cambiar el sustrato por un síntoma aislado o mezclar remedios. Antes de sumar productos, revisá pH, EC, riego, raíces y plagas. Esta guía orienta: ante un problema grave o un cultivo importante, consultá a un técnico."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "Para diagnosticar un problema, ¿qué conviene cambiar a la vez?",
+    "ok": "Una sola variable por vez, anotando el resultado",
+    "no": [
+     "Todas las variables juntas, para ganar tiempo y ver resultados antes",
+     "Dos o tres a la vez, si parecen relacionadas",
+     "Esperar una semana sin cambiar ni anotar nada"
+    ],
+    "e": "Si cambiás varias cosas juntas, no sabés cuál funcionó."
+   },
+   {
+    "d": 2,
+    "p": "Las hojas nuevas salen amarillas entre las nervaduras y las viejas están verdes. ¿Qué es más probable?",
+    "ok": "Falta de hierro, o un pH alto que lo bloquea",
+    "no": [
+     "Falta de nitrógeno, que amarillea primero las hojas viejas",
+     "Falta de magnesio, que aparece sobre todo en las hojas viejas",
+     "Exceso de luz, que blanquea las hojas de abajo"
+    ],
+    "e": "El hierro casi no se mueve en la planta: su falta aparece en las hojas nuevas."
+   },
+   {
+    "d": 3,
+    "p": "Las hojas están caídas, el sustrato lleva días húmedo y las raíces huelen mal. ¿Qué hacés primero?",
+    "ok": "Dejar de regar y revisar las raíces",
+    "no": [
+     "Regar más: las hojas caídas indican sed",
+     "Agregar fertilizante para reforzar la planta",
+     "Aplicar un insecticida, porque seguro hay plagas"
+    ],
+    "e": "Hojas caídas con sustrato húmedo y mal olor apuntan a exceso de riego o raíces enfermas."
+   }
+  ],
+  "banco": [
+   {
+    "d": 2,
+    "p": "Un tomate muestra una mancha oscura y blanda en la base del fruto. ¿Qué es más probable?",
+    "ok": "Falta de calcio en el fruto, a menudo por riego irregular",
+    "no": [
+     "Exceso de potasio en las hojas, que se acumula en el fruto",
+     "Ataque de oídio sobre el fruto, favorecido por la humedad",
+     "Quemadura por el sol de la tarde sobre la punta del fruto"
+    ],
+    "e": "La podredumbre apical se asocia a falta de calcio en el fruto, a menudo por riego irregular."
+   },
+   {
+    "d": 2,
+    "p": "Las hojas se enrollan hacia arriba como canoas, con 33 °C y poca humedad. ¿Qué es más probable?",
+    "ok": "Estrés por calor y aire seco: conviene bajar la temperatura",
+    "no": [
+     "Falta de nitrógeno: conviene fertilizar enseguida",
+     "Exceso de riego: conviene dejar de regar unos días",
+     "Falta de luz: conviene acercar la lámpara a las hojas"
+    ],
+    "e": "Calor y aire seco (VPD alto) hacen que las hojas se enrollen para perder menos agua."
+   },
+   {
+    "d": 3,
+    "p": "Una planta tiene las puntas quemadas. Un amigo dice: \"agregá más fertilizante, es hambre\". Medís una EC del doble de lo recomendado. ¿Qué hacés?",
+    "ok": "Diluir la solución y volver a medir: es un exceso de sales",
+    "no": [
+     "Agregar fertilizante como dice tu amigo, porque las puntas quemadas son hambre",
+     "Subir el pH para que absorba mejor",
+     "Cambiar la lámpara por una más potente"
+    ],
+    "e": "Con EC alta, las puntas quemadas indican exceso de sales. Más fertilizante lo empeora."
+   },
+   {
+    "d": 3,
+    "p": "Hay manchas amarillas y puntitos, y al revés de las hojas se ven telarañas finas, con 33 °C y aire seco. ¿Cuál es la secuencia más sensata?",
+    "ok": "Confirmar con lupa, aislar la planta y bajar la temperatura",
+    "no": [
+     "Fertilizar fuerte, porque las manchas amarillas indican hambre",
+     "Podar casi toda la planta y esperar que rebrote",
+     "Regar más, porque la araña roja aparece por sed"
+    ],
+    "e": "Primero se confirma el diagnóstico y se corrige el ambiente; después, la medida menos agresiva."
+   }
+  ]
+ },
+ {
+  "id": "cann-legal",
+  "cat": "cannabis",
+  "pro": true,
+  "req": 0,
+  "t": "Cannabis: marco legal en Argentina",
+  "d": "Qué regula la normativa y cómo verificarla.",
+  "aviso": "Contenido educativo. No es asesoramiento legal individual. La normativa cambia: verificá siempre fuentes oficiales.",
+  "lec": [
+   {
+    "t": "Marco legal en Argentina",
+    "x": "La Ley 27.350 regula el uso medicinal, terapéutico y paliativo del cannabis y sus derivados. Su reglamentación, sus registros y sus requisitos cambian con el tiempo, y las normas provinciales pueden sumar reglas propias. Consultá el Boletín Oficial y las fuentes oficiales vigentes."
+   },
+   {
+    "t": "Cultivar, tener y vender no son lo mismo",
+    "x": "Las reglas sobre cultivo, tenencia y comercialización son distintas y dependen de la normativa vigente y del uso previsto. Si tenés una duda concreta, consultá a un abogado especializado."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Cuál es una fuente válida para conocer la normativa vigente?",
+    "ok": "El Boletín Oficial y las fuentes oficiales",
+    "no": [
+     "Un video con muchas visualizaciones",
+     "Un grupo de redes sociales",
+     "Una publicación de un vendedor de semillas"
+    ],
+    "e": "Lo válido es lo publicado oficialmente y vigente."
+   },
+   {
+    "d": 2,
+    "p": "Una app dice: \"Cultivar cannabis es legal en todo el país para cualquier persona\". ¿Qué conviene pensar?",
+    "ok": "Es una afirmación absoluta: conviene verificar la normativa vigente, que puede variar",
+    "no": [
+     "Es correcto porque lo dice una app",
+     "Solo es falso en las grandes ciudades",
+     "Es correcto si la app tiene muchas descargas"
+    ],
+    "e": "Trampa: \"todo el país\" y \"cualquier persona\" hacen sospechosa la frase."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál afirmación es FALSA?",
+    "ok": "Las normas provinciales no tienen efecto en su provincia",
+    "no": [
+     "La normativa puede cambiar con el tiempo",
+     "Revisar la normativa de tu provincia es parte de informarse",
+     "Cultivar, tener y vender se regulan de forma distinta"
+    ],
+    "e": "Las normas provinciales sí tienen efecto en su territorio."
+   }
+  ],
+  "banco": []
+ },
+ {
+  "id": "cann-medicina",
+  "cat": "cannabis",
+  "pro": true,
+  "req": 60,
+  "t": "Cannabis y salud: tips informativos",
+  "d": "Qué dice la evidencia y quién decide un tratamiento.",
+  "aviso": "Educativo. No es consejo médico, no recomienda productos ni dosis.",
+  "lec": [
+   {
+    "t": "Cannabis y salud: qué dice la evidencia",
+    "x": "Algunos productos derivados del cannabis se usan en tratamientos médicos bajo prescripción y regulación. La evidencia varía según la condición tratada y el producto. No todo lo que circula en internet tiene respaldo científico."
+   },
+   {
+    "t": "Quién decide un tratamiento",
+    "x": "Cualquier decisión sobre uso medicinal se toma con un profesional de salud. Esta app no da dosis, no recomienda productos y no reemplaza una consulta. Tips: desconfiá de promesas de cura; llevá tus preguntas a tu médico; buscá fuentes oficiales y de revisión científica; nunca inicies, cambies ni suspendas un tratamiento por tu cuenta."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "Un video afirma que el cannabis cura una enfermedad. ¿Qué conviene hacer?",
+    "ok": "Buscar evidencia científica y consultar a un médico",
+    "no": [
+     "Creerlo: tiene muchas visualizaciones",
+     "Probar la dosis que muestra el video",
+     "Compartirlo para que lo vean más personas"
+    ],
+    "e": "Las visualizaciones no son evidencia, y nunca conviene autoprescribirse."
+   },
+   {
+    "d": 2,
+    "p": "¿Cuál es la postura más prudente?",
+    "ok": "Su uso depende de la condición, del producto y de la indicación médica",
+    "no": [
+     "Tiene efectos comprobados para todas las enfermedades",
+     "Como es natural, no tiene efectos secundarios",
+     "Si funciona para un conocido, funcionará igual para cualquiera"
+    ],
+    "e": "Trampa: \"natural\" no significa \"sin efectos\"."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál frase es FALSA?",
+    "ok": "Un producto natural siempre es seguro y no necesita control médico",
+    "no": [
+     "La evidencia varía según la condición tratada",
+     "Las decisiones de tratamiento se toman con un profesional de salud",
+     "Conviene desconfiar de las promesas de cura milagrosa"
+    ],
+    "e": "Lo natural no garantiza seguridad. Por eso existe la regulación."
+   }
+  ],
+  "banco": []
+ },
+ {
+  "id": "cann-cultivo",
+  "cat": "cannabis",
+  "pro": true,
+  "req": 180,
+  "t": "Cannabis: cultivo educativo en interior",
+  "d": "Luz, ambiente y prevención en cultivo LED.",
+  "aviso": "Educativo: cultivo en interior. Los rangos son orientativos y cambian según la genética.",
+  "lec": [
+   {
+    "t": "Luz LED y ciclo de cultivo",
+    "x": "En cultivos de interior, el PPFD, la altura y las horas de luz se ajustan según la etapa y la genética. Las plantas fotoperiódicas responden a las horas de luz; las autoflorecientes, a su edad."
+   },
+   {
+    "t": "Ambiente, riego y prevención",
+    "x": "Temperatura, humedad y circulación de aire influyen en el riego, las plagas y los hongos. En floración, bajar la humedad relativa ayuda a prevenir hongos como la botrytis. Anotá cada cambio en la bitácora para comparar ciclos."
+   }
+  ],
+  "quiz": [
+   {
+    "d": 1,
+    "p": "¿Qué conviene hacer antes de regar una planta en sustrato?",
+    "ok": "Revisar la humedad del sustrato a unos centímetros",
+    "no": [
+     "Regar según el reloj",
+     "Mojar hasta que gotee sin parar",
+     "Mirar el color de las hojas más altas"
+    ],
+    "e": "La humedad real indica si hace falta agua."
+   },
+   {
+    "d": 2,
+    "p": "Una planta fotoperiódica y una autoflorecida, ¿en qué se diferencian en el ciclo?",
+    "ok": "La fotoperiódica responde a las horas de luz; la autoflorecida, a su edad",
+    "no": [
+     "Las dos cambian de etapa según las horas de luz",
+     "Ninguna de las dos cambia de etapa",
+     "Las dos florecen a la misma edad, sin importar la luz"
+    ],
+    "e": "Trampa: la diferencia clave es qué señal usa cada tipo para cambiar de etapa."
+   },
+   {
+    "d": 3,
+    "p": "¿Cuál NO es un síntoma típico de exceso de riego?",
+    "ok": "Puntas secas por falta de agua",
+    "no": [
+     "Hojas amarillas y caídas",
+     "Raíces con mal olor",
+     "Sustrato que tarda mucho en secarse"
+    ],
+    "e": "Las puntas secas suelen indicar falta de agua o estrés, no exceso."
+   }
+  ],
+  "banco": []
+ }
+];
+
+const GLOSARIO = [
+ [
+  "PPFD",
+  "Luz útil que llega a una superficie, en µmol/m²/s."
+ ],
+ [
+  "DLI",
+  "Luz total que recibe la planta en un día (mol/m²/día): intensidad por horas de luz."
+ ],
+ [
+  "Fotoperíodo",
+  "Horas de luz por día."
+ ],
+ [
+  "EC / PPM",
+  "Sales disueltas en el agua o en la solución nutritiva. El PPM depende de la escala del medidor (0,5 o 0,7)."
+ ],
+ [
+  "pH",
+  "Medida de acidez o alcalinidad del agua de riego o de la solución. La escala es logarítmica."
+ ],
+ [
+  "VPD",
+  "Déficit de presión de vapor: relación entre temperatura y humedad."
+ ],
+ [
+  "Estomas",
+  "Poros de las hojas que regulan el intercambio de gases y el agua."
+ ],
+ [
+  "N-P-K",
+  "Porcentaje de nitrógeno, fósforo (P₂O₅) y potasio (K₂O) de un fertilizante."
+ ],
+ [
+  "Macronutrientes",
+  "Los que la planta necesita en mayor cantidad: nitrógeno, fósforo y potasio (y, como secundarios, calcio, magnesio y azufre)."
+ ],
+ [
+  "Micronutrientes",
+  "Los que se necesitan en cantidades muy pequeñas: hierro, manganeso, zinc, boro y otros."
+ ],
+ [
+  "Nutriente móvil",
+  "El que la planta traslada de las hojas viejas a las nuevas (como el nitrógeno): su falta se ve primero abajo."
+ ],
+ [
+  "Compost",
+  "Materia orgánica descompuesta que mejora la estructura del suelo."
+ ],
+ [
+  "Marrones y verdes",
+  "Materiales secos, ricos en carbono, y frescos, ricos en nitrógeno, que se combinan en el compost."
+ ],
+ [
+  "Acolchado",
+  "Cobertura del suelo (paja, hojas) que reduce evaporación y malezas."
+ ],
+ [
+  "Almácigo",
+  "Semillero donde se crían plantines antes de trasplantarlos."
+ ],
+ [
+  "Endurecimiento",
+  "Exposición gradual de los plantines al exterior antes del trasplante."
+ ],
+ [
+  "Mal del semillero",
+  "Pudrición del tallo de las plántulas en la base, favorecida por exceso de humedad (damping-off)."
+ ],
+ [
+  "Rotación de cultivos",
+  "Cambiar la familia de plantas de cada cantero en cada ciclo."
+ ],
+ [
+  "Perlita",
+  "Sustrato inerte volcánico, muy aireado, de poca retención de agua."
+ ],
+ [
+  "Vermiculita",
+  "Sustrato inerte mineral que retiene agua y nutrientes."
+ ],
+ [
+  "Fibra de coco",
+  "Sustrato inerte de buena retención y aireación; conviene lavarlo antes de usarlo."
+ ],
+ [
+  "Lana de roca",
+  "Sustrato inerte muy usado en hidroponía; de fábrica es alcalina y requiere acondicionamiento."
+ ],
+ [
+  "LECA",
+  "Arcilla expandida: sustrato inerte de buen drenaje y reutilizable."
+ ],
+ [
+  "DWC / NFT",
+  "Sistemas hidropónicos: raíces sumergidas (DWC) o con película fina de solución (NFT)."
+ ],
+ [
+  "Kratky",
+  "Método hidropónico pasivo, sin bomba: al bajar el nivel queda una cámara de aire para las raíces."
+ ],
+ [
+  "Drenaje (runoff)",
+  "Agua que sale por abajo después de regar; su EC indica qué pasa en la raíz."
+ ],
+ [
+  "Pythium",
+  "Hongo del agua que pudre las raíces; lo favorecen el agua tibia y el poco oxígeno."
+ ],
+ [
+  "Oídio",
+  "Hongo que forma un polvo blanco sobre las hojas; aparece con humedad alta y poca ventilación."
+ ],
+ [
+  "Botrytis",
+  "Moho gris que aparece con humedad alta y poca ventilación."
+ ],
+ [
+  "MIP",
+  "Manejo integrado de plagas: prevenir, monitorear y controlar con la medida menos agresiva."
+ ],
+ [
+  "Plazo de carencia",
+  "Días que deben pasar entre aplicar un producto y cosechar."
+ ]
+];
+
+/* Cannabis: solo plan Pro y Business. Contenido educativo de cultivo. */
+const CANN = [
+  { id: 'etapas', t: 'Etapas del ciclo', x: 'Plántula (primeras semanas), vegetativo (crece hojas y tallo), floración (se forman flores), cosecha, secado y curado. Cada etapa tiene necesidades distintas de luz, agua y nutrientes. Llevá registro de fechas y condiciones en la bitácora para comparar ciclos.' },
+  { id: 'tipos', t: 'Fotoperiódicas y autoflorecientes', x: 'Las fotoperiódicas cambian de etapa según las horas de luz: en vegetativo suelen usar horas de luz largas y, para inducir la floración, un ciclo de 12 horas de luz y 12 de oscuridad. Las autoflorecientes pasan a floración según su edad, sin cambiar el ciclo de luz. Conocer la genética que cultivás define el calendario.' },
+  { id: 'luz', t: 'Luz LED', x: 'Importan el PPFD, la altura y las horas de luz, como en cualquier cultivo de interior. Medí con un sensor y ajustá la lámpara según la etapa. Muchas plantas en floración necesitan más intensidad, pero el estrés lumínico aparece igual si la luz es excesiva.' },
+  { id: 'sustrato', t: 'Sustrato, riego y nutrientes', x: 'Un buen sustrato drena bien y mantiene aire en la raíz (tierra con perlita, fibra de coco o una mezcla comercial). Regá cuando las capas de arriba y de abajo estén secas, sin encharcar. Seguí las dosis del fabricante y medí pH y EC para evitar el exceso de sales.' },
+  { id: 'ambiente', t: 'Temperatura y humedad', x: 'Orientativamente, la temperatura diurna ronda los 20 a 28 °C. En floración conviene bajar la humedad relativa (aprox. 40 a 60 %) para prevenir hongos. Usá el VPD como referencia y ventilá bien el espacio.' },
+  { id: 'plagas', t: 'Plagas y hongos', x: 'Son frecuentes la araña roja (ambiente seco y caluroso), los trips y los pulgones. El oídio (polvo blanco) y la botrytis (moho gris en las flores) aparecen con humedad alta y poca circulación de aire. Revisá el envés de las hojas y las flores cada semana.' },
+  { id: 'cosecha', t: 'Cosecha, secado y curado', x: 'Muchos cultivadores revisan los tricomas con lupa para ver el momento de cosecha, que depende de la variedad. El secado lento en un espacio oscuro, ventilado y fresco (orientativo: 15 a 21 °C y 55 a 62 % de humedad relativa) es una etapa clave. El curado posterior, en recipientes con revisión de humedad, también.' }
+];
+
+const CANN_ETAPAS = [
+  { t: 'Plántula', items: ['Luz suave y a poca altura', 'Riego liviano, sin encharcar', 'Vigilar la germinación y la temperatura'] },
+  { t: 'Vegetativo', items: ['Subir la intensidad de a poco', 'Medir pH y EC del agua de riego', 'Registrar altura y crecimiento cada semana'] },
+  { t: 'Floración', items: ['Ajustar el ciclo de luz según la genética', 'Bajar la humedad relativa para prevenir hongos', 'Revisar el envés de hojas y flores cada semana'] },
+  { t: 'Secado y curado', items: ['Secado oscuro, ventilado y fresco', 'Controlar la humedad del ambiente', 'Anotar fechas y condiciones en la bitácora'] }
+];
+
+const TIPS = [
+  'Antes de regar, metí un dedo en la tierra o el sustrato. Si está seca a unos centímetros, regá.',
+  'Revisá el envés de las hojas: ahí se esconden la mayoría de las plagas.',
+  'En sustratos inertes, regá seguido con volúmenes moderados. Se secan más rápido que la tierra.',
+  'Medí la luz a la altura de las hojas, no en el aire.',
+  'Anotá cada riego y cada cambio. En un mes vas a ver patrones que hoy no ves.',
+  'Con calor fuerte, regá temprano para que la planta tenga agua antes del mediodía.',
+  'Si una hoja cambia de color, mirá también la raíz y el riego antes de sumar fertilizante.'
+];
+
+const LOGROS = [
+  ['primero', 'Primer registro', () => totalBitacora() > 0],
+  ['constante', 'Constante: 3 días seguidos', () => racha() >= 3],
+  ['led', 'Primera medición de luz', () => totalCondiciones() > 0],
+  ['cultivador', 'Cultivador: 3 cultivos creados', () => ledger.creados >= 3],
+  ['explorador', 'Explorador: 3 módulos aprobados', () => MODULOS.filter(moduloAprobado).length >= 3],
+  ['test', 'Test perfecto', () => Object.values(progreso).some(v => v >= PREGS_TEST)],
+  ['examen', 'Primer examen aprobado', () => Object.values(examenes).some(x => x.aprobado)],
+  ['maestro', 'Examen final aprobado', () => examenFinalAprobado()]
+];
+
+const NIVELES = [{ min: 0, t: 'Inexperto' }, { min: 60, t: 'Aprendiz' }, { min: 180, t: 'Aprendiz avanzado' }, { min: 350, t: 'Cultivador' }, { min: 600, t: 'Cultivador experto' }, { min: 900, t: 'Maestro de cultivo' }];
+
+const VERSION_APP = 'prueba 0.9';
+const ERRORES = [];
+window.addEventListener('error', e => { ERRORES.push(String(e.message || 'error').slice(0, 120)); if (ERRORES.length > 5) ERRORES.shift(); });
+const VERSION_PRUEBA = true; // Versión pública de prueba: oculta Business y lo que todavía no está listo.
+const CANNABIS_HABILITADO = false; // Activar solo después de la revisión legal y de las políticas de las tiendas.
+
+/* ---------- Aprendizaje v9: reglas de puntaje y exámenes ---------- */
+const PREGS_TEST = 3;            // preguntas por test de módulo: una básica, una intermedia y una trampa
+const APROBAR_MODULO = 2;        // aciertos mínimos para aprobar el test de un módulo
+const BONUS_PERFECTO = 15;       // bonus por un test perfecto
+const TOPE_TAREAS_DIA = 40;      // puntos máximos por tareas en un día
+const TOPE_REG_DIA = 5;          // registros que suman puntos por día (2 pts c/u)
+const TOPE_MED_DIA = 2;          // mediciones que suman puntos por día (4 pts c/u)
+const INTENTOS_DIA = 3;          // intentos por examen y por día
+const APROBAR_EXAMEN = 0.8;      // se aprueba con 80 % o más
+const MAESTRO_REQUIERE_EXAMEN = true; // el nivel máximo exige aprobar el examen final (Pro)
+const EXAMENES = [
+  { id: 'huerta', t: 'Examen de Huerta', d: 'Suelo, compost, germinación, rotación y calendario.', cats: ['huerta'], n: 12, pts: 40 },
+  { id: 'hidro', t: 'Examen de Hidroponía y nutrición', d: 'Nutrientes, sistemas, solución nutritiva, sustratos y riego.', cats: ['nutricion', 'hidro', 'inerte'], n: 15, pts: 40 },
+  { id: 'luzplagas', t: 'Examen de Luz, ambiente y plagas', d: 'PPFD, DLI, VPD, plagas, MIP y diagnóstico.', cats: ['luz', 'plagas'], n: 15, pts: 40 },
+  { id: 'final', t: 'Examen final BROTA', d: 'Todo el temario, con casos y trampas. Habilita el nivel Maestro de cultivo y la constancia.', cats: null, n: 30, pts: 0, pro: true, pre: ['huerta', 'hidro', 'luzplagas'] }
+];
+const LIMITE_GRATIS = 2;
+const N_GRATIS = MODULOS.filter(m => m.cat !== 'cannabis' && !m.pro).length; // módulos con test disponibles sin pagar
+const PLANES = {
+  gratis: {
+    nombre: 'Gratis', precio: 'US$ 0', tag: '',
+    items: [`Hasta ${LIMITE_GRATIS} cultivos propios`, 'Bitácora y registro rápido', 'Tareas diarias, logros y racha', `${N_GRATIS} módulos con test: huerta, nutrición, hidroponía, sustrato inerte, luz y plagas`, '3 exámenes con nota y repaso de errores', 'Agente con consejos generales'],
+    nota: ''
+  },
+  pro: {
+    nombre: 'Pro', precio: 'US$ 5.99 / mes · o US$ 49.99 / año (ahorrás cerca de 30 %)', tag: 'Recomendado',
+    items: [
+      'Todo lo de Gratis, con cultivos ilimitados',
+      'Módulo de diagnóstico avanzado de plagas y carencias',
+      'Examen final con constancia y nivel Maestro de cultivo',
+      'Exportar la bitácora como texto para copiar',
+      'Agente que usa el historial de cada cultivo',
+      ...(CANNABIS_HABILITADO ? ['Sección cannabis: etapas, luz LED, sustrato, ambiente, plagas y cosecha, con checklist por etapa', 'Curso de cannabis en Aprender: marco legal y tips de salud general, sin dosis ni recomendaciones de uso'] : [])
+    ],
+    nota: ''
+  },
+  org: {
+    nombre: 'Business', precio: 'US$ 39 / mes', tag: 'Para ONG y clubes',
+    items: ['Todo lo de Pro para cada integrante', 'Cultivos compartidos por el equipo', 'Asignación de tareas de cultivo con recordatorios', 'Panel con el avance de cada cultivo', 'Roles: administrador, operador y lector', 'Informes para la comisión, socios o donantes'],
+    nota: 'Pensado para que una ONG o un club gestione sus cultivos y las tareas de cultivo. No es una herramienta para vigilar a las personas: no incluye ubicación ni monitoreo permanente, y cada integrante ve sus propios registros. Antes de usarlo, la organización debe definir su política de uso y cumplir la normativa aplicable.'
+  }
+};
+
+function cultivosPropios() { return S.cultivos.filter(c => !c.ejemplo).length; }
+function limiteAlcanzado() { return S.plan === 'gratis' && cultivosPropios() >= LIMITE_GRATIS; }
+function botonesPlan(k, p) {
+  if (S.plan === k) return '<div class="okmsg">Plan actual</div>';
+  if (k !== 'pro') return `<button class="btn" data-act="setPlan" data-v="${k}">Elegir ${p.nombre}</button>`;
+  return `<button class="btn" data-act="setPlan" data-v="pro">Elegir Pro mensual · US$ 5.99</button>
+    <button class="btn ghost" data-act="setPlan" data-v="pro-anual" style="margin-top:6px">Elegir Pro anual · US$ 49.99</button>`;
+}
+
+function ejemplo() {
+  return [
+    { id: '1', nombre: 'Albahaca 1', tipo: 'Albahaca', ubicacion: 'interior', etapa: 'Crecimiento', fecha: '2026-09-20', ejemplo: true,
+      bitacora: [{ fecha: '2026-11-03 09:10', tipo: 'Riego', nota: 'Riego ligero; tierra seca a 3 cm' }],
+      condiciones: [
+        { fecha: '2026-11-03 20:00', watts: 100, alturaCm: 35, horas: 18, ppfd: 420, temp: 24, humedad: 60 },
+        { fecha: '2026-10-30 20:00', watts: 100, alturaCm: 30, horas: 18, ppfd: 280, temp: 23, humedad: 58 }
+      ] },
+    { id: '2', nombre: 'Tomates del patio', tipo: 'Tomate cherry', ubicacion: 'exterior', etapa: 'Floración', fecha: '2026-08-10', ejemplo: true,
+      bitacora: [{ fecha: '2026-10-31 08:00', tipo: 'Poda', nota: 'Quité brotes laterales' }], condiciones: [] }
+  ];
+}
+
+/* ---------- Persistencia (solo preferencias del dispositivo) ---------- */
+function leer(k, def) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch (e) { return def; } }
+function escribir(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+let progreso = leer('bv_progreso', {});
+let tareasPorDia = leer('bv_tareas', {});
+let progresoPts = leer('bv_progresoPts', {});
+let trial = leer('bv_trial', {});
+
+/* ---------- Estado ---------- */
+const S = {
+  onb: 0, onboarded: false, tab: 'hoy', plan: 'gratis', perfil: leer('bv_perfil', null), verPriv: false, exportar: null,
+  cultivos: leer('bv_cultivos', null) || ejemplo(),
+  abierto: null, creando: false, verCannabis: false, edadOk: false, cannTab: 'etapas', cannEt: 'Plántula',
+  confirmarBorrado: false, fotos: [],
+  chat: [{ de: 'agente', t: 'Hola, soy tu guía de cultivo. Preguntame lo que quieras o usá las preguntas rápidas.' }],
+  f: { ub: 'interior', et: 'Siembra', fecha: '' },
+  apr: { vista: 'lista', mod: null, lec: 0, q: 0, resp: null, aciertos: 0, cat: 'todas' },
+  clima: {
+    ciudad: 'Tu zona (ejemplo)',
+    hoy: { t: 22, min: 14, max: 27, lluvia: 10, viento: 12, desc: 'Parcialmente nublado' },
+    dias: [
+      { d: 'Jue', t: '19°', lluvia: 70, desc: 'Lluvia' },
+      { d: 'Vie', t: '21°', lluvia: 10, desc: 'Soleado' },
+      { d: 'Sáb', t: '25°', lluvia: 0, desc: 'Soleado' },
+      { d: 'Dom', t: '23°', lluvia: 30, desc: 'Nublado' }
+    ]
+  }
+};
+
+/* Puntos de actividad: registro permanente con topes diarios (no se pierde al borrar un cultivo).
+   dias[AAAA-MM-DD] = { r: registros con puntos, m: mediciones con puntos } */
+function migrarLedger() {
+  const propios = S.cultivos.filter(c => !c.ejemplo);
+  const l = { dias: {}, creados: propios.length };
+  const dia = d => l.dias[d] || (l.dias[d] = { r: 0, m: 0 });
+  propios.forEach(c => {
+    c.bitacora.forEach(r => { const x = dia(r.fecha.slice(0, 10)); if (x.r < TOPE_REG_DIA) x.r++; });
+    c.condiciones.forEach(r => { const x = dia(r.fecha.slice(0, 10)); if (x.m < TOPE_MED_DIA) x.m++; });
+  });
+  return l;
+}
+let ledger = leer('bv_ledger', null);
+if (!ledger || typeof ledger !== 'object' || !ledger.dias || typeof ledger.dias !== 'object') ledger = migrarLedger();
+if (typeof ledger.creados !== 'number') ledger.creados = 0;
+let estudio = leer('bv_estudio', {});
+if (!estudio || typeof estudio !== 'object' || Array.isArray(estudio)) estudio = {};
+let examenes = leer('bv_examenes', {});
+if (!examenes || typeof examenes !== 'object' || Array.isArray(examenes)) examenes = {};
+S.vistas = {};
+S.vistasEx = {};
+/* Un examen a medias se retoma al recargar: se valida todo lo guardado antes de usarlo */
+S.ex = (() => {
+  const e = leer('bv_excurso', null);
+  if (!e || typeof e !== 'object' || !EXAMENES.some(x => x.id === e.id)) return null;
+  if (!Array.isArray(e.preguntas) || !e.preguntas.length || !Array.isArray(e.resp)) return null;
+  const okPreg = e.preguntas.every(q => q && Array.isArray(q.o) && q.o.length === 4 && Number.isInteger(q.r) && q.r >= 0 && q.r < 4 && typeof q.p === 'string' && MODULOS.some(m => m.id === q.mod));
+  if (!okPreg) return null;
+  if (e.fase === 'curso' && typeof e.fin === 'number' && Number.isInteger(e.i) && e.i >= 0 && e.i < e.preguntas.length) return e;
+  if (e.fase === 'resultado' && e.res && typeof e.res.pct === 'number') return e;
+  return null;
+})();
+
+function guardar() {
+  escribir('bv_cultivos', S.cultivos.map(c => ({ ...c, fotos: [] })));
+  escribir('bv_trial', trial);
+  escribir('bv_progreso', progreso);
+  escribir('bv_tareas', tareasPorDia);
+  escribir('bv_progresoPts', progresoPts);
+  escribir('bv_ledger', ledger);
+  escribir('bv_estudio', estudio);
+  escribir('bv_examenes', examenes);
+  escribir('bv_excurso', S.ex);
+}
+
+/* ---------- Utilidades y cálculos ---------- */
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const num = v => { const n = parseFloat(v); return isNaN(n) ? null : n; };
+const p2 = n => String(n).padStart(2, '0');
+function fmtFecha(d) { return d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()); }
+function hoyStr() { return fmtFecha(new Date()); }
+function ahora() { const d = new Date(); return fmtFecha(d) + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes()); }
+function parseFecha(s) { const [y, m, d] = s.slice(0, 10).split('-').map(Number); return new Date(y, m - 1, d); }
+function diasDesde(s) { const hoy = parseFecha(hoyStr()); return Math.round((hoy - parseFecha(s)) / 86400000); }
+const estrellas = (n, total = 3) => { n = Math.max(0, Math.min(total, n | 0)); return '★'.repeat(n) + '☆'.repeat(total - n); };
+const modDe = id => MODULOS.find(m => m.id === id);
+const puntosMod = id => (progresoPts[id] || 0);
+const maxPtsMod = m => 60 + BONUS_PERFECTO; // una pregunta de cada dificultad (10 + 20 + 30) más el bonus por test perfecto
+const puntosAprender = () => MODULOS.reduce((s, m) => s + puntosMod(m.id), 0);
+const ledgerTotal = k => Object.values(ledger.dias).reduce((s, d) => s + (d[k] || 0), 0);
+const totalBitacora = () => ledgerTotal('r');
+const totalCondiciones = () => ledgerTotal('m');
+const totalTareas = () => Object.values(tareasPorDia).reduce((s, arr) => s + arr.length, 0);
+const ptsTareasDia = ids => Math.min(TOPE_TAREAS_DIA, ids.reduce((s, id) => s + ptsTarea(id), 0));
+const puntosActividad = () => Object.values(tareasPorDia).reduce((s, ids) => s + ptsTareasDia(ids), 0) + totalBitacora() * 2 + totalCondiciones() * 4;
+const puntosExamenes = () => Object.values(examenes).reduce((s, x) => s + (x.pts || 0), 0);
+const puntosTotales = () => puntosAprender() + puntosActividad() + puntosExamenes();
+const examenFinalAprobado = () => !!(examenes.final && examenes.final.aprobado);
+const nivelIdx = pts => NIVELES.reduce((idx, n, k) => (pts >= n.min ? k : idx), 0);
+const topeNivel = () => (MAESTRO_REQUIERE_EXAMEN && !examenFinalAprobado() ? NIVELES.length - 2 : NIVELES.length - 1);
+const maestroPendiente = pts => MAESTRO_REQUIERE_EXAMEN && nivelIdx(pts) === NIVELES.length - 1 && !examenFinalAprobado();
+const nivelActual = pts => NIVELES[Math.min(nivelIdx(pts), topeNivel())];
+const siguienteNivel = pts => NIVELES[Math.min(nivelIdx(pts), topeNivel()) + 1];
+
+function evaluarPPFD(etapa, v) {
+  const r = PPFD[etapa]; if (!r || v == null) return null;
+  if (v < r[0]) return { ok: false, m: `Poca luz para ${etapa.toLowerCase()} (recomendado ${r[0]}–${r[1]}). Acercá la lámpara o subí la potencia.` };
+  if (v > r[1]) return { ok: false, m: `Demasiada luz para ${etapa.toLowerCase()} (recomendado ${r[0]}–${r[1]}). Alejá la lámpara para evitar estrés lumínico.` };
+  return { ok: true, m: `Intensidad dentro del rango recomendado (${r[0]}–${r[1]}).` };
+}
+function evaluarAltura(a) {
+  if (a == null) return null;
+  return a < 20 ? { ok: false, m: 'La lámpara está muy cerca (menos de 20 cm). Riesgo de quemaduras.' } : { ok: true, m: 'Altura razonable. Confirmá la recomendación del fabricante.' };
+}
+function vpd(t, h) {
+  if (t == null || h == null) return null;
+  return +(0.61078 * Math.exp(17.27 * t / (t + 237.3)) * (1 - h / 100)).toFixed(2);
+}
+function saludCultivo(c) {
+  const u = c.condiciones[0];
+  if (u && c.ubicacion === 'interior') {
+    const pp = evaluarPPFD(c.etapa, u.ppfd); const al = evaluarAltura(u.alturaCm);
+    if ((pp && !pp.ok) || (al && !al.ok)) return { nivel: 'alerta', texto: 'Revisá la luz: hay una medición fuera de rango' };
+  }
+  if (c.bitacora.length === 0) return { nivel: 'aviso', texto: 'Sin registros todavía' };
+  const d = diasDesde(c.bitacora[0].fecha);
+  if (d >= 3) return { nivel: 'aviso', texto: `Sin registros hace ${d} días` };
+  return { nivel: 'ok', texto: 'Todo en orden por ahora' };
+}
+function diasActivos() {
+  const set = new Set();
+  Object.keys(tareasPorDia).forEach(k => { if (tareasPorDia[k].length) set.add(k); });
+  Object.keys(estudio).forEach(k => { if (estudio[k]) set.add(k); });
+  Object.keys(ledger.dias).forEach(k => { const d = ledger.dias[k]; if ((d.r || 0) + (d.m || 0) > 0) set.add(k); });
+  S.cultivos.filter(c => !c.ejemplo).forEach(c => {
+    c.bitacora.forEach(r => set.add(r.fecha.slice(0, 10)));
+    c.condiciones.forEach(r => set.add(r.fecha.slice(0, 10)));
+  });
+  return set;
+}
+function racha() {
+  const set = diasActivos();
+  const d = new Date();
+  if (!set.has(fmtFecha(d))) d.setDate(d.getDate() - 1);
+  let n = 0;
+  while (set.has(fmtFecha(d))) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+
+/* Tareas diarias generadas a partir de los cultivos */
+function ptsTarea(id) { return id.startsWith('dren-') ? 15 : id.startsWith('med-') ? 10 : 5; }
+function dificultadTarea(id) { return id.startsWith('dren-') ? 'Difícil' : id.startsWith('med-') ? 'Media' : 'Fácil'; }
+function tareasHoy() {
+  const hechas = tareasPorDia[hoyStr()] || [];
+  const lista = [];
+  S.cultivos.forEach(c => {
+    lista.push({ id: 'riego-' + c.id, texto: 'Revisar la humedad de ' + c.nombre });
+    lista.push({ id: 'obs-' + c.id, texto: 'Observar el envés de las hojas de ' + c.nombre });
+    if (c.ubicacion === 'interior') lista.push({ id: 'med-' + c.id, texto: 'Medir luz y temperatura de ' + c.nombre });
+    if (c.ubicacion === 'exterior' && S.clima.dias[0].lluvia >= 60) lista.push({ id: 'dren-' + c.id, texto: 'Revisar el drenaje de ' + c.nombre + ' (mañana hay lluvia)' });
+  });
+  return lista.map(t => ({ ...t, hecha: hechas.includes(t.id) }));
+}
+function toggleTarea(id) {
+  const k = hoyStr();
+  const arr = tareasPorDia[k] || [];
+  tareasPorDia[k] = arr.includes(id) ? arr.filter(x => x !== id) : [...arr, id];
+}
+function addEntry(c, tipo, nota) {
+  const texto = (nota || '').trim() || ('Registro rápido: ' + tipo.toLowerCase());
+  c.bitacora.unshift({ fecha: ahora(), tipo, nota: texto });
+  ledgerSuma('r');
+}
+
+/* Coincidencia por inicio de palabra. Las palabras de 3 letras o menos deben coincidir completas
+   (así "ec" no se activa con "perfecto" ni "led" con "pulled"), igual que "venta" no debe activarse con "ventana". */
+function coincide(x, w) {
+  const completa = w.length <= 3 || w === 'venta';
+  return new RegExp('(^|[^a-záéíóúñ])' + w + (completa ? '($|[^a-záéíóúñ])' : '')).test(x);
+}
+function responder(q) {
+  const x = q.toLowerCase();
+  const reglas = [
+    [['dosis', 'consumo', 'fumar', 'vender', 'venta'], 'Solo puedo orientarte sobre cultivo. No doy información sobre dosis, consumo ni venta.'],
+    [['amarill'], 'Las hojas amarillas suelen indicar exceso o falta de riego, carencia de nitrógeno o estrés por luz. Revisá primero el riego y la distancia a la lámpara. Si sigue empeorando, consultá a un especialista.'],
+    [['plaga', 'pulgón', 'pulgon', 'araña', 'mosca', 'trips', 'oídio', 'oidio'], 'Revisá el envés de las hojas y aislá la planta afectada mientras investigás. Si la infestación avanza, un especialista puede recomendarte el tratamiento adecuado.'],
+    [['diagnóstic', 'diagnostic', 'mancha', 'puntas', 'quemad', 'marchit'], 'Para diagnosticar, ordená las pistas: ¿las hojas afectadas son nuevas o viejas?, ¿el problema es parejo o en manchas?, ¿cómo están el riego, el pH y la luz? Descartá primero lo más simple (riego, luz, pH) antes de pensar en carencias o plagas, y cambiá una sola cosa por vez para saber qué funcionó.'],
+    [['nutriente', 'fertiliz', 'npk', 'abono', 'carencia', 'deficiencia', 'nitrógeno', 'nitrogeno', 'fósforo', 'fosforo', 'potasio', 'calcio', 'magnesio', 'hierro'], 'Los nutrientes se dividen en macronutrientes (N, P, K, calcio, magnesio y azufre) y micronutrientes (hierro, boro, zinc, etc.). Los móviles (N, P, K y Mg) se notan primero en las hojas viejas; los poco móviles (Ca, Fe y B), en las nuevas. Antes de fertilizar, revisá riego, luz y pH: muchas "carencias" son en realidad problemas de pH o de riego.'],
+    [['inerte', 'perlita', 'vermiculita', 'coco', 'lana de roca', 'leca'], 'En sustratos inertes el sustrato no aporta nutrientes, así que el riego con solución es clave. Regá seguido con volúmenes moderados y dejá algo de drenaje para evitar acumulación de sales.'],
+    [['hidro', 'ph', 'ec', 'solución', 'solucion', 'nft', 'dwc'], 'En hidroponía, medí pH y EC de la solución con regularidad (el pH suele mantenerse entre 5,5 y 6,5), ajustá según la etapa y renová la solución para que no se agote ni se concentre. Si la bomba o la aireación fallan, actuá rápido: las raíces se dañan en pocas horas.'],
+    [['dli', 'integral de luz', 'horas de luz', 'fotoperiodo'], 'El DLI es la luz total que recibe la planta en un día: PPFD × horas de luz × 3600 ÷ 1.000.000. Por ejemplo, 300 µmol/m²/s durante 16 horas dan unos 17 mol/m²/día. Como referencia, las hortalizas de hoja suelen andar en 12 a 17 y las de fruto en 20 a 30.'],
+    [['germin', 'semilla', 'almácigo', 'almacigo', 'trasplant', 'endurec'], 'Sembrá a una profundidad de 2 a 3 veces el diámetro de la semilla y mantené el sustrato húmedo, sin encharcar. Antes de trasplantar afuera, endurecé las plántulas durante 1 a 2 semanas: de a poco más horas al aire libre y menos protección.'],
+    [['helada', 'frío', 'frio', 'calendario', 'cuándo sembrar', 'cuando sembrar', 'época de siembra', 'epoca de siembra'], 'Las heladas son el límite de muchos cultivos de verano: tomate, albahaca, pepino y zapallo son muy sensibles. Fijate en qué fecha cae el último riesgo de helada en tu zona (en Argentina, ProHuerta del INTA publica calendarios de siembra por región) y sembrá o trasplantá después, o protegé las plantas con cobertura.'],
+    [['huerta', 'compost', 'suelo', 'rotación', 'rotacion', 'asociación', 'asociacion', 'albahaca'], 'En la huerta, el compost y el acolchado ayudan mucho: mejoran la estructura del suelo y conservan la humedad. Rotá las familias de cultivos año tras año para reducir plagas y enfermedades.'],
+    [['riego', 'regar', 'agua'], 'Antes de regar, revisá si la tierra o el sustrato está seco a unos centímetros. Regar de más y de menos dan síntomas parecidos, por eso conviene anotar cada riego.'],
+    [['luz', 'luces', 'led', 'ppfd', 'altura'], 'Para la luz LED importan la intensidad (PPFD), la altura y las horas de luz. Cada etapa tiene su rango. Cargá la medición y la app te avisa si está fuera de lo recomendado.']
+  ];
+  const r = reglas.find(([p]) => p.some(w => coincide(x, w)));
+  let t = r ? r[1] : 'Contame un poco más: qué tipo de planta es, en qué etapa está y qué observás. Mientras tanto, un consejo: ' + TIPS[new Date().getDate() % TIPS.length];
+  if (S.clima.dias[0].lluvia >= 60 && S.cultivos.some(c => c.ubicacion === 'exterior')) t += ' Hay lluvia prevista para mañana: revisá el drenaje de tus plantas de exterior.';
+  if (S.plan !== 'gratis' && S.cultivos.length) t += ` (Plan ${PLANES[S.plan].nombre}: tengo en cuenta tus ${S.cultivos.length} cultivo(s).)`;
+  if (S.plan !== 'gratis' && S.cultivos[0] && S.cultivos[0].bitacora[0]) t += ' En ' + S.cultivos[0].nombre + ' (' + S.cultivos[0].etapa + '), tu último registro fue: "' + S.cultivos[0].bitacora[0].nota + '".';
+  return t;
+}
+function enviarPregunta(texto) {
+  if (!texto || !texto.trim()) return;
+  S.chat.push({ de: 'vos', t: texto.trim() }, { de: 'agente', t: responder(texto) });
+  S.f.pregunta = '';
+}
+
+/* ---------- Bloques reutilizables ---------- */
+function consejoHTML() {
+  const c = S.clima;
+  const tip = TIPS[new Date().getDate() % TIPS.length];
+  return `<div class="card">
+    <div class="muted">Hoy en ${c.ciudad} · pronóstico de ejemplo</div>
+    <div class="nivel"><strong class="num">${c.hoy.t}°</strong><span class="muted">${c.hoy.desc}</span></div>
+    <div class="muted num">Lluvia ${c.hoy.lluvia}% · viento ${c.hoy.viento} km/h</div>
+    <div class="muted num" style="margin-top:6px">${c.dias.map(x => `${x.d} ${x.t} · ${x.lluvia}%`).join(' · ')}</div>
+    <div class="expl"><strong>Consejo del día.</strong> ${tip}</div>
+  </div>`;
+}
+function fotoHTML() {
+  return `<div class="card"><strong>Analizar una foto</strong>
+    <p class="muted">Subí una foto de hojas, tallos o del espacio de cultivo. Este análisis es de ejemplo: la lectura real de la imagen se conecta con el backend.</p>
+    <input type="file" accept="image/*" data-foto="1" class="input">
+    ${S.fotos.map(f => `<div style="margin-top:10px"><img src="${f.src}" alt="Foto subida por el usuario" style="display:block;width:100%;max-width:100%;border-radius:12px"><div class="muted num">${f.fecha}</div><div class="expl">${f.analisis}</div></div>`).join('')}
+  </div>`;
+}
+function sparkPPFD(c) {
+  const vals = c.condiciones.map(x => x.ppfd).filter(x => x != null).reverse();
+  if (vals.length < 2) return '';
+  const W = 300, H = 70, max = 1000;
+  const pts = vals.map((v, i) => [i * (W / (vals.length - 1)), H - Math.min(v, max) / max * H]);
+  const line = pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Evolución del PPFD" style="display:block;margin-top:8px">
+    <polyline points="${line}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    ${pts.map(p => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" fill="var(--accent)"/>`).join('')}
+  </svg><div class="muted num">PPFD registrado (del más viejo al más nuevo): ${vals.join(' → ')}</div>`;
+}
+function gaugeVPD(v) {
+  const pos = Math.min(v / 2, 1) * 100; const a = 0.8 / 2 * 100; const b = 1.2 / 2 * 100;
+  return `<div class="gauge"><div class="band" style="left:${a}%;width:${b - a}%"></div><div class="mark" style="left:${pos}%"></div></div>
+    <div class="muted num">VPD ${v} kPa · zona orientativa 0,8 a 1,2 kPa</div>`;
+}
+function condicionesHTML(c) {
+  const f = S.f; const u = c.condiciones[0];
+  const pp = u ? evaluarPPFD(c.etapa, u.ppfd) : null;
+  const al = u ? evaluarAltura(u.alturaCm) : null;
+  const v = u ? vpd(u.temp, u.humedad) : null;
+  return `<h3>Luz y ambiente</h3>
+    <div class="card">
+      <div class="muted">Cargá una medición cuando quieras; la app la compara con la etapa.</div>
+      <input class="input" type="number" placeholder="Potencia de la lámpara (W)" data-bind="watts" value="${esc(f.watts || '')}">
+      <input class="input" type="number" placeholder="Altura sobre la planta (cm)" data-bind="altura" value="${esc(f.altura || '')}">
+      <input class="input" type="number" placeholder="Horas de luz por día" data-bind="horas" value="${esc(f.horas || '')}">
+      <input class="input" type="number" placeholder="PPFD medido (µmol/m²/s)" data-bind="ppfd" value="${esc(f.ppfd || '')}">
+      <input class="input" type="number" placeholder="Temperatura (°C)" data-bind="temp" value="${esc(f.temp || '')}">
+      <input class="input" type="number" placeholder="Humedad relativa (%)" data-bind="humedad" value="${esc(f.humedad || '')}">
+      <button class="btn" data-act="condAdd">Guardar medición</button>
+    </div>
+    ${u ? `<div class="card"><strong>Última medición</strong>
+      ${pp ? `<p class="${pp.ok ? 'okmsg' : 'alert'}">${pp.m}</p>` : ''}
+      ${al ? `<p class="${al.ok ? 'okmsg' : 'alert'}">${al.m}</p>` : ''}
+      ${v != null ? gaugeVPD(v) : ''}
+      ${sparkPPFD(c)}
+    </div>` : ''}`;
+}
+
+/* ---------- Vistas ---------- */
+function hoyHTML() {
+  const t = tareasHoy(); const hechas = t.filter(x => x.hecha).length;
+  const p = t.length ? hechas / t.length : 0; const C = 2 * Math.PI * 26;
+  const niv = nivelActual(puntosTotales()); const r = racha();
+  return `<h2>Hoy</h2>
+    <div class="card hero">
+      <svg width="72" height="72" viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="26" stroke="var(--border)" stroke-width="7" fill="none"/>
+        <circle cx="32" cy="32" r="26" stroke="var(--accent)" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="${(C * p).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 32 32)"/>
+      </svg>
+      <div><strong class="num" style="font-size:18px">${hechas} de ${t.length}</strong><div class="muted">tareas de hoy</div></div>
+    </div>
+    ${recomendacionHTML()}
+    <div class="stats">
+      <div class="stat"><strong class="num">${puntosTotales()}</strong><span class="muted">puntos</span></div>
+      <div class="stat"><strong class="num">${r}</strong><span class="muted">días seguidos</span></div>
+      <div class="stat"><strong>${niv.t}</strong><span class="muted">nivel</span></div>
+    </div>
+    <h3>Tareas de hoy</h3>
+    ${t.length === 0
+      ? '<div class="card"><p class="muted">Todavía no tenés cultivos. Creá uno para recibir tareas diarias.</p><button class="btn" data-act="irCultivo">Crear mi primer cultivo</button></div>'
+      : t.map(x => `<button class="task ${x.hecha ? 'done' : ''}" data-act="tarea" data-v="${x.id}"><span class="check">${x.hecha ? '✓' : ''}</span><span>${x.texto}</span><span class="pts num">+${ptsTarea(x.id)} · ${dificultadTarea(x.id)}</span></button>`).join('')}
+    ${hechas === t.length && t.length ? '<div class="okmsg" style="margin-top:6px">Completaste todas las tareas de hoy. Buen trabajo.</div>' : ''}
+    ${t.length ? `<div class="muted num">Tareas de hoy: ${ptsTareasHoy()} de ${TOPE_TAREAS_DIA} pts posibles por día. Registros, mediciones y estudio suman aparte.</div>` : ''}
+    <h3>Tus cultivos</h3>
+    ${S.cultivos.map(tarjetaCultivo).join('')}
+    <h3>Logros</h3>
+    <div class="badges">${LOGROS.map(([id, txt, fn]) => `<div class="badge ${fn() ? 'ok' : ''}">${txt}</div>`).join('')}</div>
+    <h3>Clima y consejo</h3>
+    ${consejoHTML()}`;
+}
+
+const ETAPA_GUIA = {
+  'Siembra': 'Mantené el sustrato húmedo sin encharcar y dale luz suave y constante.',
+  'Crecimiento': 'Es la etapa de más riego y observación. Subí la luz de a poco y revisá el envés de las hojas.',
+  'Floración': 'Vigilá humedad y temperatura para evitar hongos. Aumentá la intensidad de luz según el rango de la etapa.',
+  'Cosecha': 'Registrá lo cosechado. Según la especie, reducí el fertilizante antes de cosechar.'
+};
+const PLANTILLAS = [
+  ['Albahaca', 'Hierba aromática', 'exterior'],
+  ['Lechuga', 'Hortaliza de hoja', 'interior'],
+  ['Tomate cherry', 'Hortaliza de fruto', 'exterior'],
+  ['Microverdes', 'Brotes', 'interior']
+];
+
+function diasDeCultivo(c) { return Math.max(1, diasDesde(c.fecha.slice(0, 10)) + 1); }
+function ultimoRiego(c) { return c.bitacora.find(r => r.tipo === 'Riego'); }
+function proximoPaso(c) {
+  const s = saludCultivo(c);
+  if (s.nivel === 'alerta') return s.texto;
+  if (!c.bitacora.length) return 'Hacé tu primer registro para empezar la bitácora';
+  const r = ultimoRiego(c);
+  if (!r || diasDesde(r.fecha.slice(0, 10)) >= 3) return 'Toca regar: no hay un riego reciente registrado';
+  if (c.etapa === 'Cosecha') return 'Registrá la cantidad cosechada';
+  return 'Todo al día. Seguí con las tareas de hoy';
+}
+
+function plantillasHTML() {
+  return `<h3>Empezar rápido</h3>
+    <div class="plantillas">${PLANTILLAS.map((p, i) => `<button class="pl" data-act="plantilla" data-v="${i}"><strong>${p[0]}</strong><span class="muted">${p[1]} · ${p[2]}</span></button>`).join('')}</div>
+    <p class="muted">O creá un cultivo propio con el botón de arriba.</p>`;
+}
+
+function tarjetaCultivo(c) {
+  const idx = ETAPAS.indexOf(c.etapa); const s = saludCultivo(c); const ult = c.bitacora[0];
+  return `<button class="card" data-act="abrir" data-v="${c.id}">
+    <div class="nivel"><strong>${esc(c.nombre)}</strong><span class="tag">Día ${diasDeCultivo(c)}</span>${c.ejemplo ? '<span class="tag">ejemplo</span>' : ''}</div>
+    <div class="muted">${esc(c.tipo)} · ${c.ubicacion} · ${c.etapa}</div>
+    <div class="seg">${ETAPAS.map((e, i) => `<span class="${i <= idx ? 'on' : ''}"></span>`).join('')}</div>
+    <div class="prox"><span class="dot ${s.nivel}"></span><span>${proximoPaso(c)}</span></div>
+    <div class="muted" style="margin-top:4px">${ult ? 'Último: ' + esc(ult.nota) : 'Todavía sin registros'}</div>
+  </button>`;
+}
+
+function cultivosHTML() {
+  if (S.verCannabis) return cannabisHTML();
+  const c = S.cultivos.find(x => x.id === S.abierto);
+  if (c) return detalleHTML(c);
+  const f = S.f;
+  const lleno = limiteAlcanzado();
+  const form = S.creando && !lleno ? `<div class="card">
+      <input class="input" placeholder="Nombre (ej. Albahaca 1)" data-bind="nombre" value="${esc(f.nombre || '')}">
+      <input class="input" placeholder="Tipo de planta" data-bind="tipo" value="${esc(f.tipo || '')}">
+      <div class="muted">Ubicación</div>
+      <div class="row">${['interior', 'exterior'].map(u => `<button class="chip" aria-pressed="${(f.ub || 'interior') === u}" data-act="setUb" data-v="${u}">${u}</button>`).join('')}</div>
+      <div class="muted">Etapa</div>
+      <div class="row">${ETAPAS.map(e => `<button class="chip" aria-pressed="${(f.et || 'Siembra') === e}" data-act="setEt" data-v="${e}">${e}</button>`).join('')}</div>
+      <input class="input" placeholder="Fecha de siembra (AAAA-MM-DD)" data-bind="fecha" value="${esc(f.fecha || hoyStr())}">
+      <button class="btn" data-act="crear">Guardar cultivo</button>
+    </div>` : '';
+  const alertas = S.cultivos.filter(x => saludCultivo(x).nivel === 'alerta').length;
+  const cosecha = S.cultivos.filter(x => x.etapa === 'Cosecha').length;
+  const filtro = S.filtroCult || 'todos';
+  const lista = S.cultivos.filter(x => filtro === 'todos' || (filtro === 'alertas' ? saludCultivo(x).nivel === 'alerta' : x.ubicacion === filtro));
+  const filtros = [['todos', 'Todos'], ['interior', 'Interior'], ['exterior', 'Exterior'], ['alertas', 'Con alertas']];
+  const hayCultivos = S.cultivos.length > 0;
+  return `<h2>Mis cultivos</h2>
+    ${hayCultivos ? `<div class="stats">
+      <div class="stat"><strong class="num">${S.cultivos.length}</strong><span class="muted">cultivos</span></div>
+      <div class="stat"><strong class="num">${cosecha}</strong><span class="muted">en cosecha</span></div>
+      <div class="stat"><strong class="num">${alertas}</strong><span class="muted">con alertas</span></div>
+    </div>` : ''}
+    ${lleno ? '<div class="card"><strong>Llegaste al límite del plan Gratis</strong><p class="muted">Incluye 2 cultivos propios. Pro es ilimitado.</p><button class="btn" data-act="tab" data-v="plan">Ver planes</button></div>' : `<button class="btn ${S.creando ? 'ghost' : ''}" data-act="toggleForm">${S.creando ? 'Cancelar' : '+ Nuevo cultivo'}</button>`}
+    ${form}
+    ${hayCultivos ? `<div class="row" style="margin-top:10px">${filtros.map(([k, n]) => `<button class="chip" aria-pressed="${filtro === k}" data-act="filtroCult" data-v="${k}">${n}</button>`).join('')}</div>` : ''}
+    ${hayCultivos
+      ? (lista.length ? lista.map(tarjetaCultivo).join('') : '<p class="muted">Ningún cultivo coincide con este filtro.</p>')
+      : '<p class="muted">Todavía no tenés cultivos. Creá el primero o empezá con una plantilla.</p>' + (S.creando ? '' : plantillasHTML())}
+    ${CANNABIS_HABILITADO ? `<button class="card" data-act="cannAbrir" style="margin-top:6px">
+      <div class="nivel"><strong>Sección cannabis</strong><span class="tag rec">Pro</span></div>
+      <div class="muted">Contenido educativo de cultivo LED. Solo para mayores de 18.</div>
+    </button>` : ''}`;
+}
+
+function detalleHTML(c) {
+  const idx = ETAPAS.indexOf(c.etapa); const s = saludCultivo(c);
+  const filtroB = S.filtroBit || 'Todas';
+  const riegos = c.bitacora.filter(r => r.tipo === 'Riego').length;
+  const ultDias = c.bitacora[0] ? diasDesde(c.bitacora[0].fecha.slice(0, 10)) : null;
+  const bit = filtroB === 'Todas' ? c.bitacora : c.bitacora.filter(r => r.tipo === filtroB);
+  const conf = S.confCult === c.id;
+  return `<div class="sub-nav"><button class="chip" data-act="volver">← Cultivos</button><span><span class="dot ${s.nivel}"></span><span class="muted">${s.texto}</span></span></div>
+    <h2 style="margin-top:8px">${esc(c.nombre)}${c.ejemplo ? ' <span class="tag">ejemplo</span>' : ''}</h2>
+    <div class="muted">${esc(c.tipo)} · ${c.ubicacion} · Día ${diasDeCultivo(c)} desde ${c.fecha.slice(0, 10)}</div>
+    <div class="card proxcard"><div class="muted">Próximo paso</div><strong>${proximoPaso(c)}</strong><div class="muted" style="margin-top:6px">${ETAPA_GUIA[c.etapa]}</div></div>
+    <div class="stats">
+      <div class="stat"><strong class="num">${c.bitacora.length}</strong><span class="muted">registros</span></div>
+      <div class="stat"><strong class="num">${riegos}</strong><span class="muted">riegos</span></div>
+      <div class="stat"><strong class="num">${ultDias == null ? '-' : ultDias === 0 ? 'Hoy' : ultDias}</strong><span class="muted">${ultDias === 1 ? 'día desde el último' : 'días desde el último'}</span></div>
+    </div>
+    <h3>Etapa</h3>
+    <div class="stages">${ETAPAS.map((e, i) => `<button class="stage ${i === idx ? 'cur' : ''} ${i < idx ? 'past' : ''}" data-act="etapaCultivo" data-v="${e}">${i < idx ? '✓ ' : ''}${e}</button>`).join('')}</div>
+    <h3>Registro rápido</h3>
+    <textarea class="input" rows="2" placeholder="Detalle (opcional): qué hiciste u observaste" data-bind="nota">${esc(S.f.nota || '')}</textarea>
+    <div class="row">${TIPOS_REG.map(t => `<button class="quick" data-act="quick" data-v="${t}">${t}</button>`).join('')}</div>
+    <div class="muted num">Cada registro suma 2 pts (hoy ${hoyLedger('r')} de ${TOPE_REG_DIA}).${c.ubicacion === 'interior' ? ` Cada medición de luz suma 4 pts (hoy ${hoyLedger('m')} de ${TOPE_MED_DIA}).` : ''}</div>
+    ${c.ubicacion === 'interior' ? condicionesHTML(c) : '<div class="card"><p class="muted">En exterior, el clima viene del pronóstico. Lo ves en la pestaña Hoy.</p></div>'}
+    ${fotosCultivoHTML(c)}${exportHTML(c)}
+    <h3>Bitácora</h3>
+    <div class="row">${['Todas', ...TIPOS_REG].map(t => `<button class="chip" aria-pressed="${filtroB === t}" data-act="filtroBit" data-v="${t}">${t}</button>`).join('')}</div>
+    ${bit.length === 0
+      ? '<p class="muted">Sin registros' + (filtroB === 'Todas' ? ' todavía. Tocá un registro rápido para empezar.' : ' de este tipo.') + '</p>'
+      : bit.map(r => `<div class="entry"><span class="letra">${esc(r.tipo[0])}</span><div><div class="muted num">${r.fecha} · ${r.tipo}</div><div>${esc(r.nota)}</div></div></div>`).join('')}
+    <h3>Zona de peligro</h3>
+    <button class="btn ghost" data-act="confEliminar" data-v="${c.id}">${conf ? 'Cancelar' : 'Eliminar este cultivo'}</button>
+    ${conf ? `<button class="btn" data-act="eliminarOK" data-v="${c.id}" style="background:var(--alert);border-color:var(--alert);margin-top:6px">Sí, eliminar y perder su bitácora</button>` : ''}`;
+}
+
+function cannabisHTML() {
+  const volver = '<button class="chip" data-act="cannVolver">← Cultivos</button>';
+  if (!(S.plan === 'pro' || S.plan === 'org')) {
+    return volver + '<h2 style="margin-top:12px">Sección cannabis</h2><div class="card"><strong>Disponible en el plan Pro</strong><p class="muted">Incluida en Pro (US$ 5.99 / mes).</p></div><button class="btn" data-act="tab" data-v="plan">Ver planes</button>';
+  }
+  if (!S.edadOk) {
+    return volver + '<h2 style="margin-top:12px">Sección cannabis</h2><div class="card"><p>Esta sección es educativa y trata solo sobre cultivo. No incluye información sobre consumo, dosis ni venta.</p><p>Al continuar confirmás que sos mayor de 18 años y que conocés la normativa vigente de tu país o provincia.</p></div><button class="btn" data-act="cannEdad">Soy mayor de 18 y acepto</button>';
+  }
+  const sec = CANN.find(x => x.id === S.cannTab) || CANN[0];
+  const et = CANN_ETAPAS.find(x => x.t === S.cannEt) || CANN_ETAPAS[0];
+  return volver + `<h2 style="margin-top:12px">Sección cannabis</h2>
+    <div class="card"><p class="muted">Contenido educativo de cultivo en interior con LED. Los rangos son orientativos y cambian según la genética. Consultá fuentes especializadas y la normativa de tu país o provincia.</p></div>
+    <div class="row">${CANN.map(x => `<button class="chip" aria-pressed="${x.id === S.cannTab}" data-act="cannTab" data-v="${x.id}">${x.t}</button>`).join('')}</div>
+    <div class="card"><strong>${sec.t}</strong><p style="line-height:1.6">${sec.x}</p></div>
+    <h3>Checklist por etapa</h3>
+    <div class="row">${CANN_ETAPAS.map(x => `<button class="chip" aria-pressed="${x.t === et.t}" data-act="cannEt" data-v="${x.t}">${x.t}</button>`).join('')}</div>
+    <div class="card"><ul class="checklist" style="margin:0;padding-left:18px">${et.items.map(i => `<li>${i}</li>`).join('')}</ul></div>`;
+}
+
+function agenteHTML() {
+  const preguntas = ['Hojas amarillas', 'Plagas', 'Nutrientes', 'Sustrato inerte', 'Hidroponía y pH', 'Huerta y compost', 'Luz LED'];
+  return `<h2>Agente</h2>
+    ${consejoHTML()}
+    ${VERSION_PRUEBA ? '' : fotoHTML()}
+    <h3>Preguntas rápidas</h3>
+    <div class="row">${preguntas.map(p => `<button class="quick" data-act="preg" data-v="${p}">${p}</button>`).join('')}</div>
+    <h3>Chat</h3>
+    ${S.chat.map(m => `<div class="bubble ${m.de}">${esc(m.t)}</div>`).join('')}
+    <input class="input" placeholder="Escribí tu pregunta" data-bind="pregunta" value="${esc(S.f.pregunta || '')}" style="margin-top:8px">
+    <button class="btn" data-act="enviar">Enviar</button>
+    <p class="muted">Modo de ejemplo sin conexión: las respuestas salen de reglas simples. El guía real se conecta con el backend.</p>`;
+}
+
+/* ---------- Aprender: ayudas ---------- */
+const esPro = () => S.plan === 'pro' || S.plan === 'org';
+const visibles = () => MODULOS.filter(m => m.cat !== 'cannabis' || CANNABIS_HABILITADO);
+const modulosPlan = () => visibles().filter(m => !m.pro || esPro());
+const moduloAprobado = m => !!m && (progreso[m.id] || 0) >= APROBAR_MODULO;
+function barajar(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+/* Mezcla las opciones en cada aparición: la posición de la correcta no se puede memorizar ni adivinar */
+function armarPregunta(q) {
+  const todas = barajar([{ t: q.ok, c: true }, ...q.no.map(t => ({ t, c: false }))]);
+  return { d: q.d, p: q.p, o: todas.map(x => x.t), r: todas.findIndex(x => x.c), e: q.e, mod: q.mod };
+}
+/* Test de módulo: una pregunta de cada dificultad, sacada del banco del módulo y distinta a la del intento anterior si es posible */
+function armarTest(m) {
+  const pool = [...m.quiz, ...m.banco].map(q => ({ ...q, mod: m.id }));
+  const vistas = S.vistas[m.id] || [];
+  const elegidas = [1, 2, 3].map(d => {
+    const c = pool.filter(q => q.d === d);
+    const nuevas = c.filter(q => !vistas.includes(q.p));
+    const base = nuevas.length ? nuevas : c;
+    return base[Math.floor(Math.random() * base.length)];
+  });
+  S.vistas[m.id] = elegidas.map(q => q.p);
+  return elegidas.map(armarPregunta);
+}
+function marcarEstudio() { estudio[hoyStr()] = true; }
+function ledgerSuma(k) {
+  const d = hoyStr(); const dia = ledger.dias[d] || (ledger.dias[d] = { r: 0, m: 0 });
+  if ((dia[k] || 0) >= (k === 'r' ? TOPE_REG_DIA : TOPE_MED_DIA)) return false;
+  dia[k] = (dia[k] || 0) + 1;
+  return true;
+}
+const hoyLedger = k => (ledger.dias[hoyStr()] || {})[k] || 0;
+const ptsTareasHoy = () => ptsTareasDia(tareasPorDia[hoyStr()] || []);
+
+function nivelPorPuntos(p) { return NIVELES.filter(n => p >= n.min).pop(); }
+function moduloDisponible(m) {
+  if (!m) return { ok: false, motivo: 'Módulo no disponible' };
+  if (m.cat === 'cannabis' && !CANNABIS_HABILITADO) return { ok: false, motivo: 'Próximamente: sujeto a revisión legal' };
+  if (m.pro && !esPro()) return { ok: false, motivo: 'Disponible en el plan Pro' };
+  if ((m.req || 0) > puntosTotales()) return { ok: false, motivo: 'Se desbloquea al llegar a ' + nivelPorPuntos(m.req).t + ' (' + m.req + ' pts)' };
+  const pend = (m.pre || []).map(modDe).filter(x => x && !moduloAprobado(x));
+  if (pend.length) return { ok: false, motivo: 'Primero aprobá: ' + pend.map(x => x.t).join(', ') };
+  return { ok: true, motivo: '' };
+}
+
+function aprenderHTML() {
+  const ap = S.apr;
+  if (S.ex) return examenVista();
+  if (ap.vista === 'modulo') return moduloHTML();
+  if (ap.vista === 'quiz') return quizHTML();
+  if (ap.vista === 'resultado') return resultadoHTML();
+  if (ap.vista === 'glosario') return glosarioHTML();
+  if (ap.vista === 'exinfo') return exInfoHTML();
+  if (ap.vista === 'constancia') return constanciaHTML();
+  const tot = puntosTotales();
+  const idx = Math.min(nivelIdx(tot), topeNivel()); const niv = NIVELES[idx]; const prox = NIVELES[idx + 1];
+  const pend = maestroPendiente(tot);
+  const pct = prox && !pend ? Math.round((tot - niv.min) / (prox.min - niv.min) * 100) : 100;
+  const hastaMaestro = prox && idx + 1 === NIVELES.length - 1 && MAESTRO_REQUIERE_EXAMEN;
+  const textoNivel = pend ? 'Tenés los puntos para Maestro de cultivo. Para obtenerlo, aprobá el Examen final (Pro).'
+    : prox ? `Te faltan ${prox.min - tot} puntos para ${prox.t}${hastaMaestro ? ' y aprobar el Examen final (Pro)' : ''}.` : 'Llegaste al nivel máximo.';
+  const sec = ap.sec || 'modulos';
+  const vis = modulosPlan();
+  const aprobados = vis.filter(moduloAprobado).length;
+  const exAprob = EXAMENES.filter(x => examenes[x.id] && examenes[x.id].aprobado).length;
+  const cabecera = `<h2>Aprender</h2>
+    <div class="card">
+      <div class="nivel"><div><div class="muted">Tu nivel</div><strong>${niv.t}</strong></div><div class="num" style="text-align:right"><strong>${tot}</strong> pts</div></div>
+      <div class="bar"><span style="width:${pct}%"></span></div>
+      <div class="muted">${textoNivel}</div>
+      <div class="muted num" style="margin-top:6px">Módulos aprobados: ${aprobados} de ${vis.length} · Exámenes aprobados: ${exAprob} de ${EXAMENES.length}</div>
+    </div>
+    <div class="niveles">${NIVELES.map((n, k) => `<span class="nv ${idx >= k ? 'on' : ''}">${n.t} · ${n.min}</span>`).join('')}</div>
+    <div class="row"><button class="chip" aria-pressed="${sec === 'modulos'}" data-act="aprSec" data-v="modulos">Módulos</button><button class="chip" aria-pressed="${sec === 'examenes'}" data-act="aprSec" data-v="examenes">Exámenes</button></div>`;
+  if (sec === 'examenes') return cabecera + examenesListaHTML();
+  const cats = CATS.filter(([k]) => k !== 'cannabis' || CANNABIS_HABILITADO);
+  const lista = visibles().filter(m => ap.cat === 'todas' || m.cat === ap.cat);
+  return cabecera + `
+    <div class="row">${cats.map(([k, n]) => `<button class="chip" aria-pressed="${ap.cat === k}" data-act="aprCat" data-v="${k}">${n}</button>`).join('')}</div>
+    ${CANNABIS_HABILITADO && (ap.cat === 'cannabis' || ap.cat === 'todas') ? '<div class="card"><div class="muted">Curso de cannabis con contenido educativo de cultivo y de salud general. No incluye dosis, recomendaciones de uso, promoción de productos ni información de venta.</div></div>' : ''}
+    ${lista.map(m => {
+      const dis = moduloDisponible(m); const best = progreso[m.id]; const hecho = best != null; const apr = moduloAprobado(m);
+      const pts = puntosMod(m.id); const max = maxPtsMod(m);
+      return `<button class="card ${dis.ok ? '' : 'locked'}" data-act="aprMod" data-v="${m.id}">
+        <div class="nivel"><strong>${m.t}${m.pro ? ' <span class="tag rec">Pro</span>' : ''}</strong><span class="stars">${dis.ok ? estrellas(hecho ? best : 0, PREGS_TEST) : 'Bloqueado'}</span></div>
+        <div class="muted">${m.d}</div>
+        <div class="muted num">${dis.ok ? (hecho ? `${apr ? '✓ Aprobado · ' : 'Sin aprobar · '}Mejor: ${pts} de ${max} pts` : `Sin intentar · hasta ${max} pts`) : dis.motivo}</div>
+        <div class="bar"><span style="width:${dis.ok && hecho ? pts / max * 100 : 0}%"></span></div>
+      </button>`;
+    }).join('')}
+    <button class="btn ghost" data-act="aprGlos">Glosario</button>`;
+}
+
+function moduloHTML() {
+  const m = modDe(S.apr.mod);
+  if (!moduloDisponible(m).ok) { S.apr.vista = 'lista'; return aprenderHTML(); }
+  if (m.cat === 'cannabis' && !S.edadOk) {
+    return `<div class="sub-nav"><button class="chip" data-act="aprLista">← Módulos</button></div>
+      <h2>${m.t}</h2>
+      <div class="card"><p>Este contenido es educativo y trata solo sobre cultivo y orientación general de salud. No incluye dosis, recomendaciones de uso, promoción de productos ni información de venta.</p>
+      <p>Al continuar confirmás que sos mayor de 18 años y que conocés la normativa vigente de tu país o provincia.</p></div>
+      <button class="btn" data-act="cannEdad">Soy mayor de 18 y acepto</button>`;
+  }
+  const i = S.apr.lec; const l = m.lec[i]; const ult = i === m.lec.length - 1;
+  return `<div class="sub-nav"><button class="chip" data-act="aprLista">← Módulos</button><span class="muted num">Lección ${i + 1} de ${m.lec.length}</span></div>
+    <div class="muted">${m.t}</div>
+    ${m.aviso ? `<div class="expl">${m.aviso}</div>` : ''}
+    <h2>${l.t}</h2>
+    <div class="card" style="font-size:16px;line-height:1.6">${l.x}</div>
+    <div class="bar"><span style="width:${(i + 1) / m.lec.length * 100}%"></span></div>
+    ${ult ? `<div class="muted" style="margin-bottom:8px">Para aprobar el módulo tenés que acertar ${APROBAR_MODULO} de ${PREGS_TEST}. Podés repetir el test: las preguntas cambian.</div>` : ''}
+    <button class="btn" data-act="lecSig">${ult ? `Hacer el test (${PREGS_TEST} preguntas)` : 'Siguiente lección'}</button>`;
+}
+
+function quizHTML() {
+  const a = S.apr;
+  if (!a.pregs) { a.vista = 'lista'; return aprenderHTML(); }
+  const preg = a.pregs[a.q]; const n = a.pregs.length;
+  const respondida = a.resp !== null;
+  return `<div class="sub-nav"><button class="chip" data-act="aprLista">Salir del test</button><span class="muted num">Pregunta ${a.q + 1} de ${n}</span></div>
+    <div class="bar"><span style="width:${a.q / n * 100}%"></span></div>
+    <div class="muted">${['', 'Básica', 'Intermedia', 'Trampa'][preg.d]} · ${preg.d * 10} pts</div><h2 style="font-size:18px">${esc(preg.p)}</h2>
+    ${preg.o.map((op, idx) => {
+      let cls = 'opt';
+      if (respondida && idx === preg.r) cls += ' ok';
+      else if (respondida && idx === a.resp) cls += ' mal';
+      return `<button class="${cls}" data-act="resp" data-v="${idx}">${esc(op)}</button>`;
+    }).join('')}
+    ${respondida ? `<div class="expl"><strong>${a.resp === preg.r ? 'Correcto.' : 'Casi.'}</strong> ${esc(preg.e)}</div>
+      <button class="btn" data-act="pregSig">${a.q < n - 1 ? 'Siguiente pregunta' : 'Ver mi puntaje'}</button>` : ''}`;
+}
+
+function resultadoHTML() {
+  const a = S.apr; const m = modDe(a.mod); const n = a.pregs ? a.pregs.length : PREGS_TEST;
+  const perfecto = a.aciertos === n;
+  const aprobado = a.aciertos >= APROBAR_MODULO;
+  const msg = perfecto ? `Perfecto. Ganaste el bonus de ${BONUS_PERFECTO} puntos.`
+    : aprobado ? 'Aprobaste. Repasá la pregunta que fallaste.'
+    : a.aciertos === 1 ? `Todavía no aprobás: necesitás ${APROBAR_MODULO} de ${n}. Volvé a leer las lecciones.`
+    : `No pasa nada. Necesitás ${APROBAR_MODULO} de ${n} para aprobar: leé el módulo otra vez y probá de nuevo.`;
+  const siguiente = visibles().find(x => x.id !== m.id && !moduloAprobado(x) && moduloDisponible(x).ok);
+  const exam = EXAMENES.find(ex => examenDisponible(ex).ok && !(examenes[ex.id] && examenes[ex.id].aprobado));
+  return `<div class="card" style="text-align:center;padding:24px 14px">
+      <div class="muted">Resultado · ${m.t}</div>
+      <div class="stars" style="font-size:28px;margin:10px 0">${estrellas(a.aciertos, n)}</div>
+      <h2 style="margin:4px 0" class="num">${a.aciertos} de ${n}</h2>
+      <div class="${aprobado ? 'okmsg' : 'alert'}">${aprobado ? 'Módulo aprobado' : 'Sin aprobar todavía'}</div>
+      <div class="okmsg num">+${a.gan || 0} pts nuevos · tu mejor marca: ${puntosMod(m.id)} de ${maxPtsMod(m)}</div>
+      <p class="muted">Solo cuenta tu mejor resultado en cada módulo: repetir el test sirve para aprender, no para sumar de más.</p>
+      <p>${msg}</p>
+    </div>
+    <button class="btn" data-act="repetir">Repetir test</button>
+    ${exam ? `<button class="btn" data-act="irExamen" data-v="${exam.id}">Ya podés rendir: ${exam.t}</button>` : ''}
+    ${siguiente ? `<button class="btn ghost" data-act="aprMod" data-v="${siguiente.id}">Seguir con ${siguiente.t}</button>` : ''}
+    <button class="btn ghost" data-act="aprLista">Volver a módulos</button>`;
+}
+
+function glosarioHTML() {
+  return `<div class="sub-nav"><button class="chip" data-act="aprLista">← Aprender</button></div>
+    <h2>Glosario</h2>
+    ${GLOSARIO.map(([t, x]) => `<div class="card"><strong>${t}</strong><div class="muted">${x}</div></div>`).join('')}`;
+}
+
+/* ---------- Exámenes ---------- */
+const exDe = id => EXAMENES.find(e => e.id === id);
+const modulosExamen = ex => visibles().filter(m => m.cat !== 'cannabis' && (!ex.cats || ex.cats.includes(m.cat)) && (!m.pro || esPro()));
+const poolExamen = ex => modulosExamen(ex).flatMap(m => [...m.quiz, ...m.banco].map(q => ({ ...q, mod: m.id })));
+const cantPreguntas = ex => Math.min(ex.n, poolExamen(ex).length);
+const tiempoLimite = ex => cantPreguntas(ex); // minutos: uno por pregunta
+const intentosHoy = id => { const r = examenes[id]; return r && r.dia === hoyStr() ? r.n : 0; };
+const fmtTiempo = s => { s = Math.max(0, Math.ceil(s)); return p2(Math.floor(s / 60)) + ':' + p2(s % 60); };
+const restoExamen = () => (S.ex && S.ex.fin ? Math.round((S.ex.fin - Date.now()) / 1000) : 0);
+
+function examenDisponible(ex) {
+  if (ex.pro && !esPro()) return { ok: false, pro: true, motivo: 'Disponible en el plan Pro' };
+  const faltan = (ex.pre || []).filter(id => !(examenes[id] && examenes[id].aprobado));
+  if (faltan.length) return { ok: false, motivo: 'Primero aprobá: ' + faltan.map(id => exDe(id).t).join(', ') };
+  const sin = modulosExamen(ex).filter(m => !moduloAprobado(m));
+  if (sin.length) return { ok: false, motivo: 'Aprobá antes el test de: ' + sin.map(m => m.t).join(', ') };
+  if (intentosHoy(ex.id) >= INTENTOS_DIA) return { ok: false, agotado: true, motivo: `Ya hiciste ${INTENTOS_DIA} intentos hoy. Volvé mañana y repasá los módulos.` };
+  return { ok: true, motivo: '' };
+}
+
+/* Sorteo estratificado: mezcla de dificultades (20 % básicas, 40 % intermedias, 40 % trampa) y reparto parejo entre módulos */
+function sortearExamen(ex) {
+  const vistas = new Set(S.vistasEx[ex.id] || []);
+  const pool = barajar(poolExamen(ex)).sort((a, b) => (vistas.has(a.p) ? 1 : 0) - (vistas.has(b.p) ? 1 : 0));
+  const n = Math.min(ex.n, pool.length);
+  const objetivo = { 1: Math.max(1, Math.round(n * 0.2)), 3: Math.round(n * 0.4) };
+  objetivo[2] = n - objetivo[1] - objetivo[3];
+  const elegidas = []; const cuenta = {};
+  [3, 2, 1].forEach(d => {
+    const cand = pool.filter(q => q.d === d);
+    for (let k = 0; k < objetivo[d] && cand.length; k++) {
+      let mejor = 0;
+      for (let j = 1; j < cand.length; j++) if ((cuenta[cand[j].mod] || 0) < (cuenta[cand[mejor].mod] || 0)) mejor = j;
+      const q = cand.splice(mejor, 1)[0];
+      cuenta[q.mod] = (cuenta[q.mod] || 0) + 1;
+      elegidas.push(q);
+    }
+  });
+  while (elegidas.length < n) { const q = pool.find(x => !elegidas.includes(x)); if (!q) break; elegidas.push(q); }
+  return barajar(elegidas).map(armarPregunta);
+}
+
+function iniciarExamen(id) {
+  const ex = exDe(id);
+  if (!ex || S.ex || !examenDisponible(ex).ok) return false;
+  const reg = examenes[id] || (examenes[id] = { mejor: 0, aprobado: false, pts: 0, hist: [], dia: '', n: 0 });
+  if (reg.dia !== hoyStr()) { reg.dia = hoyStr(); reg.n = 0; }
+  reg.n++;
+  const preguntas = sortearExamen(ex);
+  S.vistasEx[id] = preguntas.map(q => q.p);
+  S.ex = { id, fase: 'curso', preguntas, resp: [], i: 0, sel: null, inicio: Date.now(), fin: Date.now() + tiempoLimite(ex) * 60000, confirmaSalir: false };
+  marcarEstudio();
+  return true;
+}
+
+/* Puntaje con penalización: acierto = +dificultad, error = −dificultad/3, "No lo sé" o sin responder = 0 */
+function puntuarExamen(e) {
+  let max = 0, neto = 0, ac = 0, er = 0, nc = 0; const mods = {};
+  e.preguntas.forEach((q, i) => {
+    max += q.d;
+    const r = e.resp[i];
+    const mm = mods[q.mod] || (mods[q.mod] = { ac: 0, n: 0 }); mm.n++;
+    if (r == null || r < 0) nc++;
+    else if (r === q.r) { neto += q.d; ac++; mm.ac++; }
+    else { neto -= q.d / 3; er++; }
+  });
+  const pct = max ? Math.max(0, neto) / max : 0;
+  return { pct, ac, er, nc, mods, aprobado: pct >= APROBAR_EXAMEN - 1e-9 };
+}
+
+function terminarExamen(porTiempo) {
+  const e = S.ex; if (!e || e.fase !== 'curso') return;
+  const ex = exDe(e.id); const res = puntuarExamen(e);
+  const reg = examenes[e.id] || (examenes[e.id] = { mejor: 0, aprobado: false, pts: 0, hist: [], dia: hoyStr(), n: 1 });
+  e.res = res; e.fase = 'resultado'; e.porTiempo = !!porTiempo; e.sel = null; e.todo = false; e.confirmaSalir = false;
+  reg.hist = [{ f: ahora(), pct: +res.pct.toFixed(3), ok: res.aprobado }, ...(reg.hist || [])].slice(0, 10);
+  if (res.pct > reg.mejor) reg.mejor = +res.pct.toFixed(3);
+  e.pts = 0;
+  if (res.aprobado && !reg.aprobado) { reg.aprobado = true; reg.fecha = hoyStr(); reg.pts = ex.pts || 0; e.pts = reg.pts; e.primeraVez = true; }
+  marcarEstudio();
+}
+
+function exTick() {
+  if (!S.ex || S.ex.fase !== 'curso') return;
+  const r = restoExamen();
+  if (r <= 0) { terminarExamen(true); guardar(); draw(); return; }
+  const el = document.getElementById('extimer');
+  if (el) { el.textContent = fmtTiempo(r); if (el.style) el.style.color = r <= 60 ? 'var(--alert)' : ''; }
+}
+
+function examenesListaHTML() {
+  return `<div class="card"><strong>Exámenes</strong>
+    <p class="muted" style="line-height:1.5;margin-bottom:0">Miden si de verdad aprendiste: preguntas al azar con las opciones mezcladas, tiempo límite y trampas. Cada acierto suma según su dificultad, cada error resta un tercio y "No lo sé" no resta. Se aprueba con ${Math.round(APROBAR_EXAMEN * 100)} %.</p></div>
+    ${EXAMENES.map(ex => {
+      const d = examenDisponible(ex); const reg = examenes[ex.id]; const apr = !!(reg && reg.aprobado);
+      const estado = apr ? `✓ Aprobado · mejor ${Math.round(reg.mejor * 100)} %`
+        : reg && reg.mejor ? `Mejor resultado: ${Math.round(reg.mejor * 100)} %${d.ok ? '' : ' · ' + d.motivo}`
+        : d.ok ? 'Disponible · sin intentar' : d.motivo;
+      return `<button class="card ${d.ok || apr ? '' : 'locked'}" data-act="exInfo" data-v="${ex.id}">
+        <div class="nivel"><strong>${ex.t}${ex.pro ? ' <span class="tag rec">Pro</span>' : ''}</strong><span class="stars">${apr ? '★' : ''}</span></div>
+        <div class="muted">${ex.d}</div>
+        <div class="muted num">${estado}</div>
+      </button>`;
+    }).join('')}`;
+}
+
+function exInfoHTML() {
+  const ex = exDe(S.apr.exId);
+  if (!ex) { S.apr.vista = 'lista'; return aprenderHTML(); }
+  const d = examenDisponible(ex); const reg = examenes[ex.id]; const n = cantPreguntas(ex); const total = poolExamen(ex).length;
+  return `<div class="sub-nav"><button class="chip" data-act="exLista">← Exámenes</button></div>
+    <h2>${ex.t}</h2>
+    <div class="card"><div class="muted">${ex.d}</div>
+      <ul class="checklist" style="padding-left:18px;margin-bottom:0">
+        <li>${n} preguntas elegidas al azar entre ${total}: cada intento es distinto.</li>
+        <li>Tiempo: ${tiempoLimite(ex)} minutos. Si se acaba, se corrige lo que respondiste.</li>
+        <li>Se aprueba con ${Math.round(APROBAR_EXAMEN * 100)} % o más. Cada acierto suma según su dificultad, cada error resta un tercio de ese valor y "No lo sé" no suma ni resta.</li>
+        <li>No se puede volver atrás. Tenés ${INTENTOS_DIA} intentos por día (hoy llevás ${intentosHoy(ex.id)}).</li>
+        <li>${ex.pts ? `La primera vez que aprobás ganás +${ex.pts} puntos.` : 'Al aprobar se habilita el nivel Maestro de cultivo y la constancia.'}</li>
+      </ul>
+    </div>
+    ${reg && reg.mejor ? `<div class="muted num" style="margin-bottom:10px">Tu mejor resultado: ${Math.round(reg.mejor * 100)} %${reg.aprobado ? ' · aprobado' : ''}</div>` : ''}
+    ${ex.id === 'final' && reg && reg.aprobado ? '<button class="btn ghost" data-act="constancia">Ver mi constancia</button>' : ''}
+    ${d.ok ? '<button class="btn" data-act="exStart">Empezar el examen</button>'
+      : `<div class="card"><p class="muted" style="margin:0">${d.motivo}</p></div>${d.pro ? '<button class="btn" data-act="tab" data-v="plan">Ver planes</button>' : ''}`}`;
+}
+
+function examenVista() { return S.ex.fase === 'resultado' ? exResultadoHTML() : examenHTML(); }
+
+function examenHTML() {
+  const e = S.ex; const n = e.preguntas.length; const q = e.preguntas[e.i]; const sel = e.sel;
+  if (e.confirmaSalir) {
+    return `<h2>¿Salir del examen?</h2>
+      <div class="card"><p>Este intento ya cuenta entre tus ${INTENTOS_DIA} de hoy y no se guarda el resultado.</p></div>
+      <button class="btn danger" data-act="exSalirOk">Sí, salir y perder el intento</button>
+      <button class="btn" data-act="exSalirNo">Seguir con el examen</button>`;
+  }
+  const r = restoExamen();
+  return `<div class="sub-nav"><button class="chip" data-act="exSalir">Salir</button><span class="num" id="extimer" style="font-weight:700;${r <= 60 ? 'color:var(--alert)' : ''}">${fmtTiempo(r)}</span><span class="muted num">Pregunta ${e.i + 1} de ${n}</span></div>
+    <div class="bar"><span style="width:${e.i / n * 100}%"></span></div>
+    <h2 style="font-size:18px">${esc(q.p)}</h2>
+    ${q.o.map((op, idx) => `<button class="opt ${sel === idx ? 'sel' : ''}" data-act="exSel" data-v="${idx}" aria-pressed="${sel === idx}">${esc(op)}</button>`).join('')}
+    <button class="opt ${sel === -1 ? 'sel' : ''}" data-act="exSel" data-v="-1" aria-pressed="${sel === -1}" style="color:var(--muted)">No lo sé (no suma ni resta)</button>
+    <button class="btn" data-act="exOk" ${sel == null ? 'disabled' : ''} style="margin-top:6px">${e.i < n - 1 ? 'Confirmar y seguir' : 'Confirmar y terminar'}</button>`;
+}
+
+function exResultadoHTML() {
+  const e = S.ex; const ex = exDe(e.id); const r = e.res; const n = e.preguntas.length;
+  const pct = Math.round(r.pct * 100); const minimo = Math.round(APROBAR_EXAMEN * 100);
+  const flojos = Object.entries(r.mods).filter(([id, x]) => x.ac / x.n < 0.7).map(([id]) => modDe(id)).filter(Boolean);
+  const filas = e.preguntas.map((q, i) => ({ q, resp: e.resp[i] })).filter(x => e.todo || x.resp !== x.q.r);
+  const tuya = x => (x.resp == null || x.resp < 0 ? 'Sin responder' : x.q.o[x.resp]);
+  return `<div class="card" style="text-align:center;padding:24px 14px">
+      <div class="muted">${ex.t}</div>
+      <div class="big num" style="margin:10px 0;color:${r.aprobado ? 'var(--ok)' : 'var(--alert)'}">${pct} %</div>
+      <strong>${r.aprobado ? 'Aprobado' : 'No aprobado'}</strong>
+      <div class="muted num">Mínimo para aprobar: ${minimo} %</div>
+      <p class="num">${r.ac} aciertos · ${r.er} errores · ${r.nc} sin responder (de ${n})</p>
+      ${e.porTiempo ? '<p class="muted">Se acabó el tiempo: se corrigió lo que alcanzaste a responder.</p>' : ''}
+      ${e.pts ? `<div class="okmsg num">+${e.pts} pts por aprobar por primera vez</div>` : ''}
+      ${e.id === 'final' && r.aprobado ? '<div class="okmsg">Habilitaste el nivel Maestro de cultivo (si ya tenés los puntos) y tu constancia.</div>' : ''}
+    </div>
+    ${e.id === 'final' && r.aprobado ? '<button class="btn" data-act="constancia">Ver mi constancia</button>' : ''}
+    ${flojos.length ? `<h3>Para repasar</h3><div class="row">${flojos.map(m => `<button class="chip" data-act="exRepasar" data-v="${m.id}">${m.t}</button>`).join('')}</div>` : ''}
+    ${filas.length ? `<h3>${e.todo ? 'Todas las preguntas' : 'Preguntas para repasar'}</h3>` + filas.map(x => `<div class="rev ${x.resp === x.q.r ? 'ok' : ''}">
+        <div class="muted">${modDe(x.q.mod).t}</div><strong>${esc(x.q.p)}</strong>
+        <div class="muted">Tu respuesta: ${esc(tuya(x))}</div>
+        ${x.resp !== x.q.r ? `<div class="okmsg">Correcta: ${esc(x.q.o[x.q.r])}</div>` : ''}
+        <div class="expl">${esc(x.q.e)}</div></div>`).join('') : '<p class="okmsg">No tuviste errores.</p>'}
+    <button class="btn ghost" data-act="exTodo">${e.todo ? 'Ver solo las que fallé' : 'Ver todas las preguntas'}</button>
+    <button class="btn" data-act="exLista">Volver a exámenes</button>`;
+}
+
+function constanciaTexto() {
+  const reg = examenes.final; const nom = (S.f.nombreConst || '').trim();
+  return ['BROTA · Constancia del Examen final', 'Nombre: ' + (nom || '(sin nombre)'),
+    'Resultado: ' + Math.round(reg.mejor * 100) + ' % (mínimo ' + Math.round(APROBAR_EXAMEN * 100) + ' %)',
+    'Fecha de aprobación: ' + reg.fecha, 'Nivel actual: ' + nivelActual(puntosTotales()).t, '',
+    'Aviso: es un reconocimiento interno de la app BROTA. No es un título oficial ni tiene validez académica o legal.'].join('\n');
+}
+function constanciaHTML() {
+  if (!examenFinalAprobado()) { S.apr.vista = 'lista'; return aprenderHTML(); }
+  return `<div class="sub-nav"><button class="chip" data-act="exLista">← Exámenes</button></div>
+    <h2>Tu constancia</h2>
+    <div class="card"><div class="muted">Escribí tu nombre si querés que figure.</div>
+      <input class="input" placeholder="Tu nombre (opcional)" data-bind="nombreConst" value="${esc(S.f.nombreConst || '')}" style="margin-top:8px">
+      <textarea id="cons" class="input num" rows="9" readonly style="font-size:13px">${esc(constanciaTexto())}</textarea>
+      <button class="btn" data-act="copiarConst">Copiar constancia</button>
+      <div class="muted">Es un reconocimiento interno de BROTA: no tiene validez oficial.</div></div>`;
+}
+
+function textoOpinion() {
+  const est = S.f.estrellas ? S.f.estrellas + '/5' : 'sin calificar';
+  const plan = S.plan === 'gratis' ? 'Gratis' : PLANES[S.plan].nombre + (S.ciclo === 'anual' ? ' anual' : ' mensual');
+  return ['BROTA ' + VERSION_APP + ' · ' + hoyStr(), 'Plan: ' + plan, 'Calificación: ' + est,
+    'Cultivos propios: ' + cultivosPropios(), 'Módulos aprobados: ' + modulosPlan().filter(moduloAprobado).length + ' de ' + modulosPlan().length, 'Exámenes aprobados: ' + EXAMENES.filter(x => examenes[x.id] && examenes[x.id].aprobado).length + ' de ' + EXAMENES.length, 'Errores capturados: ' + (ERRORES.length ? ERRORES.join(' | ') : 'ninguno'),
+    '', 'Comentario:', (S.f.opinion || '').trim() || '(sin comentario)'].join('\n');
+}
+function opinionHTML() {
+  const est = S.f.estrellas || 0;
+  return `<h3>Tu opinión de la prueba</h3>
+    <div class="card">
+      <div class="muted">¿Qué tan útil te resulta BROTA hasta ahora?</div>
+      <div class="row">${[1, 2, 3, 4, 5].map(n => `<button class="chip" aria-pressed="${est === n}" data-act="estrella" data-v="${n}">${n}</button>`).join('')}</div>
+      <textarea class="input" rows="3" placeholder="¿Qué te gustó? ¿Qué falló o te confundió?" data-bind="opinion">${esc(S.f.opinion || '')}</textarea>
+      <button class="btn" data-act="copiarOp">Copiar mi opinión</button>
+      <div class="muted">La app no envía nada sola: pegá el texto en el formulario o mensaje que te indiquemos.</div>
+      <textarea id="opn" class="input num" rows="6" readonly style="font-size:12px">${esc(textoOpinion())}</textarea>
+    </div>`;
+}
+
+function planHTML() {
+  return `<h2>Planes</h2>
+    ${Object.entries(PLANES).filter(([k]) => !(VERSION_PRUEBA && k === 'org')).map(([k, p]) => `<div class="plan-box ${S.plan === k ? 'active' : ''}">
+      <div class="nivel"><strong>${p.nombre}</strong>${p.tag ? `<span class="tag ${p.tag === 'Recomendado' ? 'rec' : ''}">${p.tag}</span>` : ''}</div>
+      <div class="price">${p.precio}</div>
+      <ul>${p.items.map(i => `<li>${i}</li>`).join('')}</ul>
+      ${p.nota ? `<p class="nota-legal">${p.nota}</p>` : ''}
+      ${botonesPlan(k, p)}
+    </div>`).join('')}
+    ${opinionHTML()}
+    ${trialHTML()}
+    <p class="muted">El cobro real se conecta después. Por ahora el cambio es solo local.</p>
+    <h3>Privacidad</h3>${privHTML()}
+    ${S.confirmarBorrado
+      ? `<p>Se eliminan cultivos, bitácora, progreso, exámenes y tareas de este dispositivo. No se puede deshacer.</p>
+         <button class="btn danger" data-act="borrarOK">Confirmar borrado</button>
+         <button class="btn ghost" data-act="borrarNo">Cancelar</button>`
+      : `<button class="btn danger" data-act="borrar">Borrar mi cuenta y todos los datos</button>`}`;
+}
+
+function draw() {
+  if (trial.fin && trial.fin < hoyStr() && S.plan === 'pro') S.plan = 'gratis';
+  if (S.ex && S.ex.fase === 'curso') { if (restoExamen() <= 0) { terminarExamen(true); guardar(); } else S.tab = 'aprender'; }
+  const app = document.getElementById('app');
+  if (!S.onboarded) { app.innerHTML = `<div class="main" style="padding:16px">${onboardingHTML()}</div>`; return; }
+  const enExamen = !!(S.ex && S.ex.fase === 'curso');
+  const tabs = [['hoy', 'Hoy'], ['cultivos', 'Cultivos'], ['agente', 'Agente'], ['aprender', 'Aprender'], ['plan', 'Plan']];
+  const vistas = { hoy: hoyHTML, cultivos: cultivosHTML, agente: agenteHTML, aprender: aprenderHTML, plan: planHTML };
+  const etiqueta = S.plan === 'gratis' ? 'Plan gratis' : PLANES[S.plan].nombre;
+  app.innerHTML = `<header class="top"><div class="brand">BROTA</div><span class="muted">${etiqueta}${VERSION_PRUEBA ? ' · <span class="tag">Prueba</span>' : ''}</span></header>
+    <div class="main">${vistas[S.tab]()}</div>
+    <nav class="tabs">${tabs.map(([k, n]) => `<button data-act="tab" data-v="${k}" ${S.tab === k ? 'aria-current="page"' : ''} ${enExamen && S.tab !== k ? 'disabled' : ''}>${n}</button>`).join('')}</nav>`;
+}
+
+/* ---------- Acciones ---------- */
+const PERFILES = [['huerta', 'Huerta'], ['hidro', 'Hidroponía'], ['interior', 'Interior con LED'], ['exterior', 'Exterior o balcón']];
+const CAT_PERFIL = { huerta: 'huerta', hidro: 'hidro', interior: 'luz', exterior: 'huerta' };
+
+function onboardingHTML() {
+  const pasos = [
+    ['Bienvenido a BROTA', 'Es tu cuaderno de cultivo: registrás lo que hacés con tus plantas y entendés por qué pasa lo que pasa.'],
+    ['Tareas, registros y logros', 'Cada día tenés tareas sencillas para tus cultivos. Registrar, medir y completar tareas suma puntos y mantiene tu racha.'],
+    ['Aprendizaje y un guía', 'Módulos cortos con tests que suman puntos y, al terminar un bloque, exámenes con nota para comprobar lo que aprendiste. Un guía te da consejos para tus cultivos.'],
+    ['¿Qué cultivás?', 'Elegimos los primeros módulos según tu forma de cultivar. Podés cambiarlo cuando quieras.']
+  ];
+  const i = S.onb; const u = i === pasos.length - 1;
+  const chips = i === pasos.length - 1
+    ? `<div class="row">${PERFILES.map(([k, n]) => `<button class="chip" aria-pressed="${S.perfil === k}" data-act="perfil" data-v="${k}">${n}</button>`).join('')}</div>`
+    : '';
+  return `<div class="step" style="padding:16px">
+    <div class="brand">BROTA</div>
+    <h2 style="margin-top:28px">${pasos[i][0]}</h2>
+    <p>${pasos[i][1]}</p>
+    ${chips}
+    <div class="dots">${pasos.map((_, k) => `<span class="${k === i ? 'on' : ''}"></span>`).join('')}</div>
+    <button class="btn" data-act="next">${u ? 'Empezar' : 'Siguiente'}</button>
+  </div>`;
+}
+
+function recomendacionHTML() {
+  const lista = modulosPlan();
+  const cat = S.perfil ? CAT_PERFIL[S.perfil] : null;
+  const pendientes = lista.filter(x => !moduloAprobado(x));
+  const libres = pendientes.filter(x => moduloDisponible(x).ok);
+  const propio = cat ? pendientes.find(x => x.cat === cat) : null; // el primero de su forma de cultivar, esté o no desbloqueado
+  const ex = EXAMENES.find(x => examenDisponible(x).ok && !(examenes[x.id] && examenes[x.id].aprobado));
+  const tarjeta = (m, titulo, boton) => `<div class="card">
+      <div class="muted">${titulo}</div>
+      <strong>${m.t}</strong>
+      <div class="muted">${m.d}</div>
+      ${boton}
+    </div>`;
+  const empezar = m => `<button class="btn" data-act="irModulo" data-v="${m.id}" style="margin-top:8px">${progreso[m.id] != null ? 'Retomar este módulo (te falta aprobar el test)' : 'Empezar este módulo'}</button>`;
+  let html = '';
+  if (propio) {
+    const dis = moduloDisponible(propio);
+    html += tarjeta(propio, 'Recomendado para tu forma de cultivar',
+      dis.ok ? empezar(propio) : `<div class="muted" style="margin-top:6px">${dis.motivo}. Sumá puntos con tareas, registros y otros módulos.</div>`);
+  }
+  const propioLibre = !!(propio && moduloDisponible(propio).ok);
+  const otro = propioLibre ? null : libres.find(x => !propio || x.id !== propio.id);
+  if (otro) html += tarjeta(otro, propio ? 'Mientras tanto, para sumar puntos' : 'Siguiente módulo para aprobar', empezar(otro));
+  if (ex) {
+    html += `<div class="card">
+      <div class="muted">Ya podés rendir</div>
+      <strong>${ex.t}</strong>
+      <div class="muted">${ex.d}</div>
+      <button class="btn ghost" data-act="irExamen" data-v="${ex.id}" style="margin-top:8px">Ver el examen</button>
+    </div>`;
+  }
+  return html;
+}
+
+function fotosCultivoHTML(c) {
+  const f = c.fotos || [];
+  const comp = f.length >= 2
+    ? `<div class="comp"><figure><img src="${f[f.length - 1].src}" alt="Primera foto del cultivo"><figcaption class="muted num">Primera · ${f[f.length - 1].fecha}</figcaption></figure><figure><img src="${f[0].src}" alt="Foto más reciente del cultivo"><figcaption class="muted num">Última · ${f[0].fecha}</figcaption></figure></div>`
+    : '';
+  return `<h3>Fotos del cultivo</h3>
+    <div class="card">
+      <div class="muted">Subí una foto cada semana para ver la evolución. Las fotos se guardan en este navegador mientras uses la app.</div>
+      <input type="file" accept="image/*" data-foto="cultivo" class="input" style="margin-top:8px">
+      ${comp}
+      <div class="fotos">${f.map(x => `<figure><img src="${x.src}" alt="Foto del cultivo"><figcaption class="muted num">${x.fecha}</figcaption></figure>`).join('')}</div>
+    </div>`;
+}
+
+function textoExport(c) {
+  const lineas = [
+    'BROTA · ' + c.nombre + ' (' + c.tipo + ', ' + c.ubicacion + ')',
+    'Etapa actual: ' + c.etapa + ' · Desde: ' + c.fecha,
+    '',
+    'BITÁCORA',
+    ...(c.bitacora.length ? c.bitacora.map(r => r.fecha + ' | ' + r.tipo + ' | ' + r.nota) : ['Sin registros']),
+    '',
+    'MEDICIONES'
+  ];
+  if (!c.condiciones.length) lineas.push('Sin mediciones');
+  c.condiciones.forEach(r => lineas.push([r.fecha, 'PPFD ' + (r.ppfd ?? '-'), 'Altura ' + (r.alturaCm ?? '-') + ' cm', 'Temp ' + (r.temp ?? '-') + ' °C', 'HR ' + (r.humedad ?? '-') + ' %'].join(' | ')));
+  return lineas.join('\n');
+}
+
+function exportHTML(c) {
+  if (!(S.plan === 'pro' || S.plan === 'org')) return '';
+  return `<h3>Exportar</h3>
+    <div class="card">
+      <button class="btn ghost" data-act="exportar" data-v="${c.id}">${S.exportar === c.id ? 'Ocultar texto' : 'Generar texto de la bitácora'}</button>
+      ${S.exportar === c.id ? `<textarea id="exp" class="input num" rows="8" readonly style="font-size:13px">${esc(textoExport(c))}</textarea>
+        <button class="btn" data-act="copiar">Copiar al portapapeles</button>
+        <div class="muted">Si el botón no copia, seleccioná el texto y copialo a mano.</div>` : ''}
+    </div>`;
+}
+
+function trialHTML() {
+  if (trial.fin && S.plan === 'pro') {
+    const d = Math.max(0, Math.ceil((parseFecha(trial.fin) - parseFecha(hoyStr())) / 86400000));
+    return `<div class="card"><strong>Estás probando Pro</strong><div class="muted">Te quedan ${d} días. Al terminar vuelve al plan gratis si no elegís un plan.</div></div>`;
+  }
+  if (S.plan === 'gratis' && !trial.usado) {
+    return `<div class="card"><strong>Probá Pro 14 días</strong><div class="muted">Activala para probar todas las funciones de Pro, como el módulo de diagnóstico y el Examen final.</div><button class="btn" data-act="trial" style="margin-top:8px">Activar prueba</button></div>`;
+  }
+  return '';
+}
+
+function privHTML() {
+  if (!S.verPriv) return `<button class="btn ghost" data-act="verPriv">Ver cómo tratamos tus datos</button>`;
+  return `<div class="card">
+    <strong>Tus datos</strong>
+    <p class="muted">Versión de prueba. El texto final de privacidad se publica antes del lanzamiento.</p>
+    <ul class="checklist" style="padding-left:18px">
+      <li>Guardamos lo que cargás: cultivos, registros, mediciones, fotos, progreso y resultados de exámenes.</li>
+      <li>En esta versión de prueba, los datos quedan en tu navegador y no se envían a un servidor.</li>
+      <li>Podés borrar tu cuenta y todos los datos desde esta pantalla.</li>
+    </ul>
+    <button class="btn ghost" data-act="verPriv">Ocultar</button>
+  </div>`;
+}
+
+function iniciarQuiz(id) {
+  const m = modDe(id);
+  S.apr = { ...S.apr, vista: 'quiz', mod: id, lec: 0, q: 0, resp: null, aciertos: 0, puntos: 0, bonus: 0, gan: 0, pregs: armarTest(m) };
+}
+
+/* Con un examen en curso solo se aceptan las acciones del propio examen */
+const ACTS_EXAMEN = ['exSel', 'exOk', 'exSalir', 'exSalirNo', 'exSalirOk'];
+
+function act(a, v) {
+  if (S.ex && S.ex.fase === 'curso') {
+    if (restoExamen() <= 0) terminarExamen(true);
+    else if (!ACTS_EXAMEN.includes(a)) return;
+  }
+  const c = S.cultivos.find(x => x.id === S.abierto);
+  const ap = S.apr;
+  switch (a) {
+    case 'next': if (S.onb < 3) S.onb++; else S.onboarded = true; break;
+    case 'tab': S.tab = v; S.abierto = null; S.verCannabis = false; break;
+    case 'irCultivo': S.tab = 'cultivos'; S.abierto = null; S.creando = true; break;
+    case 'tarea': toggleTarea(v); break;
+    case 'toggleForm': S.creando = !S.creando; break;
+    case 'setUb': S.f.ub = v; break;
+    case 'setEt': S.f.et = v; break;
+    case 'crear':
+      if ((S.f.nombre || '').trim() && !limiteAlcanzado()) {
+        S.cultivos.unshift({ id: Date.now() + '-' + Math.floor(Math.random() * 10000), nombre: S.f.nombre.trim(), tipo: (S.f.tipo || '').trim() || 'Sin especificar',
+          ubicacion: S.f.ub || 'interior', etapa: S.f.et || 'Siembra', fecha: S.f.fecha || hoyStr(), bitacora: [], condiciones: [] });
+        ledger.creados++;
+        S.f.nombre = ''; S.f.tipo = ''; S.creando = false;
+      }
+      break;
+    case 'abrir': S.abierto = v; S.f.nota = ''; break;
+    case 'volver': S.abierto = null; break;
+    case 'etapaCultivo': if (c) c.etapa = v; break;
+    case 'quick': if (c) { addEntry(c, v, S.f.nota); S.f.nota = ''; } break;
+    case 'condAdd':
+      if (c) {
+        const med = { fecha: ahora(), watts: num(S.f.watts), alturaCm: num(S.f.altura), horas: num(S.f.horas),
+          ppfd: num(S.f.ppfd), temp: num(S.f.temp), humedad: num(S.f.humedad) };
+        if ([med.watts, med.alturaCm, med.horas, med.ppfd, med.temp, med.humedad].some(x => x != null)) {
+          c.condiciones.unshift(med);
+          ledgerSuma('m');
+          S.f.ppfd = ''; S.f.altura = '';
+        }
+      }
+      break;
+    case 'enviar': enviarPregunta(S.f.pregunta); break;
+    case 'preg': enviarPregunta(v); break;
+
+    /* Aprender: módulos */
+    case 'aprSec': ap.sec = v === 'examenes' ? 'examenes' : 'modulos'; ap.vista = 'lista'; break;
+    case 'aprCat': ap.cat = v; break;
+    case 'aprLista': ap.vista = 'lista'; break;
+    case 'aprGlos': ap.vista = 'glosario'; break;
+    case 'aprMod': { if (moduloDisponible(modDe(v)).ok) { ap.vista = 'modulo'; ap.mod = v; ap.lec = 0; ap.sec = 'modulos'; } break; }
+    case 'lecSig': {
+      const m = modDe(ap.mod);
+      if (ap.lec < m.lec.length - 1) ap.lec++; else iniciarQuiz(ap.mod);
+      break;
+    }
+    case 'resp': {
+      if (ap.resp === null && ap.pregs) {
+        const preg = ap.pregs[ap.q];
+        ap.resp = +v;
+        if (ap.resp === preg.r) { ap.aciertos++; ap.puntos += preg.d * 10; }
+      }
+      break;
+    }
+    case 'pregSig': {
+      if (ap.resp === null || !ap.pregs) break;
+      const m = modDe(ap.mod); const n = ap.pregs.length;
+      if (ap.q < n - 1) { ap.q++; ap.resp = null; }
+      else {
+        const prev = progreso[m.id];
+        if (prev == null || ap.aciertos > prev) progreso[m.id] = ap.aciertos;
+        ap.bonus = ap.aciertos === n ? BONUS_PERFECTO : 0;
+        const antes = progresoPts[m.id] || 0; const nuevo = ap.puntos + ap.bonus;
+        ap.gan = Math.max(0, nuevo - antes);
+        if (nuevo > antes) progresoPts[m.id] = nuevo;
+        marcarEstudio();
+        ap.vista = 'resultado';
+      }
+      break;
+    }
+    case 'repetir': iniciarQuiz(ap.mod); break;
+
+    /* Aprender: exámenes */
+    case 'exInfo': if (exDe(v)) { ap.vista = 'exinfo'; ap.exId = v; ap.sec = 'examenes'; } break;
+    case 'irExamen':
+      if (exDe(v)) { if (S.ex && S.ex.fase === 'resultado') S.ex = null; S.tab = 'aprender'; ap.sec = 'examenes'; ap.vista = 'exinfo'; ap.exId = v; }
+      break;
+    case 'exStart': if (iniciarExamen(ap.exId)) ap.vista = 'lista'; break;
+    case 'exSel': if (S.ex && S.ex.fase === 'curso' && !S.ex.confirmaSalir) S.ex.sel = +v; break;
+    case 'exOk': {
+      const e = S.ex;
+      if (!e || e.fase !== 'curso' || e.sel == null || e.confirmaSalir) break;
+      e.resp[e.i] = e.sel; e.sel = null;
+      if (e.i < e.preguntas.length - 1) e.i++; else terminarExamen(false);
+      break;
+    }
+    case 'exSalir': if (S.ex && S.ex.fase === 'curso') S.ex.confirmaSalir = true; break;
+    case 'exSalirNo': if (S.ex) S.ex.confirmaSalir = false; break;
+    case 'exSalirOk': if (S.ex && S.ex.fase === 'curso') { S.ex = null; ap.vista = 'lista'; ap.sec = 'examenes'; } break;
+    case 'exLista': if (S.ex && S.ex.fase === 'resultado') S.ex = null; ap.vista = 'lista'; ap.sec = 'examenes'; break;
+    case 'exTodo': if (S.ex && S.ex.fase === 'resultado') S.ex.todo = !S.ex.todo; break;
+    case 'exRepasar': {
+      const m = modDe(v);
+      if (m && moduloDisponible(m).ok) { if (S.ex && S.ex.fase === 'resultado') S.ex = null; ap.vista = 'modulo'; ap.mod = v; ap.lec = 0; ap.sec = 'modulos'; }
+      break;
+    }
+    case 'constancia': if (examenFinalAprobado()) { if (S.ex && S.ex.fase === 'resultado') S.ex = null; ap.vista = 'constancia'; ap.sec = 'examenes'; } break;
+    case 'copiarConst': {
+      if (!examenFinalAprobado()) break;
+      const txt = constanciaTexto();
+      const ta = document.getElementById('cons'); if (ta) ta.value = txt;
+      try { navigator.clipboard.writeText(txt).catch(() => {}); } catch (e) {}
+      break;
+    }
+
+    case 'cannAbrir': if (CANNABIS_HABILITADO) S.verCannabis = true; break;
+    case 'cannVolver': S.verCannabis = false; break;
+    case 'cannEdad': S.edadOk = true; break;
+    case 'cannTab': S.cannTab = v; break;
+    case 'cannEt': S.cannEt = v; break;
+    case 'perfil': S.perfil = v; escribir('bv_perfil', v); break;
+    case 'irModulo': if (moduloDisponible(modDe(v)).ok) { S.tab = 'aprender'; ap.vista = 'modulo'; ap.mod = v; ap.lec = 0; ap.sec = 'modulos'; } break;
+    case 'trial': { const f = new Date(); f.setDate(f.getDate() + 14); trial = { usado: true, fin: fmtFecha(f) }; S.plan = 'pro'; break; }
+    case 'verPriv': S.verPriv = !S.verPriv; break;
+    case 'exportar': S.exportar = S.exportar === v ? null : v; break;
+    case 'copiar': { const ta = document.getElementById('exp'); if (ta) { ta.select(); try { navigator.clipboard.writeText(ta.value).catch(() => {}); } catch (e) {} } break; }
+    case 'setPlan': S.plan = v.startsWith('pro') ? 'pro' : v; S.ciclo = v === 'pro-anual' ? 'anual' : 'mensual'; trial.fin = null; break;
+    case 'plantilla': { const p = PLANTILLAS[+v]; if (p) { S.f.nombre = p[0]; S.f.tipo = p[1]; S.f.ub = p[2]; S.f.et = 'Siembra'; S.f.fecha = hoyStr(); S.creando = true; } break; }
+    case 'filtroCult': S.filtroCult = v; break;
+    case 'filtroBit': S.filtroBit = v; break;
+    case 'confEliminar': S.confCult = S.confCult === v ? null : v; break;
+    case 'eliminarOK': S.cultivos = S.cultivos.filter(x => x.id !== v); S.abierto = null; S.confCult = null; break;
+    case 'estrella': S.f.estrellas = +v; break;
+    case 'copiarOp': {
+      const txt = textoOpinion();
+      const ta = document.getElementById('opn'); if (ta) ta.value = txt;
+      try { navigator.clipboard.writeText(txt).catch(() => {}); } catch (e) {}
+      break;
+    }
+    case 'borrar': S.confirmarBorrado = true; break;
+    case 'borrarNo': S.confirmarBorrado = false; break;
+    case 'borrarOK':
+      S.cultivos = []; S.plan = 'gratis'; S.confirmarBorrado = false; S.abierto = null; S.fotos = [];
+      progreso = {}; progresoPts = {}; tareasPorDia = {};
+      ledger = { dias: {}, creados: 0 }; estudio = {}; examenes = {}; S.ex = null; S.vistas = {}; S.vistasEx = {};
+      S.apr = { vista: 'lista', mod: null, lec: 0, q: 0, resp: null, aciertos: 0, cat: 'todas', sec: 'modulos' };
+      break;
+  }
+}
+
+document.addEventListener('input', e => {
+  const k = e.target.dataset && e.target.dataset.bind;
+  if (!k) return;
+  S.f[k] = e.target.value;
+  if (k === 'nombreConst' && examenFinalAprobado()) { const t = document.getElementById('cons'); if (t) t.value = constanciaTexto(); }
+});
+
+document.addEventListener('change', e => {
+  const tipo = e.target.dataset && e.target.dataset.foto;
+  if (tipo === undefined) return;
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    if (tipo === 'cultivo') {
+      const c = S.cultivos.find(x => x.id === S.abierto);
+      if (c) { c.fotos = c.fotos || []; c.fotos.unshift({ src: r.result, fecha: ahora() }); }
+    } else {
+      S.fotos.unshift({ src: r.result, fecha: ahora(), analisis: 'Análisis de ejemplo: en la versión conectada, el guía revisa el color de las hojas, manchas, plagas visibles y la estructura de la planta, y te propone una acción concreta. Acá no se analiza la imagen real.' });
+    }
+    draw();
+  };
+  r.readAsDataURL(f);
+});
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  act(el.dataset.act, el.dataset.v);
+  guardar();
+  draw();
+});
+
+draw();
+const _tickEx = setInterval(exTick, 1000);
+if (_tickEx && _tickEx.unref) _tickEx.unref(); // solo para las pruebas en Node
+</script>
+
+</body></html>

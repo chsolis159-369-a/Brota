@@ -1,0 +1,34 @@
+# Dependencias y salidas
+node_modules/
+.expo/
+dist/
+web-build/
+coverage/
+*.tsbuildinfo
+.metro-health-check*
+expo-env.d.ts
+
+# Carpetas nativas generadas (Continuous Native Generation)
+ios/
+android/
+
+# Secretos
+.env
+.env.*
+!.env.example
+*.jks
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
+
+# Supabase local
+supabase/.temp/
+supabase/.branches/
+
+# Varios
+npm-debug.*
+yarn-error.*
+.DS_Store
+*.orig.*
