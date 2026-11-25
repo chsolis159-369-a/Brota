@@ -4,7 +4,8 @@ import type { Plan } from '@/db/repos/perfil';
 
 export type { Plan };
 
-export type MensajeChat = { de: 'agente' | 'vos'; t: string };
+/** Mensaje del chat con el Agente. `foto`: URI local de la foto que mandó el usuario (D-30). */
+export type MensajeChat = { de: 'agente' | 'vos'; t: string; foto?: string };
 
 type EstadoApp = {
   /** Plan vigente. En H5 lo decide el entitlement `pro` de RevenueCat; mientras tanto, el perfil local. */

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { Boton, Campo, Chip, Estadisticas, Fila, Subtitulo } from '@/componentes/controles';
+import { Boton, Campo, Chip, Estadisticas, Fila, Medalla, Subtitulo } from '@/componentes/controles';
 import { TarjetaCultivo, datosSalud } from '@/componentes/cultivo';
 import { Pantalla } from '@/componentes/Pantalla';
 import { Tarjeta } from '@/componentes/Tarjeta';
@@ -13,7 +13,7 @@ import { ETAPAS, UBICACIONES, type Etapa, type Ubicacion } from '@/reglas/domini
 import { hoyStr } from '@/reglas/fechas';
 import { useApp } from '@/store/app';
 import { useDatos } from '@/store/datos';
-import { MEDIDAS, useTema } from '@/tema/useTema';
+import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
 const FILTROS = ['todos', 'interior', 'exterior', 'alertas'] as const;
 type Filtro = (typeof FILTROS)[number];
@@ -60,9 +60,9 @@ export default function Cultivos() {
       {hay ? (
         <Estadisticas
           items={[
-            { valor: cultivos.length, etiqueta: t('cultivos.stats.cultivos') },
-            { valor: cultivos.filter((c) => c.etapa === 'Cosecha').length, etiqueta: t('cultivos.stats.enCosecha') },
-            { valor: cultivos.filter(alerta).length, etiqueta: t('cultivos.stats.conAlertas') },
+            { valor: cultivos.length, etiqueta: t('cultivos.stats.cultivos'), icono: 'cultivo', tono: 'accent' },
+            { valor: cultivos.filter((c) => c.etapa === 'Cosecha').length, etiqueta: t('cultivos.stats.enCosecha'), icono: 'cosecha', tono: 'gold' },
+            { valor: cultivos.filter(alerta).length, etiqueta: t('cultivos.stats.conAlertas'), icono: 'alerta', tono: 'alert' },
           ]}
         />
       ) : null}
@@ -79,6 +79,7 @@ export default function Cultivos() {
         <Boton
           texto={creando ? t('comun.cancelar') : t('cultivos.nuevo')}
           variante={creando ? 'fantasma' : 'primario'}
+          icono={creando ? undefined : 'cultivo'}
           onPress={() => setCreando(!creando)}
           testID="nuevo-cultivo"
         />
@@ -133,7 +134,8 @@ export default function Cultivos() {
                       setForm({ nombre: p.nombre, tipo: p.tipo, ubicacion: p.ubicacion, etapa: 'Siembra', fecha: hoyStr(), plantilla: p.nombre });
                       setCreando(true);
                     }}
-                    style={[estilos.plantilla, { backgroundColor: colores.surface, borderColor: colores.border }]}>
+                    style={({ pressed }) => [estilos.plantilla, superficie(colores), { transform: [{ scale: pressed ? 0.98 : 1 }] }]}>
+                    <Medalla icono={p.ubicacion === 'interior' ? 'luz' : 'huerta'} tono={p.ubicacion === 'interior' ? 'gold' : 'accent'} tamano={34} />
                     <Texto variante="cuerpoFuerte">{p.nombre}</Texto>
                     <Texto variante="secundario">{t('cultivos.plantilla', { tipo: p.tipo, ubicacion: p.ubicacion })}</Texto>
                   </Pressable>
@@ -152,5 +154,5 @@ const estilos = StyleSheet.create({
   parrafo: { marginVertical: 6 },
   filtros: { marginTop: 10 },
   plantillas: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginVertical: 8 },
-  plantilla: { width: '48.5%', borderWidth: 1, borderRadius: MEDIDAS.radioTarjeta, padding: 12, gap: 4, minHeight: MEDIDAS.toque },
+  plantilla: { width: '48.5%', borderRadius: 18, padding: 14, gap: 6, minHeight: MEDIDAS.toque },
 });

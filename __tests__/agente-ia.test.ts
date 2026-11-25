@@ -1,5 +1,5 @@
 /**
- * Agente con IA: lógica compartida de la Edge Function y servicio de la app (D-27).
+ * Agente con IA: lógica compartida de la Edge Function y servicio de la app (D-27), con fotos (D-30).
  * La llamada real a Claude se prueba en el servidor; acá se verifican reglas, validación y armado.
  */
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -9,11 +9,14 @@ import { ErrorAgente, hayAgenteIA, preguntarAgenteIA } from '@/servicios/agenteI
 
 import {
   LIMITE_DIARIO,
+  LIMITE_FOTOS_DIARIO,
+  MAX_FOTO_BASE64,
   MAX_HISTORIAL,
   MAX_PREGUNTA,
   MODELO_POR_DEFECTO,
   NEGATIVA,
   PALABRAS_PROHIBIDAS,
+  PREGUNTA_FOTO,
   SIN_RESPUESTA,
   SISTEMA,
   armarMensajes,
@@ -33,12 +36,15 @@ const cultivo = {
   registros: [{ fecha: '2026-11-03 09:10', tipo: 'Riego', nota: 'Riego ligero; tierra seca a 3 cm' }],
   medicion: { ppfd: 420, temp: 24, humedad: 60, alturaCm: 35 },
 };
-const pedido = (o: Partial<Pedido> = {}): Pedido => ({ pregunta: '¿Cuándo riego?', historial: [], cultivos: [cultivo], mes: 11, ...o });
+const pedido = (o: Partial<Pedido> = {}): Pedido => ({ pregunta: '¿Cuándo riego?', historial: [], cultivos: [cultivo], mes: 11, foto: null, ...o });
+/** Un JPEG mínimo en base64 (alcanza para validar el formato). */
+const JPEG = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE=';
 
 describe('reglas del agente con IA', () => {
   it('usa Claude Sonnet 5.5 por defecto y un límite diario', () => {
     expect(MODELO_POR_DEFECTO).toBe('claude-sonnet-5-5');
     expect(LIMITE_DIARIO).toBe(30);
+    expect(LIMITE_FOTOS_DIARIO).toBe(10);
   });
 
   it('el prompt de sistema conserva las reglas del prototipo', () => {
@@ -47,6 +53,11 @@ describe('reglas del agente con IA', () => {
     expect(SISTEMA).toContain('consultar a un técnico');
     expect(SISTEMA).toContain('voseo');
     expect(SISTEMA).toContain('hemisferio sur');
+    // Fotos (D-30): orientación prudente, insectos benéficos y nada sobre personas.
+    expect(SISTEMA).toContain('Cuando llega una foto');
+    expect(SISTEMA).toContain('no un diagnóstico seguro');
+    expect(SISTEMA).toContain('benéfico');
+    expect(SISTEMA).toContain('no las describís ni las identificás');
     // Sin datos variables: así se puede cachear.
     expect(SISTEMA).not.toMatch(/\d{4}-\d{2}-\d{2}/);
   });
@@ -85,6 +96,24 @@ describe('validación del pedido', () => {
     expect(v.pedido.cultivos).toHaveLength(3);
   });
 
+  it('acepta una foto válida y, sin pregunta, usa la pregunta por defecto', () => {
+    const v = validarPedido({ pregunta: '', foto: { tipo: 'image/jpeg', datos: JPEG } });
+    if (!v.ok) throw new Error(v.error);
+    expect(v.pedido.foto).toEqual({ tipo: 'image/jpeg', datos: JPEG });
+    expect(v.pedido.pregunta).toBe(PREGUNTA_FOTO);
+    const sinFoto = validarPedido({ pregunta: 'hola' });
+    if (!sinFoto.ok) throw new Error(sinFoto.error);
+    expect(sinFoto.pedido.foto).toBeNull();
+  });
+
+  it('rechaza fotos de otro tipo, mal formadas o demasiado grandes', () => {
+    const error = { ok: false, error: 'foto_invalida' };
+    expect(validarPedido({ pregunta: 'x', foto: { tipo: 'image/gif', datos: JPEG } })).toEqual(error);
+    expect(validarPedido({ pregunta: 'x', foto: { tipo: 'image/jpeg', datos: 'no es base64!' } })).toEqual(error);
+    expect(validarPedido({ pregunta: 'x', foto: { tipo: 'image/jpeg', datos: 'A'.repeat(MAX_FOTO_BASE64 + 4) } })).toEqual(error);
+    expect(validarPedido({ pregunta: 'x', foto: 'data:image/jpeg;base64,' })).toEqual(error);
+  });
+
   it('ignora un mes fuera de rango y campos con tipos incorrectos', () => {
     const v = validarPedido({ pregunta: 'hola', mes: 13, cultivos: [{ nombre: 5, medicion: { ppfd: 'mucho' } }] });
     if (!v.ok) throw new Error(v.error);
@@ -106,6 +135,18 @@ describe('mensajes para Claude', () => {
     expect(contenido).toContain('Última medición: PPFD 420, lámpara a 35 cm, 24 °C, 60 % HR.');
     expect(contenido).toContain('2026-11-03 09:10 · Riego: Riego ligero; tierra seca a 3 cm');
     expect(contenido.endsWith('Pregunta: ¿Cuándo riego?')).toBe(true);
+  });
+
+  it('con foto, el último mensaje lleva la imagen y después el texto', () => {
+    const m = armarMensajes(pedido({ pregunta: '¿Qué bicho es?', foto: { tipo: 'image/jpeg', datos: JPEG } }), false);
+    expect(m).toHaveLength(1);
+    expect(m[0]).toEqual({
+      role: 'user',
+      content: [
+        { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: JPEG } },
+        { type: 'text', text: 'Mes actual: noviembre (hemisferio sur, Argentina).\n\nPregunta: ¿Qué bicho es?' },
+      ],
+    });
   });
 
   it('el historial empieza con el usuario (saltea el saludo del agente)', () => {
@@ -165,6 +206,19 @@ describe('servicio de la app', () => {
   it('el límite diario se informa como "limite"', async () => {
     const s = clienteSimulado(true, { data: null, error: { context: { status: 429 } } });
     await expect(preguntarAgenteIA(p, s.cliente)).rejects.toEqual(new ErrorAgente('limite'));
+  });
+
+  it('el límite de fotos se distingue del de preguntas', async () => {
+    const contexto = { status: 429, json: async () => ({ error: 'limite_fotos' }) };
+    const s = clienteSimulado(true, { data: null, error: { context: contexto } });
+    await expect(preguntarAgenteIA(p, s.cliente)).rejects.toEqual(new ErrorAgente('limite_fotos'));
+  });
+
+  it('manda la foto junto con la pregunta', async () => {
+    const s = clienteSimulado(true, { data: { texto: 'Es un pulgón.' }, error: null });
+    const conFoto = { ...p, foto: { tipo: 'image/jpeg' as const, datos: JPEG } };
+    expect(await preguntarAgenteIA(conFoto, s.cliente)).toBe('Es un pulgón.');
+    expect(s.invoke).toHaveBeenCalledWith('agente', { body: conFoto });
   });
 
   it('cualquier otra falla es "sin_conexion"', async () => {

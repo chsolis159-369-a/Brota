@@ -5,6 +5,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Boton, Chip, Fila } from '@/componentes/controles';
+import { Logo } from '@/componentes/Logo';
 import { Texto } from '@/componentes/Texto';
 import { PERFILES } from '@/reglas/dominio';
 import { useDatos } from '@/store/datos';
@@ -29,11 +30,17 @@ export default function Onboarding() {
 
   return (
     <SafeAreaView style={[estilos.raiz, { backgroundColor: c.bg }]}>
+      <View pointerEvents="none" style={[estilos.brillo, { backgroundImage: `radial-gradient(circle at 50% 0%, ${c.accentSoft} 0%, ${c.bg} 70%)` }]} />
       <ScrollView contentContainerStyle={estilos.scroll}>
         <View style={estilos.columna}>
-          <Texto variante="marca" color="accent">
-            {t('marca')}
-          </Texto>
+          <View style={estilos.marca}>
+            <View style={[estilos.logo, { boxShadow: c.sombra ? '0 14px 30px rgba(10, 66, 39, 0.30)' : undefined }]}>
+              <Logo tamano={104} />
+            </View>
+            <Texto variante="marca" color="accent" style={estilos.nombre}>
+              {t('marca')}
+            </Texto>
+          </View>
           <Texto variante="tituloGrande" style={estilos.titulo}>
             {actual.t}
           </Texto>
@@ -53,7 +60,7 @@ export default function Onboarding() {
           ) : null}
           <View style={estilos.puntos} accessibilityLabel={`${paso + 1} / ${pasos.length}`}>
             {pasos.map((_, k) => (
-              <View key={k} style={[estilos.punto, { backgroundColor: k === paso ? c.accent : c.border }]} />
+              <View key={k} style={[estilos.punto, k === paso ? { backgroundColor: c.accent, width: 24 } : { backgroundColor: c.border }]} />
             ))}
           </View>
           <Boton texto={ultimo ? t('onboarding.empezar') : t('onboarding.siguiente')} onPress={() => void siguiente()} testID="onboarding-siguiente" />
@@ -65,10 +72,14 @@ export default function Onboarding() {
 
 const estilos = StyleSheet.create({
   raiz: { flex: 1 },
+  brillo: { position: 'absolute', top: 0, left: 0, right: 0, height: 420 },
   scroll: { flexGrow: 1, justifyContent: 'center', padding: 16 },
   columna: { width: '100%', maxWidth: MEDIDAS.anchoMaximo, alignSelf: 'center', paddingVertical: 32 },
-  titulo: { marginTop: 28, marginBottom: 12 },
+  marca: { alignItems: 'center', gap: 14 },
+  logo: { borderRadius: 24 },
+  nombre: { fontSize: 26, lineHeight: 32, letterSpacing: 3 },
+  titulo: { marginTop: 32, marginBottom: 12 },
   chips: { marginTop: 8 },
-  puntos: { flexDirection: 'row', justifyContent: 'center', gap: 8, marginVertical: 18 },
+  puntos: { flexDirection: 'row', justifyContent: 'center', gap: 8, marginVertical: 22 },
   punto: { width: 8, height: 8, borderRadius: 4 },
 });

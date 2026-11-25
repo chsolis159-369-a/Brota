@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { Boton, BotonRapido, Campo, Chip, Estadisticas, Fila, Mensaje, Subtitulo } from '@/componentes/controles';
+import { Boton, BotonRapido, Campo, Chip, Estadisticas, Fila, Medalla, Mensaje, Subtitulo } from '@/componentes/controles';
 import { datosSalud, useTextoProximo, useTextoSalud } from '@/componentes/cultivo';
 import { Etiqueta } from '@/componentes/Etiqueta';
 import { MedidorVPD, Punto, SparkPPFD } from '@/componentes/graficos';
@@ -17,7 +17,7 @@ import { diasDesde, hoyStr } from '@/reglas/fechas';
 import { evaluarAltura, evaluarPPFD, vpd } from '@/reglas/mediciones';
 import { elegirFoto } from '@/servicios/fotos';
 import { useDatos, type CultivoCompleto, type FormMedicion } from '@/store/datos';
-import { MEDIDAS, useTema } from '@/tema/useTema';
+import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
 const CAMPOS: (keyof FormMedicion)[] = ['watts', 'altura', 'horas', 'ppfd', 'temp', 'humedad'];
 const medicionVacia = (): FormMedicion => ({ watts: '', altura: '', horas: '', ppfd: '', temp: '', humedad: '' });
@@ -95,11 +95,13 @@ function Detalle({ c }: { c: CultivoCompleto }) {
 
       <Estadisticas
         items={[
-          { valor: c.bitacora.length, etiqueta: t('cultivo.stats.registros') },
-          { valor: riegos, etiqueta: t('cultivo.stats.riegos') },
+          { valor: c.bitacora.length, etiqueta: t('cultivo.stats.registros'), icono: 'registros', tono: 'accent' },
+          { valor: riegos, etiqueta: t('cultivo.stats.riegos'), icono: 'Riego', tono: 'info' },
           {
             valor: ultDias === null ? '-' : ultDias === 0 ? t('cultivo.stats.hoy') : ultDias,
             etiqueta: ultDias === 1 ? t('cultivo.stats.diaDesde') : t('cultivo.stats.diasDesde'),
+            icono: 'tiempo',
+            tono: 'gold',
           },
         ]}
       />
@@ -131,7 +133,7 @@ function Detalle({ c }: { c: CultivoCompleto }) {
       <Campo etiqueta={t('cultivo.detalle')} value={nota} onChangeText={setNota} multiline numberOfLines={2} testID="campo-nota" />
       <Fila>
         {TIPOS_REGISTRO.map((tipo) => (
-          <BotonRapido key={tipo} texto={t(`tiposRegistro.${tipo}`)} onPress={() => void registrar(tipo)} testID={`registro-${tipo}`} />
+          <BotonRapido key={tipo} texto={t(`tiposRegistro.${tipo}`)} icono={tipo} onPress={() => void registrar(tipo)} testID={`registro-${tipo}`} />
         ))}
       </Fila>
       <Texto variante="secundario">
@@ -173,12 +175,8 @@ function Detalle({ c }: { c: CultivoCompleto }) {
         <Texto variante="secundario">{t('cultivo.sinRegistros') + (filtro === 'Todas' ? t('cultivo.sinRegistrosTodas') : t('cultivo.sinRegistrosTipo'))}</Texto>
       ) : (
         bitacora.map((r) => (
-          <View key={r.id} style={[estilos.entrada, { backgroundColor: tema.c.surface, borderColor: tema.c.border }]} accessible>
-            <View style={[estilos.letra, { backgroundColor: tema.c.accentSoft }]}>
-              <Texto variante="cuerpoFuerte" color="accent">
-                {r.tipo[0]!}
-              </Texto>
-            </View>
+          <View key={r.id} style={[estilos.entrada, superficie(tema.c)]} accessible>
+            <Medalla icono={r.tipo} tono={r.tipo === 'Riego' ? 'info' : r.tipo === 'Plaga' ? 'alert' : r.tipo === 'Fertilizante' ? 'gold' : 'accent'} tamano={34} />
             <View style={estilos.flex}>
               <Texto variante="secundario">{t('cultivo.entrada', { fecha: r.fecha, tipo: t(`tiposRegistro.${r.tipo}`) })}</Texto>
               <Texto variante="cuerpo">{r.nota}</Texto>
@@ -251,16 +249,15 @@ const estilos = StyleSheet.create({
   subnav: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap', marginBottom: 4 },
   estado: { flexDirection: 'row', alignItems: 'center', flexShrink: 1 },
   titulo: { flexDirection: 'row', alignItems: 'center', marginTop: 8, flexWrap: 'wrap' },
-  proximo: { borderLeftWidth: 4, marginTop: 10 },
+  proximo: { borderLeftWidth: 5, marginTop: 12 },
   guia: { marginTop: 6 },
   etapas: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 6, marginBottom: 12 },
-  etapa: { width: '48.5%', borderWidth: 1, borderRadius: 12, padding: 10, minHeight: MEDIDAS.toque, justifyContent: 'center' },
+  etapa: { width: '48.5%', borderWidth: 1.5, borderRadius: MEDIDAS.radioControl, padding: 10, minHeight: 48, justifyContent: 'center' },
   separado: { marginTop: 12 },
   ayudaMedicion: { marginBottom: 8 },
   botonFoto: { marginTop: 8 },
   fotos: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 },
   figura: { width: '48.5%', gap: 4 },
-  imagen: { width: '100%', aspectRatio: 1, borderRadius: 12 },
-  entrada: { flexDirection: 'row', gap: 10, borderWidth: 1, borderRadius: 12, padding: 10, marginBottom: 8 },
-  letra: { width: 28, height: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  imagen: { width: '100%', aspectRatio: 1, borderRadius: 14 },
+  entrada: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 16, padding: 12, marginBottom: 8 },
 });

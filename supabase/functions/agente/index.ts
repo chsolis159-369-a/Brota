@@ -2,7 +2,8 @@
  * Edge Function `agente`: el guía de cultivo de BROTA con Claude.
  * - Exige una sesión de Supabase (anónima o con cuenta).
  * - Rechaza sin llamar al modelo las consultas de dosis, consumo o venta.
- * - Limita las preguntas por usuario y por día (tabla agente_uso, D-27).
+ * - Limita las preguntas y las fotos por usuario y por día (tabla agente_uso, D-27 y D-30).
+ * - Analiza una foto de la planta, una hoja, una plaga o un insecto (D-30).
  * - Usa el historial de los cultivos solo si RevenueCat confirma el entitlement `pro` (H5).
  * Secretos (nunca en la app): ANTHROPIC_API_KEY, ANTHROPIC_MODEL (opcional), REVENUECAT_SECRET_KEY (H5).
  * Supabase inyecta SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY.
@@ -12,6 +13,7 @@ import { createClient } from '@supabase/supabase-js';
 
 import {
   LIMITE_DIARIO,
+  LIMITE_FOTOS_DIARIO,
   MODELO_POR_DEFECTO,
   NEGATIVA,
   SISTEMA,
@@ -72,12 +74,22 @@ Deno.serve(async (req) => {
   if (esConsultaProhibida(v.pedido.pregunta)) return json({ texto: NEGATIVA });
 
   const admin = createClient(url, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
-  const { data: permitido, error: errorUso } = await admin.rpc('agente_consumir', { p_usuario: user.id, p_limite: LIMITE_DIARIO });
+  const conFoto = v.pedido.foto !== null;
+  const { data: uso, error: errorUso } = await admin.rpc('agente_consumir', {
+    p_usuario: user.id,
+    p_limite: LIMITE_DIARIO,
+    p_foto: conFoto,
+    p_limite_fotos: LIMITE_FOTOS_DIARIO,
+  });
   if (errorUso) {
     console.error('agente_consumir', errorUso.message);
     return json({ error: 'servidor' }, 500);
   }
-  if (!permitido) return json({ error: 'limite' }, 429);
+  if (uso === 'limite' || uso === 'limite_fotos') return json({ error: uso }, 429);
+  if (uso !== 'ok') {
+    console.error('agente_consumir', uso);
+    return json({ error: 'servidor' }, 500);
+  }
 
   const pro = await esPro(user.id).catch(() => false);
 
@@ -86,7 +98,8 @@ Deno.serve(async (req) => {
       model: MODELO,
       // Respuestas breves por diseño (unas 120 palabras); con margen para el razonamiento.
       max_tokens: 2048,
-      output_config: { effort: 'low' },
+      // Con foto, un poco más de esfuerzo: así revisa la imagen con detalle antes de responder.
+      output_config: { effort: conFoto ? 'medium' : 'low' },
       // Si el modelo rechaza por una regla de seguridad, el servidor reintenta con otro modelo.
       betas: ['server-side-fallback-2026-07-01'],
       fallbacks: 'default',

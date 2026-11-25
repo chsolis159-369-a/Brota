@@ -12,13 +12,13 @@ App móvil (iOS y Android) de bitácora de cultivo con aprendizaje, exámenes y 
 
 ## Alcance
 - Pestañas: Hoy, Cultivos, Agente, Aprender, Plan.
-- Fuera de alcance y **sin código accesible**: plan Business, cannabis (`CANNABIS_HABILITADO = false`) y análisis de fotos por IA (`FOTO_AGENTE = false`).
+- Fuera de alcance y **sin código accesible**: plan Business y contenido de cannabis (`CANNABIS_HABILITADO = false`). El análisis de fotos por IA en el Agente está prendido (`FOTO_AGENTE = true`, D-30).
 - **Gratis (US$ 0)**: hasta 2 cultivos propios (los de ejemplo no cuentan), bitácora y registro rápido, tareas diarias, logros y racha, 16 módulos con test, 3 exámenes por bloque, agente con consejos generales.
 - **Pro (US$ 5.99/mes o US$ 49.99/año)**: todo lo de Gratis más cultivos ilimitados, módulo `diagnostico`, Examen final con constancia y nivel Maestro de cultivo, exportar la bitácora como texto, agente que usa el historial del cultivo.
 - Puntos de paywall (como en el prototipo): límite de 2 cultivos, módulo Diagnóstico bloqueado, Examen final, aviso de Maestro pendiente, exportar, historial del agente.
 
 ## Stack
-- Expo (SDK vigente) + TypeScript estricto + Expo Router + Zustand. Tokens de color y modo claro/oscuro como en el prototipo. Fraunces (títulos) y Nunito Sans (texto). i18n preparado, `es-AR` por defecto.
+- Expo (SDK vigente) + TypeScript estricto + Expo Router + Zustand. Modo claro/oscuro; colores y estilo visual del rediseño D-29 (el prototipo manda en textos y comportamiento). Logo: plántula de cannabis generada con `tools/marca/` (D-28). Fraunces (títulos) y Nunito Sans (texto). i18n preparado, `es-AR` por defecto.
 - Local primero: `expo-sqlite` para cultivos, registros, mediciones y progreso. Lecciones y tests de módulo funcionan sin conexión.
 - Backend: Supabase (Auth con email, Google y Apple; Postgres con RLS; Edge Functions).
 - Suscripciones: RevenueCat (`react-native-purchases`, `react-native-purchases-ui`). Requiere development build (`expo-dev-client`); Expo Go no procesa compras. Entitlement `pro`; productos `brota_pro_mensual` y `brota_pro_anual`. La prueba de 14 días es una oferta introductoria de las tiendas, **no** un botón local. Obligatorio: "Restaurar compras", enlaces a términos y privacidad, texto de renovación automática.
@@ -66,7 +66,7 @@ Migración inicial desde datos locales: reconstruir el ledger con los topes diar
 
 ## Tiendas, privacidad y accesibilidad
 - "Borrar mi cuenta y todos los datos" dentro de la app: borra en Supabase y en el dispositivo (incluidos ledger y exámenes). Pantalla de privacidad real y enlaces a términos.
-- Sin cannabis, dosis, consumo ni venta. Sin pagos fuera de las compras integradas.
+- Sin contenido de cannabis, dosis, consumo ni venta (el logo es una plántula de cannabis por pedido del usuario: declarar referencias a drogas en la clasificación por edad, D-28). Sin pagos fuera de las compras integradas.
 - Objetivos táctiles ≥ 44 px, contraste AA, textos escalables, lectores de pantalla en preguntas y temporizador.
 
 ## Métricas (PostHog)

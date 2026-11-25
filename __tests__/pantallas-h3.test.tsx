@@ -220,7 +220,7 @@ describe('Plan', () => {
   it('privacidad se despliega y se oculta', async () => {
     await render(<PantallaPlan />);
     await fireEvent.press(screen.getByText('Ver cómo tratamos tus datos'));
-    expect(screen.getByText('En esta versión de prueba, los datos quedan en tu teléfono y no se envían a un servidor.')).toBeTruthy();
+    expect(screen.getByText(/^Tus cultivos, registros, mediciones y progreso quedan en tu teléfono. Las preguntas y las fotos/)).toBeTruthy();
     await fireEvent.press(screen.getByText('Ocultar'));
     expect(screen.queryByText('Tus datos')).toBeNull();
   });

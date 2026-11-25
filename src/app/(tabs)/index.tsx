@@ -8,6 +8,7 @@ import { MODULOS } from '@/contenido';
 import { Boton, Estadisticas, Mensaje, Subtitulo } from '@/componentes/controles';
 import { TarjetaCultivo } from '@/componentes/cultivo';
 import { Anillo } from '@/componentes/graficos';
+import { Hero } from '@/componentes/Hero';
 import { ClimaConsejo, FilaTarea, Logros, TarjetasRecomendacion } from '@/componentes/hoy';
 import { Pantalla } from '@/componentes/Pantalla';
 import { Tarjeta } from '@/componentes/Tarjeta';
@@ -43,21 +44,23 @@ export default function Hoy() {
 
   return (
     <Pantalla titulo={t('titulos.hoy')}>
-      <Tarjeta style={estilos.hero}>
-        <Anillo progreso={total ? r.hechas / total : 0} />
-        <View accessible>
-          <Texto variante="subtitulo">{t('hoy.hechasDe', { hechas: r.hechas, total })}</Texto>
-          <Texto variante="secundario">{t('hoy.tareasDeHoy')}</Texto>
+      <Hero style={estilos.hero} testID="resumen-hoy">
+        <Anillo progreso={total ? r.hechas / total : 0} tamano={84} />
+        <View accessible style={estilos.flex}>
+          <Texto variante="numeroGrande">{t('hoy.hechasDe', { hechas: r.hechas, total })}</Texto>
+          <Texto variante="cuerpo" color="muted">
+            {t('hoy.tareasDeHoy')}
+          </Texto>
         </View>
-      </Tarjeta>
+      </Hero>
 
       <TarjetasRecomendacion r={r.recomendacion} intentado={(id) => datos.progreso[id] !== undefined} />
 
       <Estadisticas
         items={[
-          { valor: r.puntos, etiqueta: t('hoy.puntos') },
-          { valor: r.racha, etiqueta: t('hoy.diasSeguidos') },
-          { valor: r.nivel.t, etiqueta: t('hoy.nivel'), texto: true },
+          { valor: r.puntos, etiqueta: t('hoy.puntos'), icono: 'puntos', tono: 'gold' },
+          { valor: r.racha, etiqueta: t('hoy.diasSeguidos'), icono: 'racha', tono: 'alert' },
+          { valor: r.nivel.t, etiqueta: t('hoy.nivel'), texto: true, icono: 'nivel', tono: 'accent' },
         ]}
       />
 
@@ -88,6 +91,7 @@ export default function Hoy() {
 }
 
 const estilos = StyleSheet.create({
-  hero: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+  hero: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+  flex: { flex: 1 },
   boton: { marginTop: 8, marginBottom: 0 },
 });

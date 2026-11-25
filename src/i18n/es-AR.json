@@ -59,7 +59,7 @@
     "version": "Versión de prueba. El texto final de privacidad se publica antes del lanzamiento.",
     "items": [
       "Guardamos lo que cargás: cultivos, registros, mediciones, fotos, progreso y resultados de exámenes.",
-      "En esta versión de prueba, los datos quedan en tu teléfono y no se envían a un servidor.",
+      "Tus cultivos, registros, mediciones y progreso quedan en tu teléfono. Las preguntas y las fotos que le mandás al guía viajan a nuestro servidor y al servicio de inteligencia artificial solo para responderte: no guardamos las fotos.",
       "Podés borrar tu cuenta y todos los datos desde esta pantalla."
     ],
     "borrar": "Borrar mi cuenta y todos los datos",
@@ -104,7 +104,20 @@
     },
     "lluvia": " Hay lluvia prevista para mañana: revisá el drenaje de tus plantas de exterior.",
     "proCultivos": " (Plan {{plan}}: tengo en cuenta tus {{n}} cultivo(s).)",
-    "proUltimo": " En {{nombre}} ({{etapa}}), tu último registro fue: \"{{nota}}\"."
+    "proUltimo": " En {{nombre}} ({{etapa}}), tu último registro fue: \"{{nota}}\".",
+    "foto": {
+      "titulo": "Analizar una foto",
+      "ayuda": "Sacale una foto a la planta, a una hoja, a una plaga o a un insecto, y el guía te dice qué ve y qué conviene hacer.",
+      "pista": "Si escribís una pregunta abajo antes de sacar la foto, la mandamos junto con ella.",
+      "sacar": "Sacar foto",
+      "elegir": "Elegir de la galería",
+      "analizando": "Analizando la foto…",
+      "alt": "Foto subida por el usuario",
+      "sinPermiso": "Para sacar fotos, BROTA necesita permiso para usar la cámara. Podés darlo en los ajustes del teléfono o elegir una foto de la galería.",
+      "error": "No pude abrir la foto. Probá de nuevo o elegí otra.",
+      "sinConexion": "No pude analizar la foto porque no hay conexión con el guía. Probá de nuevo en un rato.",
+      "limite": "Llegaste al límite de {{n}} fotos por día. Mañana podés mandar más."
+    }
   },
   "aprender": {
     "tuNivel": "Tu nivel",
@@ -251,10 +264,22 @@
     "cannabis": "Próximamente: sujeto a revisión legal"
   },
   "examenes": {
-    "huerta": { "t": "Examen de Huerta", "d": "Suelo, compost, germinación, rotación y calendario." },
-    "hidro": { "t": "Examen de Hidroponía y nutrición", "d": "Nutrientes, sistemas, solución nutritiva, sustratos y riego." },
-    "luzplagas": { "t": "Examen de Luz, ambiente y plagas", "d": "PPFD, DLI, VPD, plagas, MIP y diagnóstico." },
-    "final": { "t": "Examen final BROTA", "d": "Todo el temario, con casos y trampas. Habilita el nivel Maestro de cultivo y la constancia." },
+    "huerta": {
+      "t": "Examen de Huerta",
+      "d": "Suelo, compost, germinación, rotación y calendario."
+    },
+    "hidro": {
+      "t": "Examen de Hidroponía y nutrición",
+      "d": "Nutrientes, sistemas, solución nutritiva, sustratos y riego."
+    },
+    "luzplagas": {
+      "t": "Examen de Luz, ambiente y plagas",
+      "d": "PPFD, DLI, VPD, plagas, MIP y diagnóstico."
+    },
+    "final": {
+      "t": "Examen final BROTA",
+      "d": "Todo el temario, con casos y trampas. Habilita el nivel Maestro de cultivo y la constancia."
+    },
     "titulo": "Exámenes",
     "intro": "Miden si de verdad aprendiste: preguntas al azar con las opciones mezcladas, tiempo límite y trampas. Cada acierto suma según su dificultad, cada error resta un tercio y \"No lo sé\" no resta. Se aprueba con {{pct}} %.",
     "estadoAprobado": "✓ Aprobado · mejor {{pct}} %",
@@ -305,7 +330,15 @@
       "nieve": "Nieve",
       "tormenta": "Tormenta"
     },
-    "diasSemana": ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+    "diasSemana": [
+      "Dom",
+      "Lun",
+      "Mar",
+      "Mié",
+      "Jue",
+      "Vie",
+      "Sáb"
+    ]
   },
   "tips": [
     "Antes de regar, metí un dedo en la tierra o el sustrato. Si está seca a unos centímetros, regá.",

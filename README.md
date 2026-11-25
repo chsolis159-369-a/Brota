@@ -68,6 +68,12 @@ El Agente responde con IA a través de la Edge Function `agente` (D-27). La form
 
 Las claves secretas nunca se pegan en el código ni en el chat: van solo en *Secrets* de GitHub. También se pueden cargar desde la terminal con `gh secret set NOMBRE` (pide el valor sin mostrarlo).
 
+El Agente también analiza fotos de la planta, hojas, plagas o insectos (D-30): hasta 10 fotos por usuario y por día, además de las 30 preguntas.
+
+## Logo e íconos
+
+El logo (una plántula de cannabis, D-28) se dibuja con código en `tools/marca/`. Para cambiarlo, editá la geometría o los colores y corré `node tools/marca/generar-marca.js`: regenera el ícono de la app, el ícono adaptable y monocromático de Android, la pantalla de carga, los SVG de `assets/marca/` y `src/tema/marca.ts`. Con `--vista <carpeta>` genera solo una vista previa.
+
 ## Variables de entorno
 
 Se cargan desde `.env` (ver `.env.example`). Nunca se commitean valores.

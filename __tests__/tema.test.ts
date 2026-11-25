@@ -1,34 +1,8 @@
-import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 
-import { AJUSTES_AA, claro, oscuro, type Colores } from '@/tema/colores';
-
-const HTML = readFileSync(join(__dirname, '..', 'reference', 'brota-v9-prototipo.html'), 'utf8');
-const NOMBRES: Record<string, keyof Colores> = {
-  '--bg': 'bg',
-  '--surface': 'surface',
-  '--fg': 'fg',
-  '--muted': 'muted',
-  '--accent': 'accent',
-  '--accent-soft': 'accentSoft',
-  '--border': 'border',
-  '--alert': 'alert',
-  '--ok': 'ok',
-  '--gold': 'gold',
-};
-
-/** Variables de color de un bloque CSS del prototipo. */
-function tokens(bloque: string): Partial<Colores> {
-  const r: Partial<Colores> = {};
-  for (const [, nombre, valor] of bloque.matchAll(/(--[a-z-]+):\s*(#[0-9A-Fa-f]{6})/g)) {
-    const k = NOMBRES[nombre!];
-    if (k) r[k] = valor!.toUpperCase();
-  }
-  return r;
-}
-
-const bloqueClaro = HTML.slice(HTML.indexOf(':root {', HTML.indexOf('<title>BROTA</title>')), HTML.indexOf('@media (prefers-color-scheme: dark)'));
-const bloqueOscuro = HTML.slice(HTML.indexOf(':root[data-theme="dark"]'), HTML.indexOf('body {', HTML.indexOf(':root[data-theme="dark"]')));
+import { claro, oscuro, type Colores } from '@/tema/colores';
+import { COLORES_MARCA } from '@/tema/marca';
 
 const L = (h: string) => {
   const c = [1, 3, 5]
@@ -41,49 +15,83 @@ const contraste = (a: string, b: string) => {
   return (x! + 0.05) / (y! + 0.05);
 };
 
-describe('tokens de color', () => {
-  it('modo claro: iguales al prototipo salvo los ajustes AA documentados', () => {
-    const proto = tokens(bloqueClaro);
-    expect(Object.keys(proto)).toHaveLength(10);
-    const esperado = { ...proto };
-    const app: Partial<Colores> = { ...claro };
-    for (const [k, original] of Object.entries(AJUSTES_AA.claro)) {
-      expect(esperado[k as keyof Colores]).toBe(original);
-      delete esperado[k as keyof Colores];
-      delete app[k as keyof Colores];
+const SOMBRAS: (keyof Colores)[] = ['sombra', 'sombraBoton'];
+const HEX = /^#[0-9A-F]{6}$/;
+
+describe('paleta del rediseño (D-29)', () => {
+  it('claro y oscuro tienen los mismos tokens, en hexadecimal', () => {
+    expect(Object.keys(oscuro).sort()).toEqual(Object.keys(claro).sort());
+    for (const tema of [claro, oscuro]) {
+      for (const [k, v] of Object.entries(tema)) if (!SOMBRAS.includes(k as keyof Colores)) expect(v).toMatch(HEX);
     }
-    expect(app).toMatchObject(esperado);
   });
 
-  it('modo oscuro: iguales al prototipo', () => {
-    const proto = tokens(bloqueOscuro);
-    expect(Object.keys(proto)).toHaveLength(10);
-    expect(oscuro).toMatchObject(proto);
+  it('en oscuro no hay sombras (se usa el borde)', () => {
+    expect(oscuro.sombra).toBe('');
+    expect(claro.sombra).not.toBe('');
   });
 
   describe.each([
     ['claro', claro],
     ['oscuro', oscuro],
-  ] as const)('contraste AA en modo %s', (_modo, c) => {
+  ] as const)('contraste AA del texto en modo %s', (_modo, c) => {
     const pares: [keyof Colores, keyof Colores][] = [
       ['fg', 'bg'],
       ['fg', 'surface'],
+      ['fg', 'surfaceAlt'],
       ['fg', 'accentSoft'],
+      ['fg', 'goldSoft'],
+      ['fg', 'alertSoft'],
+      ['fg', 'infoSoft'],
       ['muted', 'bg'],
       ['muted', 'surface'],
+      ['muted', 'surfaceAlt'],
       ['muted', 'accentSoft'],
       ['accent', 'bg'],
       ['accent', 'surface'],
+      ['accent', 'surfaceAlt'],
       ['accent', 'accentSoft'],
       ['alert', 'bg'],
       ['alert', 'surface'],
+      ['alert', 'alertSoft'],
       ['ok', 'surface'],
+      ['ok', 'accentSoft'],
       ['gold', 'bg'],
       ['gold', 'surface'],
+      ['gold', 'goldSoft'],
+      ['info', 'surface'],
+      ['info', 'infoSoft'],
       ['sobreAccent', 'accent'],
+      ['sobreAccent', 'botonDesde'],
+      ['sobreAccent', 'botonHasta'],
+      ['sobreHero', 'heroDesde'],
+      ['sobreHero', 'heroHasta'],
+      ['sobreHeroSuave', 'heroDesde'],
+      ['sobreHeroSuave', 'heroHasta'],
+      ['surface', 'alert'],
     ];
     it.each(pares)('%s sobre %s ≥ 4,5', (texto, fondo) => {
       expect(contraste(c[texto], c[fondo])).toBeGreaterThanOrEqual(4.5);
     });
+
+    it('el botón blanco de las tarjetas destacadas (texto heroHasta) ≥ 4,5', () => {
+      expect(contraste(c.heroHasta, '#FFFFFF')).toBeGreaterThanOrEqual(4.5);
+    });
+
+    it('el lima de los gráficos sobre el degradé ≥ 3 (objetos gráficos)', () => {
+      expect(contraste(c.lima, c.heroDesde)).toBeGreaterThanOrEqual(3);
+      expect(contraste(c.lima, c.heroHasta)).toBeGreaterThanOrEqual(3);
+    });
+  });
+});
+
+describe('marca (D-28)', () => {
+  it('los íconos y los trazos generados están al día con tools/marca', () => {
+    const salida = execFileSync('node', [join(__dirname, '..', 'tools', 'marca', 'generar-marca.js'), '--check'], { encoding: 'utf8' });
+    expect(salida).toContain('Marca al día.');
+  });
+
+  it('el fondo del ícono es el verde de la marca', () => {
+    expect(COLORES_MARCA.fondoHasta).toBe('#0A4227');
   });
 });

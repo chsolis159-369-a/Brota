@@ -1,57 +1,98 @@
 /**
- * Tokens de color del prototipo (variables CSS de :root), en claro y oscuro.
+ * Paleta de BROTA (D-29, rediseño visual pedido por el usuario): el verde esmeralda de la marca (D-28)
+ * con acentos lima, ámbar y celeste. Reemplaza los colores del prototipo, que sigue siendo la fuente de
+ * los textos y del comportamiento. Mantiene los nombres de los tokens del prototipo y suma los del
+ * rediseño (degradés, superficies suaves y sombras).
  *
- * Son los mismos valores del prototipo salvo tres ajustes para cumplir contraste AA (D-14):
- *  - claro.gold   #B8862B → #8A6420 (texto de puntos y estrellas: 3,0 → 4,95 sobre bg)
- *  - claro.muted  #66756B → #606E65 (texto secundario sobre accentSoft: 4,13 → 4,56)
- *  - oscuro.sobreAccent  #FFFFFF → #121A14 (texto de botones sobre accent: 1,95 → 9,08)
- * Las pruebas comparan estos valores con reference/brota-v9-prototipo.html y verifican el contraste.
+ * Todo texto cumple contraste AA (≥ 4,5) sobre los fondos donde se usa; lo verifica __tests__/tema.test.ts.
+ * `lima` es solo para gráficos (anillos y barras sobre el degradé), no para texto.
  */
 export type Colores = {
   bg: string;
   surface: string;
+  /** Campos y zonas secundarias dentro de una tarjeta. */
+  surfaceAlt: string;
   fg: string;
   muted: string;
   accent: string;
   accentSoft: string;
   border: string;
   alert: string;
+  alertSoft: string;
   ok: string;
   gold: string;
+  goldSoft: string;
+  info: string;
+  infoSoft: string;
   /** Texto sobre fondo accent (botones primarios, chips activos). */
   sobreAccent: string;
+  /** Degradé del botón primario (el texto es sobreAccent). */
+  botonDesde: string;
+  botonHasta: string;
+  /** Degradé de las tarjetas destacadas (resumen de Hoy, nivel, plan Pro). */
+  heroDesde: string;
+  heroHasta: string;
+  sobreHero: string;
+  sobreHeroSuave: string;
+  lima: string;
+  /** Sombra de las tarjetas (boxShadow); vacía en modo oscuro, donde se usa el borde. */
+  sombra: string;
+  /** Sombra del botón primario. */
+  sombraBoton: string;
 };
 
 export const claro: Colores = {
-  bg: '#F4F7F2',
+  bg: '#F2F6F3',
   surface: '#FFFFFF',
-  fg: '#1F2A22',
-  muted: '#606E65',
-  accent: '#2F6B3A',
-  accentSoft: '#E3F0E5',
-  border: '#D5DED6',
-  alert: '#B5552B',
-  ok: '#2F6B3A',
-  gold: '#8A6420',
+  surfaceAlt: '#F6FAF7',
+  fg: '#0F2418',
+  muted: '#53685A',
+  accent: '#147A3B',
+  accentSoft: '#E3F4E8',
+  border: '#DCE7DF',
+  alert: '#C2410C',
+  alertSoft: '#FDEDE4',
+  ok: '#147A3B',
+  gold: '#93560A',
+  goldSoft: '#FEF3C7',
+  info: '#0369A1',
+  infoSoft: '#E0F2FE',
   sobreAccent: '#FFFFFF',
+  botonDesde: '#168342',
+  botonHasta: '#0E6630',
+  heroDesde: '#147A3B',
+  heroHasta: '#0A4227',
+  sobreHero: '#FFFFFF',
+  sobreHeroSuave: '#E3F9EA',
+  lima: '#BEF264',
+  sombra: '0 1px 2px rgba(15, 36, 24, 0.06), 0 8px 20px rgba(15, 36, 24, 0.07)',
+  sombraBoton: '0 6px 14px rgba(20, 122, 59, 0.28)',
 };
 
 export const oscuro: Colores = {
-  bg: '#121A14',
-  surface: '#1B2620',
-  fg: '#E6EDE7',
-  muted: '#9AAA9E',
-  accent: '#8CC79A',
-  accentSoft: '#22332A',
-  border: '#2E3D33',
-  alert: '#E08B63',
-  ok: '#8CC79A',
-  gold: '#E0B45C',
-  sobreAccent: '#121A14',
+  bg: '#08130D',
+  surface: '#102019',
+  surfaceAlt: '#0C1913',
+  fg: '#E8F3EC',
+  muted: '#9CB5A6',
+  accent: '#4ADE80',
+  accentSoft: '#143322',
+  border: '#21392B',
+  alert: '#FB923C',
+  alertSoft: '#3A1E0E',
+  ok: '#4ADE80',
+  gold: '#FBBF24',
+  goldSoft: '#3A2C0A',
+  info: '#7DD3FC',
+  infoSoft: '#0B2A3A',
+  sobreAccent: '#052E16',
+  botonDesde: '#5EE88E',
+  botonHasta: '#34C46A',
+  heroDesde: '#166534',
+  heroHasta: '#0A3A22',
+  sobreHero: '#FFFFFF',
+  sobreHeroSuave: '#CDEFD8',
+  lima: '#BEF264',
+  sombra: '',
+  sombraBoton: '',
 };
-
-/** Ajustes respecto del prototipo, por modo. Las pruebas los usan para comparar. */
-export const AJUSTES_AA = {
-  claro: { gold: '#B8862B', muted: '#66756B' },
-  oscuro: {},
-} as const;

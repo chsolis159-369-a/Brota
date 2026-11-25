@@ -12,9 +12,9 @@ const { extraer } = require('../tools/extraer-contenido.js') as { extraer: () =>
 const archivo = () => JSON.parse(readFileSync(join(__dirname, '..', 'content', 'modulos.json'), 'utf8'));
 
 describe('contenido', () => {
-  it('cannabis y el análisis de fotos por IA están apagados', () => {
+  it('cannabis sigue apagado; el análisis de fotos por IA está prendido (D-30)', () => {
     expect(CANNABIS_HABILITADO).toBe(false);
-    expect(FOTO_AGENTE).toBe(false);
+    expect(FOTO_AGENTE).toBe(true);
   });
 
   it('se carga tal cual está en content/modulos.json', () => {

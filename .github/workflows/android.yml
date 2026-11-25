@@ -92,9 +92,29 @@ jobs:
           profile: pixel_6
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot
+          # Después de las pruebas, capturas de las pantallas en claro y en oscuro para revisar el diseño
+          # (D-29). Si una captura falla, no cambia el resultado de las pruebas.
           script: |
             adb install -r android/app/build/outputs/apk/release/app-release.apk
             maestro test .maestro --format junit --output maestro-resultados.xml
+            maestro test .maestro/capturas/pantallas.yaml -e MODO=claro || echo "::warning::Fallaron las capturas en modo claro"
+            adb shell cmd uimode night yes
+            maestro test .maestro/capturas/pantallas.yaml -e MODO=oscuro || echo "::warning::Fallaron las capturas en modo oscuro"
+
+      - name: Juntar las capturas
+        if: always()
+        run: |
+          mkdir -p capturas-ui
+          find . "$HOME/.maestro" -type f \( -name 'claro-*.png' -o -name 'oscuro-*.png' \) -not -path './capturas-ui/*' -exec cp {} capturas-ui/ \; 2>/dev/null || true
+          ls capturas-ui
+
+      - name: Guardar las capturas
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: capturas
+          path: capturas-ui/
+          if-no-files-found: ignore
 
       - name: Guardar los resultados de Maestro
         if: always()

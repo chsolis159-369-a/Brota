@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useAprendizaje, useTextoMotivoExamen } from '@/componentes/aprender';
-import { Boton, Chip, Fila } from '@/componentes/controles';
+import { Boton, Chip, Fila, Medalla, type Tono } from '@/componentes/controles';
 import { Etiqueta } from '@/componentes/Etiqueta';
 import { Barra } from '@/componentes/graficos';
+import { Hero } from '@/componentes/Hero';
 import { useTextoMotivoModulo } from '@/componentes/hoy';
 import { Pantalla } from '@/componentes/Pantalla';
 import { Tarjeta } from '@/componentes/Tarjeta';
@@ -17,9 +18,20 @@ import { EXAMENES, moduloAprobado, modulosDelPlan } from '@/reglas/aprendizaje';
 import { APROBAR_EXAMEN, MAX_PTS_MODULO } from '@/reglas/dominio';
 import { NIVELES } from '@/reglas/niveles';
 import { estrellas } from '@/reglas/test';
-import { MEDIDAS, useTema } from '@/tema/useTema';
+import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
 const CATEGORIAS: ('todas' | Exclude<Categoria, 'cannabis'>)[] = ['todas', 'huerta', 'nutricion', 'hidro', 'inerte', 'luz', 'plagas'];
+
+/** Color de cada categoría de módulos (D-29). */
+const TONO_CATEGORIA: Record<Categoria, Tono> = {
+  huerta: 'accent',
+  nutricion: 'gold',
+  hidro: 'info',
+  inerte: 'info',
+  luz: 'gold',
+  plagas: 'alert',
+  cannabis: 'accent',
+};
 
 /** Aprender (aprenderHTML del prototipo): nivel, módulos por categoría y exámenes. */
 export default function Aprender() {
@@ -45,16 +57,16 @@ export default function Aprender() {
 
   return (
     <Pantalla titulo={t('titulos.aprender')}>
-      <Tarjeta>
+      <Hero>
         <View style={estilos.nivel}>
-          <View>
+          <View style={estilos.encoger}>
             <Texto variante="secundario">{t('aprender.tuNivel')}</Texto>
             <Texto variante="titulo" style={estilos.nivelNombre}>
               {nivel.nivel.t}
             </Texto>
           </View>
           <Texto variante="cuerpo">
-            <Texto variante="cuerpoFuerte">{String(puntos)}</Texto> {t('aprender.pts')}
+            <Texto variante="numero">{String(puntos)}</Texto> {t('aprender.pts')}
           </Texto>
         </View>
         <Barra valor={nivel.pct / 100} />
@@ -62,11 +74,11 @@ export default function Aprender() {
         <Texto variante="secundario" style={estilos.resumen}>
           {t('aprender.resumen', { a: aprobados, n: delPlan.length, e: a.examenesAprobados, t: EXAMENES.length })}
         </Texto>
-      </Tarjeta>
+      </Hero>
 
       <View style={estilos.niveles}>
         {NIVELES.map((n, k) => (
-          <View key={n.t} style={[estilos.nv, { borderColor: nivel.idx >= k ? c.gold : c.border }]}>
+          <View key={n.t} style={[estilos.nv, nivel.idx >= k ? { borderColor: c.goldSoft, backgroundColor: c.goldSoft } : { borderColor: c.border }]}>
             <Texto variante="secundario" color={nivel.idx >= k ? 'fg' : 'muted'} style={nivel.idx >= k ? estilos.negrita : null}>
               {t('aprender.nivelChip', { t: n.t, min: n.min })}
             </Texto>
@@ -109,10 +121,11 @@ export default function Aprender() {
                   if (dis.ok) router.push({ pathname: '/aprender/modulo/[id]', params: { id: mod.id } });
                   else if (dis.motivo.tipo === 'pro') router.navigate('/plan');
                 }}
-                style={[estilos.tarjeta, { backgroundColor: c.surface, borderColor: c.border, opacity: dis.ok ? 1 : 0.55 }]}>
+                style={({ pressed }) => [estilos.tarjeta, superficie(c), { opacity: dis.ok ? 1 : 0.6, transform: [{ scale: pressed ? 0.99 : 1 }] }]}>
                 <View style={estilos.nivel}>
-                  <View style={estilos.titulo}>
-                    <Texto variante="cuerpoFuerte" style={estilos.encoger}>
+                  <Medalla icono={dis.ok ? mod.cat : 'bloqueado'} tono={dis.ok ? TONO_CATEGORIA[mod.cat] : 'accent'} tamano={40} />
+                  <View style={[estilos.titulo, estilos.flex]}>
+                    <Texto variante="subtitulo" style={estilos.encoger}>
                       {mod.t}
                     </Texto>
                     {mod.pro ? <Etiqueta tono="gold">{t('comun.pro')}</Etiqueta> : null}
@@ -127,7 +140,7 @@ export default function Aprender() {
               </Pressable>
             );
           })}
-          <Boton texto={t('aprender.glosario')} variante="fantasma" onPress={() => router.push('/aprender/glosario')} testID="glosario" />
+          <Boton texto={t('aprender.glosario')} variante="fantasma" icono="glosario" onPress={() => router.push('/aprender/glosario')} testID="glosario" />
         </>
       )}
     </Pantalla>
@@ -166,10 +179,11 @@ function ListaExamenes() {
             accessibilityRole="button"
             testID={`examen-${ex.id}`}
             onPress={() => router.push({ pathname: '/aprender/examen/[id]', params: { id: ex.id } })}
-            style={[estilos.tarjeta, { backgroundColor: c.surface, borderColor: c.border, opacity: d.ok || apr ? 1 : 0.55 }]}>
+            style={({ pressed }) => [estilos.tarjeta, superficie(c), { opacity: d.ok || apr ? 1 : 0.6, transform: [{ scale: pressed ? 0.99 : 1 }] }]}>
             <View style={estilos.nivel}>
-              <View style={estilos.titulo}>
-                <Texto variante="cuerpoFuerte" style={estilos.encoger}>
+              <Medalla icono={apr ? 'logro' : ex.pro ? 'pro' : 'examen'} tono={apr || ex.pro ? 'gold' : 'accent'} tamano={40} />
+              <View style={[estilos.titulo, estilos.flex]}>
+                <Texto variante="subtitulo" style={estilos.encoger}>
                   {t(`examenes.${ex.id}.t`)}
                 </Texto>
                 {ex.pro ? <Etiqueta tono="gold">{t('comun.pro')}</Etiqueta> : null}
@@ -189,12 +203,13 @@ function ListaExamenes() {
 
 const estilos = StyleSheet.create({
   nivel: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
-  nivelNombre: { fontSize: 18, lineHeight: 22 },
+  nivelNombre: { fontSize: 24, lineHeight: 30 },
   resumen: { marginTop: 6 },
-  niveles: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 10 },
-  nv: { borderWidth: 1, borderRadius: 999, paddingHorizontal: 9, paddingVertical: 3 },
+  niveles: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
+  nv: { borderWidth: 1, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 },
   negrita: { fontFamily: 'NunitoSans_700Bold' },
-  tarjeta: { borderWidth: 1, borderRadius: MEDIDAS.radioTarjeta, padding: 14, marginBottom: 10, minHeight: MEDIDAS.toque },
+  flex: { flex: 1 },
+  tarjeta: { borderRadius: MEDIDAS.radioTarjeta, padding: 16, marginBottom: 12, minHeight: MEDIDAS.toque, gap: 4 },
   titulo: { flexDirection: 'row', alignItems: 'center', flexShrink: 1, flexWrap: 'wrap' },
   encoger: { flexShrink: 1 },
   estrellas: { letterSpacing: 2 },

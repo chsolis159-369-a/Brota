@@ -1,4 +1,4 @@
-/** Pantalla del Agente con servidor: respuesta con IA, negativa local, límite y caída a reglas (D-27). */
+/** Pantalla del Agente con servidor: respuesta con IA, negativa local, límite, caída a reglas (D-27) y fotos (D-30). */
 import { fireEvent, render, screen } from '@testing-library/react-native';
 
 import Agente from '@/app/(tabs)/agente';
@@ -18,10 +18,14 @@ jest.mock('@/servicios/agenteIA', () => {
   const real = jest.requireActual('@/servicios/agenteIA');
   return { ...real, hayAgenteIA: () => true, preguntarAgenteIA: (...a: unknown[]) => mockPreguntar(...a) };
 });
+const mockFoto = jest.fn();
+jest.mock('@/servicios/fotoAgente', () => ({ fotoParaAnalizar: (...a: unknown[]) => mockFoto(...a) }));
+const FOTO = { uri: 'file:///cache/hoja.jpg', base64: '/9j/4AAQ', tipo: 'image/jpeg' };
 jest.mock('expo-router', () => ({ useRouter: () => ({}), useLocalSearchParams: () => ({}), useFocusEffect: () => {} }));
 
 beforeEach(async () => {
   mockPreguntar.mockReset();
+  mockFoto.mockReset();
   const db = abrirBaseDePrueba();
   await migrar(db);
   await inicializarDatos(db);
@@ -71,6 +75,56 @@ describe('Agente con IA', () => {
     await render(<Agente />);
     await preguntar('¿Cuándo trasplanto?');
     expect(screen.getByText(/^Llegaste al límite de preguntas al guía por hoy/)).toBeTruthy();
+  });
+
+  it('saca una foto, la manda con la pregunta escrita y muestra el análisis', async () => {
+    mockFoto.mockResolvedValue({ tipo: 'ok', foto: FOTO });
+    mockPreguntar.mockResolvedValue('Veo pulgones en el envés. Aislá la planta y revisá cada dos días.');
+    await render(<Agente />);
+    expect(screen.getByText('Analizar una foto')).toBeTruthy();
+    await fireEvent.changeText(screen.getByLabelText('Escribí tu pregunta'), '¿Qué bichos son?');
+    await fireEvent.press(screen.getByText('Sacar foto'));
+    expect(mockFoto).toHaveBeenCalledWith('camara');
+    expect(mockPreguntar.mock.calls[0][0]).toMatchObject({ pregunta: '¿Qué bichos son?', foto: { tipo: 'image/jpeg', datos: '/9j/4AAQ' } });
+    expect(screen.getByLabelText('Foto subida por el usuario')).toBeTruthy();
+    expect(screen.getByText('Veo pulgones en el envés. Aislá la planta y revisá cada dos días.')).toBeTruthy();
+  });
+
+  it('una foto sin pregunta se manda igual (el servidor usa una pregunta por defecto)', async () => {
+    mockFoto.mockResolvedValue({ tipo: 'ok', foto: FOTO });
+    mockPreguntar.mockResolvedValue('Es una vaquita: es benéfica, no la elimines.');
+    await render(<Agente />);
+    await fireEvent.press(screen.getByText('Elegir de la galería'));
+    expect(mockFoto).toHaveBeenCalledWith('galeria');
+    expect(mockPreguntar.mock.calls[0][0]).toMatchObject({ pregunta: '', foto: { datos: '/9j/4AAQ' } });
+  });
+
+  it('sin permiso de cámara lo explica y no llama al servidor', async () => {
+    mockFoto.mockResolvedValue({ tipo: 'sin_permiso' });
+    await render(<Agente />);
+    await fireEvent.press(screen.getByText('Sacar foto'));
+    expect(mockPreguntar).not.toHaveBeenCalled();
+    expect(screen.getByText(/^Para sacar fotos, BROTA necesita permiso para usar la cámara/)).toBeTruthy();
+  });
+
+  it('avisa cuando se llega al límite de fotos del día', async () => {
+    mockFoto.mockResolvedValue({ tipo: 'ok', foto: FOTO });
+    mockPreguntar.mockRejectedValue(new ErrorAgente('limite_fotos'));
+    await render(<Agente />);
+    await fireEvent.press(screen.getByText('Sacar foto'));
+    expect(screen.getByText('Llegaste al límite de 10 fotos por día. Mañana podés mandar más.')).toBeTruthy();
+  });
+
+  it('el historial que va al servidor marca los mensajes que tenían foto', async () => {
+    mockFoto.mockResolvedValue({ tipo: 'ok', foto: FOTO });
+    mockPreguntar.mockResolvedValueOnce('Es oídio.').mockResolvedValueOnce('Sí, sacá esas hojas.');
+    await render(<Agente />);
+    await fireEvent.press(screen.getByText('Sacar foto'));
+    await preguntar('¿Saco las hojas?');
+    expect(mockPreguntar.mock.calls[1][0].historial).toEqual([
+      { de: 'vos', t: '(Foto)' },
+      { de: 'agente', t: 'Es oídio.' },
+    ]);
   });
 
   it('sin conexión responde con las reglas y lo aclara', async () => {

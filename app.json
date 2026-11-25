@@ -12,14 +12,13 @@
       "android"
     ],
     "ios": {
-      "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.brota.app",
       "supportsTablet": false
     },
     "android": {
       "package": "com.brota.app",
       "adaptiveIcon": {
-        "backgroundColor": "#E3F0E5",
+        "backgroundColor": "#0A4227",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -31,11 +30,11 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#F4F7F2",
+          "backgroundColor": "#0A4227",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76,
+          "imageWidth": 200,
           "dark": {
-            "backgroundColor": "#121A14"
+            "backgroundColor": "#08130D"
           }
         }
       ],
@@ -50,7 +49,7 @@
         "expo-image-picker",
         {
           "photosPermission": "BROTA usa tus fotos para que sigas la evolución de tus cultivos.",
-          "cameraPermission": false,
+          "cameraPermission": "BROTA usa la cámara para que saques fotos de tus plantas, hojas, plagas o insectos y el guía las analice.",
           "microphonePermission": false
         }
       ]

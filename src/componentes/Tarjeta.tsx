@@ -1,19 +1,18 @@
 import type { ReactNode } from 'react';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 
-import { MEDIDAS, useTema } from '@/tema/useTema';
+import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
-/** Tarjeta (.card del prototipo). */
+/** Tarjeta (.card del prototipo): blanca con sombra suave en claro, con borde en oscuro (D-29). */
 export function Tarjeta({ children, style }: { children?: ReactNode; style?: ViewStyle }) {
   const { c } = useTema();
-  return <View style={[estilos.tarjeta, { backgroundColor: c.surface, borderColor: c.border }, style]}>{children}</View>;
+  return <View style={[estilos.tarjeta, superficie(c), style]}>{children}</View>;
 }
 
 const estilos = StyleSheet.create({
   tarjeta: {
-    borderWidth: 1,
     borderRadius: MEDIDAS.radioTarjeta,
-    padding: 14,
-    marginBottom: 10,
+    padding: 16,
+    marginBottom: 12,
   },
 });

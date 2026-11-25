@@ -3,8 +3,9 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { diasDeCultivo, proximoPaso, saludCultivo, type ProximoPaso, type Salud } from '@/reglas/cultivos';
 import type { CultivoCompleto } from '@/store/datos';
-import { MEDIDAS, useTema } from '@/tema/useTema';
+import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
+import { Medalla } from './controles';
 import { Etiqueta } from './Etiqueta';
 import { Punto, SegmentosEtapa } from './graficos';
 import { Texto } from './Texto';
@@ -42,15 +43,20 @@ export function TarjetaCultivo({ c, onPress, ahora }: { c: CultivoCompleto; onPr
       onPress={onPress}
       accessibilityRole="button"
       testID={`cultivo-${c.nombre}`}
-      style={({ pressed }) => [estilos.tarjeta, { backgroundColor: tema.c.surface, borderColor: tema.c.border, opacity: pressed ? 0.85 : 1 }]}>
+      style={({ pressed }) => [estilos.tarjeta, superficie(tema.c), { opacity: pressed ? 0.9 : 1, transform: [{ scale: pressed ? 0.99 : 1 }] }]}>
       <View style={estilos.cabecera}>
-        <Texto variante="cuerpoFuerte" style={estilos.nombre}>
-          {c.nombre}
-        </Texto>
-        <Etiqueta>{t('cultivos.dia', { n: diasDeCultivo(c.fecha, ahora) })}</Etiqueta>
-        {c.ejemplo ? <Etiqueta>{t('comun.ejemplo')}</Etiqueta> : null}
+        <Medalla icono={nivel === 'alerta' ? 'alerta' : 'cultivo'} tono={nivel === 'ok' ? 'accent' : nivel === 'alerta' ? 'alert' : 'gold'} tamano={44} />
+        <View style={estilos.flex}>
+          <View style={estilos.nombreFila}>
+            <Texto variante="subtitulo" style={estilos.nombre}>
+              {c.nombre}
+            </Texto>
+            <Etiqueta tono="ok">{t('cultivos.dia', { n: diasDeCultivo(c.fecha, ahora) })}</Etiqueta>
+            {c.ejemplo ? <Etiqueta>{t('comun.ejemplo')}</Etiqueta> : null}
+          </View>
+          <Texto variante="secundario">{t('cultivos.linea', { tipo: c.tipo, ubicacion: t(`cultivos.ubicaciones.${c.ubicacion}`), etapa: t(`etapas.${c.etapa}`) })}</Texto>
+        </View>
       </View>
-      <Texto variante="secundario">{t('cultivos.linea', { tipo: c.tipo, ubicacion: t(`cultivos.ubicaciones.${c.ubicacion}`), etapa: t(`etapas.${c.etapa}`) })}</Texto>
       <SegmentosEtapa etapa={c.etapa} />
       <View style={estilos.prox}>
         <Punto nivel={nivel} />
@@ -66,10 +72,11 @@ export function TarjetaCultivo({ c, onPress, ahora }: { c: CultivoCompleto; onPr
 }
 
 const estilos = StyleSheet.create({
-  tarjeta: { borderWidth: 1, borderRadius: MEDIDAS.radioTarjeta, padding: 14, marginBottom: 10 },
-  cabecera: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' },
+  tarjeta: { borderRadius: MEDIDAS.radioTarjeta, padding: 16, marginBottom: 12 },
+  cabecera: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 4 },
+  nombreFila: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' },
   nombre: { flexShrink: 1, marginRight: 'auto' },
-  prox: { flexDirection: 'row', alignItems: 'center', marginTop: 6 },
+  prox: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
   flex: { flex: 1 },
   ultimo: { marginTop: 4 },
 });

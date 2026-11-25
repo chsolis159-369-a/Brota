@@ -32,6 +32,8 @@ const NUEVOS = new Set([
   'agente.pensando',
   'agente.limite',
   'agente.sinConexion',
+  // Análisis de fotos en el Agente, pedido del usuario (D-30). "Analizar una foto" y el texto alternativo salen del prototipo.
+  ...['ayuda', 'pista', 'sacar', 'elegir', 'analizando', 'sinPermiso', 'error', 'sinConexion', 'limite'].map((k) => `agente.foto.${k}`),
 ]);
 
 /** Hojas de un objeto de textos, con su clave completa. */

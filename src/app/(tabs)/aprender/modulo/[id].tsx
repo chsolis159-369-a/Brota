@@ -135,8 +135,8 @@ function Test({ m, fase, setFase }: { m: Modulo; fase: Extract<Fase, { tipo: 'te
             style={[
               estilos.opcion,
               {
-                backgroundColor: esCorrecta ? c.accentSoft : c.surface,
-                borderColor: esCorrecta ? c.ok : esMal ? c.alert : c.border,
+                backgroundColor: esCorrecta ? c.accentSoft : esMal ? c.alertSoft : c.surface,
+                borderColor: esCorrecta ? c.ok : esMal ? c.alert : resp === idx ? c.accent : c.border,
               },
             ]}>
             <Texto variante="cuerpo">{op}</Texto>
@@ -223,7 +223,7 @@ const estilos = StyleSheet.create({
   leccion: { fontSize: 16, lineHeight: 26 },
   nota: { marginBottom: 8 },
   pregunta: { fontSize: 18, lineHeight: 24, marginTop: 4, marginBottom: 12 },
-  opcion: { borderWidth: 1, borderRadius: MEDIDAS.radioControl, paddingVertical: 12, paddingHorizontal: 14, marginBottom: 8, minHeight: MEDIDAS.toque },
+  opcion: { borderWidth: 1.5, borderRadius: MEDIDAS.radioControl, paddingVertical: 14, paddingHorizontal: 16, marginBottom: 10, minHeight: 52, justifyContent: 'center' },
   resultado: { paddingVertical: 24, alignItems: 'stretch' },
   centro: { textAlign: 'center' },
   centrado: { alignItems: 'center' },

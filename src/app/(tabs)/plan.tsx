@@ -5,6 +5,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Boton, Campo, Chip, Fila, Mensaje, Subtitulo } from '@/componentes/controles';
 import { Etiqueta } from '@/componentes/Etiqueta';
+import { Hero, useEnHero } from '@/componentes/Hero';
+import { Icono } from '@/componentes/Icono';
 import { Pantalla } from '@/componentes/Pantalla';
 import { Tarjeta } from '@/componentes/Tarjeta';
 import { Texto } from '@/componentes/Texto';
@@ -16,7 +18,7 @@ import { hoyStr } from '@/reglas/fechas';
 import { erroresRecientes } from '@/servicios/errores';
 import { useApp } from '@/store/app';
 import { useDatos } from '@/store/datos';
-import { MEDIDAS, useTema } from '@/tema/useTema';
+import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
 /** Plan (planHTML del prototipo): planes, opinión de la prueba, privacidad y borrado de datos. */
 export default function PantallaPlan() {
@@ -48,6 +50,7 @@ export default function PantallaPlan() {
         )}
       </CajaPlan>
       <CajaPlan
+        destacada
         nombre={t('planes.pro')}
         etiqueta={t('planes.recomendado')}
         precio={t('planes.precioPro')}
@@ -74,12 +77,7 @@ export default function PantallaPlan() {
             {t('privacidad.version')}
           </Texto>
           {(t('privacidad.items', { returnObjects: true }) as string[]).map((item) => (
-            <View key={item} style={estilos.item}>
-              <Texto variante="cuerpo">•</Texto>
-              <Texto variante="cuerpo" style={estilos.flex}>
-                {item}
-              </Texto>
-            </View>
+            <ItemPlan key={item} texto={item} />
           ))}
           <Boton texto={t('privacidad.ocultar')} variante="fantasma" onPress={() => setVerPrivacidad(false)} style={estilos.arriba} />
         </Tarjeta>
@@ -123,26 +121,38 @@ function EnlaceBorrar({ texto, onPress }: { texto: string; onPress: () => void }
   );
 }
 
-function CajaPlan(p: { nombre: string; etiqueta?: string; precio: string; items: string[]; activo: boolean; children: ReactNode }) {
+/** Caja de un plan. El Pro va destacado con el degradé de la marca (D-29). */
+function CajaPlan(p: { nombre: string; etiqueta?: string; precio: string; items: string[]; activo: boolean; destacada?: boolean; children: ReactNode }) {
   const { c } = useTema();
-  return (
-    <View style={[estilos.caja, { backgroundColor: c.surface, borderColor: p.activo ? c.accent : c.border, borderWidth: p.activo ? 2 : 1 }]}>
+  const contenido = (
+    <>
       <View style={estilos.cabecera}>
-        <Texto variante="cuerpoFuerte">{p.nombre}</Texto>
+        {p.destacada ? <Icono nombre="pro" color={c.lima} tamano={22} /> : null}
+        <Texto variante="subtitulo">{p.nombre}</Texto>
         {p.etiqueta ? <Etiqueta tono="gold">{p.etiqueta}</Etiqueta> : null}
       </View>
-      <Texto variante="titulo" style={estilos.precio}>
+      <Texto variante="tituloGrande" style={estilos.precio}>
         {p.precio}
       </Texto>
       {p.items.map((item) => (
-        <View key={item} style={estilos.item}>
-          <Texto variante="cuerpo">•</Texto>
-          <Texto variante="cuerpo" style={estilos.flex}>
-            {item}
-          </Texto>
-        </View>
+        <ItemPlan key={item} texto={item} />
       ))}
       <View style={estilos.arriba}>{p.children}</View>
+    </>
+  );
+  if (p.destacada) return <Hero style={p.activo ? { ...estilos.caja, borderWidth: 3, borderColor: c.lima } : estilos.caja}>{contenido}</Hero>;
+  return <View style={[estilos.caja, superficie(c), p.activo ? { borderWidth: 2, borderColor: c.accent } : null]}>{contenido}</View>;
+}
+
+function ItemPlan({ texto }: { texto: string }) {
+  const { c } = useTema();
+  const enHero = useEnHero();
+  return (
+    <View style={estilos.item}>
+      <Icono nombre="tarea" color={enHero ? c.lima : c.accent} tamano={18} />
+      <Texto variante="cuerpo" style={estilos.flex}>
+        {texto}
+      </Texto>
     </View>
   );
 }
@@ -200,10 +210,10 @@ function Opinion() {
 }
 
 const estilos = StyleSheet.create({
-  caja: { borderRadius: MEDIDAS.radioTarjeta, padding: 14, marginBottom: 12 },
-  cabecera: { flexDirection: 'row', alignItems: 'center' },
-  precio: { marginTop: 4, marginBottom: 6 },
-  item: { flexDirection: 'row', gap: 8, marginBottom: 4 },
+  caja: { borderRadius: MEDIDAS.radioTarjeta, padding: 18, marginBottom: 14 },
+  cabecera: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  precio: { marginTop: 6, marginBottom: 10 },
+  item: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginBottom: 6 },
   flex: { flex: 1 },
   arriba: { marginTop: 8 },
   parrafo: { marginVertical: 6 },

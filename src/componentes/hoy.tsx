@@ -8,9 +8,10 @@ import { LOGROS, type IdLogro, type MotivoModulo, type Recomendacion } from '@/r
 import { nivelPorPuntos } from '@/reglas/niveles';
 import { descripcionClima } from '@/servicios/clima';
 import { useClima } from '@/store/clima';
-import { MEDIDAS, useTema } from '@/tema/useTema';
+import { superficie, useTema } from '@/tema/useTema';
 
-import { Boton, Explicacion } from './controles';
+import { Boton, Explicacion, Medalla } from './controles';
+import { Icono } from './Icono';
 import { Tarjeta } from './Tarjeta';
 import { Texto } from './Texto';
 
@@ -41,13 +42,9 @@ export function FilaTarea({ tarea, onPress }: { tarea: Tarea; onPress: () => voi
       accessibilityRole="checkbox"
       accessibilityState={{ checked: tarea.hecha }}
       accessibilityLabel={`${texto}. ${t('tareas.puntos', { pts: tarea.puntos, dificultad: t(`tareas.dificultad.${tarea.dificultad}`) })}`}
-      style={[estilos.tarea, { backgroundColor: tarea.hecha ? c.accentSoft : c.surface, borderColor: c.border }]}>
+      style={({ pressed }) => [estilos.tarea, superficie(c), tarea.hecha ? { backgroundColor: c.accentSoft } : null, { transform: [{ scale: pressed ? 0.985 : 1 }] }]}>
       <View style={[estilos.check, { borderColor: c.accent, backgroundColor: tarea.hecha ? c.accent : 'transparent' }]}>
-        {tarea.hecha ? (
-          <Texto variante="cuerpoFuerte" color="sobreAccent">
-            ✓
-          </Texto>
-        ) : null}
+        {tarea.hecha ? <Icono nombre="check" color={c.sobreAccent} tamano={16} /> : null}
       </View>
       <Texto
         variante="cuerpo"
@@ -55,9 +52,11 @@ export function FilaTarea({ tarea, onPress }: { tarea: Tarea; onPress: () => voi
         style={[estilos.flex, tarea.hecha ? estilos.tachado : null]}>
         {texto}
       </Texto>
-      <Texto variante="secundario" color="gold" style={estilos.pts}>
-        {t('tareas.puntos', { pts: tarea.puntos, dificultad: t(`tareas.dificultad.${tarea.dificultad}`) })}
-      </Texto>
+      <View style={[estilos.pts, { backgroundColor: c.goldSoft }]}>
+        <Texto variante="secundario" color="gold" style={estilos.ptsTexto}>
+          {t('tareas.puntos', { pts: tarea.puntos, dificultad: t(`tareas.dificultad.${tarea.dificultad}`) })}
+        </Texto>
+      </View>
     </Pressable>
   );
 }
@@ -75,8 +74,9 @@ export function Logros({ obtenidos }: { obtenidos: Record<IdLogro, boolean> }) {
             key={id}
             accessible
             accessibilityState={{ checked: ok }}
-            style={[estilos.badge, ok ? { borderColor: c.gold, borderStyle: 'solid', backgroundColor: c.surface } : { borderColor: c.border }]}>
-            <Texto variante={ok ? 'cuerpoFuerte' : 'secundario'} color={ok ? 'fg' : 'muted'} style={estilos.centro}>
+            style={[estilos.badge, ok ? { borderColor: c.goldSoft, borderStyle: 'solid', backgroundColor: c.goldSoft } : { borderColor: c.border }]}>
+            <Icono nombre={ok ? 'logro' : 'bloqueado'} color={ok ? c.gold : c.muted} tamano={22} />
+            <Texto variante={ok ? 'cuerpoFuerte' : 'secundario'} color={ok ? 'fg' : 'muted'} style={estilos.flex}>
               {t(`logros.${id}`)}
             </Texto>
           </View>
@@ -99,10 +99,15 @@ export function ClimaConsejo({ ahora }: { ahora: Date }) {
     <Tarjeta>
       {clima ? (
         <>
-          <Texto variante="secundario">{t('clima.hoyEn', { ciudad })}</Texto>
           <View style={estilos.climaFila}>
-            <Texto variante="subtitulo">{t('clima.grados', { t: clima.hoy.t })}</Texto>
-            <Texto variante="secundario">{t(`clima.desc.${descripcionClima(clima.hoy.codigo)}`)}</Texto>
+            <Medalla icono={descripcionClima(clima.hoy.codigo)} tono="info" tamano={48} />
+            <View style={estilos.flex}>
+              <Texto variante="secundario">{t('clima.hoyEn', { ciudad })}</Texto>
+              <View style={estilos.climaGrados}>
+                <Texto variante="numeroGrande">{t('clima.grados', { t: clima.hoy.t })}</Texto>
+                <Texto variante="secundario">{t(`clima.desc.${descripcionClima(clima.hoy.codigo)}`)}</Texto>
+              </View>
+            </View>
           </View>
           <Texto variante="secundario">{t('clima.lluviaViento', { lluvia: clima.hoy.lluvia, viento: clima.hoy.viento })}</Texto>
           <Texto variante="secundario" style={estilos.dias}>
@@ -114,7 +119,7 @@ export function ClimaConsejo({ ahora }: { ahora: Date }) {
       ) : (
         <Texto variante="secundario">{t('clima.sinPronostico')}</Texto>
       )}
-      <Explicacion>
+      <Explicacion icono="consejo">
         <Texto variante="cuerpo">
           <Texto variante="cuerpoFuerte">{t('clima.consejoDelDia')}</Texto> {tip}
         </Texto>
@@ -191,20 +196,32 @@ const estilos = StyleSheet.create({
   tarea: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    borderWidth: 1,
-    borderRadius: MEDIDAS.radioTarjeta,
-    padding: 12,
-    marginBottom: 8,
-    minHeight: MEDIDAS.toque,
+    gap: 12,
+    borderRadius: 18,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    marginBottom: 10,
+    minHeight: 56,
   },
-  check: { width: 24, height: 24, borderRadius: 8, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
+  check: { width: 26, height: 26, borderRadius: 13, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
   tachado: { textDecorationLine: 'line-through' },
-  pts: { fontWeight: '600', flexShrink: 0 },
+  pts: { flexShrink: 0, borderRadius: 999, paddingHorizontal: 9, paddingVertical: 3 },
+  ptsTexto: { fontFamily: 'NunitoSans_700Bold' },
   badges: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  badge: { width: '48.5%', borderWidth: 1, borderStyle: 'dashed', borderRadius: 12, padding: 10, justifyContent: 'center' },
-  climaFila: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 },
-  dias: { marginTop: 6 },
+  badge: {
+    width: '48.5%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    borderWidth: 1.5,
+    borderStyle: 'dashed',
+    borderRadius: 16,
+    padding: 12,
+    minHeight: 56,
+  },
+  climaFila: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+  climaGrados: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 },
+  dias: { marginTop: 10 },
   motivo: { marginTop: 6 },
   porque: { marginTop: 8 },
   negrita: { fontFamily: 'NunitoSans_700Bold' },

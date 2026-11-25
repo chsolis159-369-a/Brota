@@ -1,0 +1,24 @@
+# Capturas de las pantallas principales para revisar el diseño (D-29). No es una prueba: el workflow de
+# Android lo corre aparte, una vez en modo claro y otra en oscuro (MODO=claro u oscuro), y guarda las
+# imágenes en el artefacto "capturas".
+appId: com.brota.app
+---
+- runFlow: ../comun/onboarding.yaml
+- takeScreenshot: capturas/${MODO}-1-hoy
+- scroll
+- takeScreenshot: capturas/${MODO}-2-hoy-tareas
+- tapOn: "Cultivos"
+- takeScreenshot: capturas/${MODO}-3-cultivos
+- tapOn:
+    id: "cultivo-Albahaca 1"
+- takeScreenshot: capturas/${MODO}-4-cultivo
+- tapOn: "Agente"
+- takeScreenshot: capturas/${MODO}-5-agente
+- scroll
+- takeScreenshot: capturas/${MODO}-6-agente-chat
+- tapOn: "Aprender"
+- takeScreenshot: capturas/${MODO}-7-aprender
+- scroll
+- takeScreenshot: capturas/${MODO}-8-aprender-modulos
+- tapOn: "Plan"
+- takeScreenshot: capturas/${MODO}-9-plan

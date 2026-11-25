@@ -8,16 +8,23 @@ export const FUENTES = {
   textoBold: 'NunitoSans_700Bold',
 } as const;
 
-/** Escala tomada del CSS del prototipo (body 15px/1.5, h2 22px, h3 16px, .muted 13px, .brand 24px). */
+/** Escala tipográfica del rediseño (D-29): títulos en Fraunces más grandes y números destacados. */
 export const TEXTO = {
-  marca: { fontFamily: FUENTES.titulo, fontSize: 24, lineHeight: 28, letterSpacing: 0.5 },
-  titulo: { fontFamily: FUENTES.titulo, fontSize: 22, lineHeight: 26 },
-  tituloGrande: { fontFamily: FUENTES.titulo, fontSize: 28, lineHeight: 34 },
-  subtitulo: { fontFamily: FUENTES.textoSemi, fontSize: 16, lineHeight: 21 },
+  marca: { fontFamily: FUENTES.titulo, fontSize: 22, lineHeight: 26, letterSpacing: 1.2 },
+  titulo: { fontFamily: FUENTES.titulo, fontSize: 22, lineHeight: 28 },
+  tituloGrande: { fontFamily: FUENTES.titulo, fontSize: 30, lineHeight: 36 },
+  /** Títulos de sección (h3). */
+  seccion: { fontFamily: FUENTES.titulo, fontSize: 20, lineHeight: 26 },
+  subtitulo: { fontFamily: FUENTES.textoBold, fontSize: 17, lineHeight: 22 },
+  /** Valores de las estadísticas. */
+  numero: { fontFamily: FUENTES.titulo, fontSize: 24, lineHeight: 30 },
+  /** Valor principal de una tarjeta destacada. */
+  numeroGrande: { fontFamily: FUENTES.titulo, fontSize: 32, lineHeight: 38 },
   cuerpo: { fontFamily: FUENTES.texto, fontSize: 15, lineHeight: 22 },
-  cuerpoFuerte: { fontFamily: FUENTES.textoSemi, fontSize: 15, lineHeight: 22 },
+  cuerpoFuerte: { fontFamily: FUENTES.textoBold, fontSize: 15, lineHeight: 22 },
+  boton: { fontFamily: FUENTES.textoBold, fontSize: 16, lineHeight: 22 },
   secundario: { fontFamily: FUENTES.texto, fontSize: 13, lineHeight: 19 },
-  etiqueta: { fontFamily: FUENTES.textoSemi, fontSize: 11, lineHeight: 14, letterSpacing: 0.66, textTransform: 'uppercase' },
+  etiqueta: { fontFamily: FUENTES.textoBold, fontSize: 11, lineHeight: 14, letterSpacing: 0.8, textTransform: 'uppercase' },
   pestana: { fontFamily: FUENTES.texto, fontSize: 12, lineHeight: 16 },
 } satisfies Record<string, TextStyle>;
 

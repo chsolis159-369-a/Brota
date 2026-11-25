@@ -5,19 +5,25 @@ import { ETAPAS, type Etapa } from '@/reglas/dominio';
 import { ZONA_VPD } from '@/reglas/mediciones';
 import { useTema } from '@/tema/useTema';
 
-/** Anillo de progreso de tareas del día. Decorativo: el texto "X de N" lo acompaña. */
-export function Anillo({ progreso }: { progreso: number }) {
+import { useEnHero } from './Hero';
+
+/**
+ * Anillo de progreso de tareas del día. Decorativo: el texto "X de N" lo acompaña. Sobre el degradé de
+ * una tarjeta destacada usa un riel translúcido y el progreso en lima.
+ */
+export function Anillo({ progreso, tamano = 72 }: { progreso: number; tamano?: number }) {
   const { c } = useTema();
+  const enHero = useEnHero();
   const r = 26;
   const C = 2 * Math.PI * r;
   return (
-    <Svg width={72} height={72} viewBox="0 0 64 64" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-      <Circle cx={32} cy={32} r={r} stroke={c.border} strokeWidth={7} fill="none" />
+    <Svg width={tamano} height={tamano} viewBox="0 0 64 64" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+      <Circle cx={32} cy={32} r={r} stroke={enHero ? 'rgba(255, 255, 255, 0.22)' : c.border} strokeWidth={7} fill="none" />
       <Circle
         cx={32}
         cy={32}
         r={r}
-        stroke={c.accent}
+        stroke={enHero ? c.lima : c.accent}
         strokeWidth={7}
         fill="none"
         strokeLinecap="round"
@@ -51,9 +57,16 @@ export function Punto({ nivel }: { nivel: 'ok' | 'aviso' | 'alerta' }) {
 /** Barra de progreso (.bar), de 0 a 1. */
 export function Barra({ valor }: { valor: number }) {
   const { c } = useTema();
+  const enHero = useEnHero();
   return (
-    <View style={[estilos.barra, { backgroundColor: c.border }]}>
-      <View style={[estilos.barraLlena, { backgroundColor: c.accent, width: `${Math.max(0, Math.min(1, valor)) * 100}%` }]} />
+    <View style={[estilos.barra, { backgroundColor: enHero ? 'rgba(255, 255, 255, 0.22)' : c.border }]}>
+      <View
+        style={[
+          estilos.barraLlena,
+          { backgroundColor: enHero ? c.lima : c.accent, width: `${Math.max(0, Math.min(1, valor)) * 100}%` },
+          enHero ? null : { backgroundImage: `linear-gradient(90deg, ${c.botonDesde} 0%, ${c.accent} 100%)` },
+        ]}
+      />
     </View>
   );
 }
@@ -99,9 +112,9 @@ export function SparkPPFD({ valores, etiqueta }: { valores: number[]; etiqueta: 
 
 const estilos = StyleSheet.create({
   seg: { flexDirection: 'row', gap: 4, marginVertical: 8 },
-  segItem: { flex: 1, height: 6, borderRadius: 999 },
+  segItem: { flex: 1, height: 7, borderRadius: 999 },
   punto: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
-  barra: { height: 8, borderRadius: 999, overflow: 'hidden', marginVertical: 8 },
+  barra: { height: 9, borderRadius: 999, overflow: 'hidden', marginVertical: 8 },
   barraLlena: { height: '100%', borderRadius: 999 },
   gauge: { height: 10, borderRadius: 999, marginTop: 12, marginBottom: 6 },
   banda: { position: 'absolute', top: 0, bottom: 0, borderRadius: 999 },

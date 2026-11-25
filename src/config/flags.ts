@@ -3,8 +3,8 @@
 /** Cannabis queda fuera de esta versión: sin contenido ni pantallas accesibles. */
 export const CANNABIS_HABILITADO = false;
 
-/** Análisis de fotos por IA en el Agente: fuera de esta versión. */
-export const FOTO_AGENTE = false;
+/** Análisis de fotos por IA en el Agente (D-30, pedido del usuario): requiere el servidor del Agente con IA. */
+export const FOTO_AGENTE = true;
 
 /** Versión pública de prueba: muestra la etiqueta "Prueba" y oculta Business. */
 export const VERSION_PRUEBA = true;
