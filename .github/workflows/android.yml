@@ -93,13 +93,15 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot
           # Después de las pruebas, capturas de las pantallas en claro y en oscuro para revisar el diseño
-          # (D-29). Si una captura falla, no cambia el resultado de las pruebas.
+          # (D-29). Se sacan aunque falle una prueba; el paso falla al final si falló alguna prueba, y una
+          # captura que falla no cambia ese resultado.
           script: |
             adb install -r android/app/build/outputs/apk/release/app-release.apk
-            maestro test .maestro --format junit --output maestro-resultados.xml
+            maestro test .maestro --format junit --output maestro-resultados.xml || touch maestro-fallo
             maestro test .maestro/capturas/pantallas.yaml -e MODO=claro || echo "::warning::Fallaron las capturas en modo claro"
             adb shell cmd uimode night yes
             maestro test .maestro/capturas/pantallas.yaml -e MODO=oscuro || echo "::warning::Fallaron las capturas en modo oscuro"
+            test ! -f maestro-fallo
 
       - name: Juntar las capturas
         if: always()

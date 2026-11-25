@@ -91,7 +91,8 @@ describe('marca (D-28)', () => {
     expect(salida).toContain('Marca al día.');
   });
 
-  it('el fondo del ícono es el verde de la marca', () => {
-    expect(COLORES_MARCA.fondoHasta).toBe('#0A4227');
+  it('el fondo del ícono es el verde oscuro tipo tierra de la foto de referencia', () => {
+    expect(COLORES_MARCA.fondoDesde).toBe('#1B4A33');
+    expect(COLORES_MARCA.fondoHasta).toBe('#061710');
   });
 });

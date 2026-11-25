@@ -1,15 +1,16 @@
-import Svg, { Defs, Ellipse, LinearGradient, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
+import Svg, { Circle, Defs, G, LinearGradient, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
 
-import { COLORES_MARCA as M, COTILEDONES, FOLIOLOS, GROSOR_NERVIO, GROSOR_PECIOLO, LIENZO, NERVIOS, OPACIDAD_NERVIO, PECIOLOS, SUELO, TALLO } from '@/tema/marca';
+import { BROTE, CENTRO, COLORES_MARCA as M, COTILEDONES, HOJAS, LIENZO, NERVIOS_COTILEDON, NERVIOS_HOJA, SOMBRA, TRAZO } from '@/tema/marca';
 
 /** Radio de las esquinas del ícono, como en iOS (≈ 22 % del lado). */
 const RADIO = 230;
 
 /**
- * Logo de BROTA (D-28): la plántula de cannabis sobre el fondo verde, igual que el ícono de la app.
- * Decorativo: el nombre "BROTA" lo acompaña como texto.
+ * Logo de BROTA (D-28): la plántula de cannabis vista desde arriba sobre el fondo verde oscuro, igual
+ * que el ícono de la app. Decorativo: el nombre "BROTA" lo acompaña como texto.
  */
 export function Logo({ tamano = 40 }: { tamano?: number }) {
+  const formas = [...COTILEDONES, ...HOJAS];
   return (
     <Svg
       width={tamano}
@@ -22,35 +23,42 @@ export function Logo({ tamano = 40 }: { tamano?: number }) {
           <Stop offset="0" stopColor={M.fondoDesde} />
           <Stop offset="1" stopColor={M.fondoHasta} />
         </LinearGradient>
-        <RadialGradient id="brillo" cx="512" cy="430" r="420" gradientUnits="userSpaceOnUse">
+        <RadialGradient id="brillo" cx="512" cy="500" r="430" gradientUnits="userSpaceOnUse">
           <Stop offset="0" stopColor={M.brillo} stopOpacity={0.3} />
           <Stop offset="1" stopColor={M.brillo} stopOpacity={0} />
         </RadialGradient>
-        <LinearGradient id="hoja" x1="0" y1="200" x2="0" y2="760" gradientUnits="userSpaceOnUse">
-          <Stop offset="0" stopColor={M.hojaClara} />
-          <Stop offset="1" stopColor={M.hojaOscura} />
-        </LinearGradient>
-        <LinearGradient id="cotiledon" x1="0" y1="420" x2="0" y2="720" gradientUnits="userSpaceOnUse">
+        <LinearGradient id="cotiledon" x1="0" y1="0" x2="1" y2="1">
           <Stop offset="0" stopColor={M.cotiledonClaro} />
           <Stop offset="1" stopColor={M.cotiledonOscuro} />
+        </LinearGradient>
+        <LinearGradient id="hoja" x1="0" y1="0" x2="1" y2="1">
+          <Stop offset="0" stopColor={M.hojaClara} />
+          <Stop offset="1" stopColor={M.hojaOscura} />
         </LinearGradient>
       </Defs>
       <Rect width={LIENZO} height={LIENZO} rx={RADIO} fill="url(#fondo)" />
       <Rect width={LIENZO} height={LIENZO} rx={RADIO} fill="url(#brillo)" />
-      <Ellipse cx={SUELO.cx} cy={SUELO.cy} rx={SUELO.rx} ry={SUELO.ry} fill={M.suelo} fillOpacity={SUELO.opacidad} />
-      <Path d={TALLO} fill={M.tallo} />
-      {PECIOLOS.map((d) => (
-        <Path key={d} d={d} stroke={M.tallo} strokeWidth={GROSOR_PECIOLO} strokeLinecap="round" fill="none" />
-      ))}
+      <G transform={`translate(${SOMBRA.dx} ${SOMBRA.dy})`} fill={M.sombra} fillOpacity={SOMBRA.opacidad}>
+        {formas.map((d) => (
+          <Path key={d} d={d} />
+        ))}
+      </G>
       {COTILEDONES.map((d) => (
-        <Path key={d} d={d} fill="url(#cotiledon)" />
+        <Path key={d} d={d} fill="url(#cotiledon)" stroke={M.borde} strokeOpacity={TRAZO.opacidadBorde} strokeWidth={TRAZO.borde} strokeLinejoin="round" />
       ))}
-      {FOLIOLOS.map((d) => (
+      {NERVIOS_COTILEDON.map((d) => (
+        <Path key={d} d={d} stroke={M.nervioCotiledon} strokeOpacity={TRAZO.opacidadNervioCotiledon} strokeWidth={TRAZO.nervio} strokeLinecap="round" fill="none" />
+      ))}
+      {HOJAS.map((d) => (
+        <Path key={d} d={d} fill="url(#hoja)" stroke={M.borde} strokeOpacity={TRAZO.opacidadBorde} strokeWidth={TRAZO.borde} strokeLinejoin="round" />
+      ))}
+      {NERVIOS_HOJA.map((d) => (
+        <Path key={d} d={d} stroke={M.nervioHoja} strokeOpacity={TRAZO.opacidadNervioHoja} strokeWidth={TRAZO.nervio} strokeLinecap="round" fill="none" />
+      ))}
+      {BROTE.map((d) => (
         <Path key={d} d={d} fill="url(#hoja)" />
       ))}
-      {NERVIOS.map((d) => (
-        <Path key={d} d={d} stroke={M.nervio} strokeOpacity={OPACIDAD_NERVIO} strokeWidth={GROSOR_NERVIO} strokeLinecap="round" fill="none" />
-      ))}
+      <Circle cx={CENTRO.cx} cy={CENTRO.cy} r={CENTRO.r} fill={M.centro} />
     </Svg>
   );
 }

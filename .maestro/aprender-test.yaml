@@ -40,9 +40,11 @@ appId: com.brota.app
 - tapOn:
     id: "volver-modulos"
 - assertVisible: "Tu nivel"
+# La lista de módulos es larga: se le da más tiempo para llegar al final.
 - scrollUntilVisible:
     element:
       id: "glosario"
+    timeout: 60000
 - tapOn:
     id: "glosario"
 - assertVisible: "PPFD"

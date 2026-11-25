@@ -72,7 +72,7 @@ El Agente también analiza fotos de la planta, hojas, plagas o insectos (D-30): 
 
 ## Logo e íconos
 
-El logo (una plántula de cannabis, D-28) se dibuja con código en `tools/marca/`. Para cambiarlo, editá la geometría o los colores y corré `node tools/marca/generar-marca.js`: regenera el ícono de la app, el ícono adaptable y monocromático de Android, la pantalla de carga, los SVG de `assets/marca/` y `src/tema/marca.ts`. Con `--vista <carpeta>` genera solo una vista previa.
+El logo (una plántula de cannabis vista desde arriba, D-28) se dibuja con código en `tools/marca/`. Para cambiarlo, editá la geometría o los colores y corré `node tools/marca/generar-marca.js`: regenera el ícono de la app, el ícono adaptable y monocromático de Android, la pantalla de carga, los SVG de `assets/marca/` y `src/tema/marca.ts`. Con `--vista <carpeta>` genera solo una vista previa.
 
 ## Variables de entorno
 

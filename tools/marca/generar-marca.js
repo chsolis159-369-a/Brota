@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Marca de BROTA (D-28): una plántula de cannabis (cotiledones y una hoja palmeada de 7 foliolos
- * dentados). Un solo diseño genera todo:
+ * Marca de BROTA (D-28): una plántula de cannabis vista desde arriba (cotiledones ovalados y el primer
+ * par de hojas dentadas), inspirada en la foto de referencia del usuario. Un solo diseño genera todo:
  *  - src/tema/marca.ts           trazos para el logo dentro de la app (react-native-svg)
  *  - assets/marca/*.svg          originales vectoriales (ícono y plántula sola)
  *  - assets/images/*.png         ícono de la app, ícono adaptable de Android (fondo, frente y
@@ -16,29 +16,30 @@ const path = require('node:path');
 const { Resvg } = require('@resvg/resvg-js');
 
 const { plantula, r1, trazo, ubicar } = require('./geometria');
-const { COLORES, FONDO, GROSOR_NERVIO, GROSOR_PECIOLO, LADO, OPACIDAD_NERVIO, OPACIDAD_SUELO, cuerpo, svg } = require('./dibujo');
+const D = require('./dibujo');
 
+const { COLORES, LADO, cuerpo, svg } = D;
 const RAIZ = path.join(__dirname, '..', '..');
 
-/** La variante elegida (C4 en la hoja de contactos): hoja central de 7 foliolos y tallo corto. */
-const FORMA = { forma: 'central', n: 7, largoHoja: 320, anchoFoliolo: 0.16, nodoCot: -74, apice: -165, cot: [124, 50, 66] };
+/** Fondo elegido para el ícono (ver dibujo.FONDOS). */
+const FONDO = 'tierra';
 
 // Ícono completo (iOS y Android viejo): plántula grande sobre el fondo.
-const enIcono = ubicar(plantula(FORMA), 512, 520, 700, 640);
+const enIcono = ubicar(plantula(), 512, 512, 720, 720);
 // Ícono adaptable de Android y pantalla de carga (Android 12+ recorta ambos en un círculo de 2/3 del
-// lado): la plántula, con la sombra del suelo, entra en ese círculo.
-const enAdaptable = ubicar(plantula(FORMA), 512, 518, 520, 510);
+// lado): la plántula entra en ese círculo.
+const enAdaptable = ubicar(plantula(), 512, 512, 560, 560);
 // Original vectorial de la plántula sola, ocupando casi todo el lienzo.
-const enGrande = ubicar(plantula(FORMA), 512, 512, 900, 900);
+const enGrande = ubicar(plantula(), 512, 512, 940, 940);
 
 const SVGS = {
-  'assets/marca/brota-icono.svg': svg(FONDO + cuerpo(enIcono), { conFondo: true }),
+  'assets/marca/brota-icono.svg': svg(cuerpo(enIcono), { fondo: FONDO }),
   'assets/marca/brota-plantula.svg': svg(cuerpo(enGrande)),
 };
 
 const PNGS = {
   'assets/images/icon.png': SVGS['assets/marca/brota-icono.svg'],
-  'assets/images/android-icon-background.png': svg(FONDO, { conFondo: true }),
+  'assets/images/android-icon-background.png': svg('', { fondo: FONDO }),
   'assets/images/android-icon-foreground.png': svg(cuerpo(enAdaptable)),
   'assets/images/android-icon-monochrome.png': svg(cuerpo(enAdaptable, { mono: true })),
   'assets/images/splash-icon.png': svg(cuerpo(enAdaptable)),
@@ -47,13 +48,14 @@ const PNGS = {
 /** Módulo con los trazos del ícono para dibujar el logo dentro de la app. */
 function modulo() {
   const u = enIcono;
+  const k = u.escala;
   const lista = (xs) => `[\n${xs.map((x) => `  '${x}',`).join('\n')}\n]`;
   const colores = Object.entries(COLORES)
-    .map(([k, v]) => `  ${k}: '${v}',`)
+    .map(([c, v]) => `  ${c}: '${v}',`)
     .join('\n');
   return `/**
- * Trazos de la marca de BROTA (plántula de cannabis, D-28) en un lienzo de ${LADO} × ${LADO}.
- * Archivo generado por tools/marca/generar-marca.js: no se edita a mano.
+ * Trazos de la marca de BROTA (plántula de cannabis vista desde arriba, D-28) en un lienzo de
+ * ${LADO} × ${LADO}. Archivo generado por tools/marca/generar-marca.js: no se edita a mano.
  */
 export const LIENZO = ${LADO};
 
@@ -61,23 +63,27 @@ export const COLORES_MARCA = {
 ${colores}
 } as const;
 
-export const TALLO = '${trazo(u.tallo)}';
+export const COTILEDONES: readonly string[] = ${lista(u.cotiledones.map((e) => trazo(e.contorno)))};
 
-export const PECIOLOS: readonly string[] = ${lista(u.peciolos.map((p) => trazo(p, false)))};
+export const NERVIOS_COTILEDON: readonly string[] = ${lista(u.cotiledones.map((e) => trazo(e.nervio, false)))};
 
-export const GROSOR_PECIOLO = ${r1(GROSOR_PECIOLO * u.escala)};
+export const HOJAS: readonly string[] = ${lista(u.hojas.map((e) => trazo(e.contorno)))};
 
-export const COTILEDONES: readonly string[] = ${lista(u.cotiledones.map((p) => trazo(p)))};
+export const NERVIOS_HOJA: readonly string[] = ${lista(u.hojas.map((e) => trazo(e.nervio, false)))};
 
-export const FOLIOLOS: readonly string[] = ${lista(u.hojas.map((h) => trazo(h.contorno)))};
+export const BROTE: readonly string[] = ${lista(u.brote.map((p) => trazo(p)))};
 
-export const NERVIOS: readonly string[] = ${lista(u.hojas.map((h) => trazo(h.nervio, false)))};
+export const CENTRO = { cx: ${r1(u.centro.cx)}, cy: ${r1(u.centro.cy)}, r: ${r1(u.centro.r)} } as const;
 
-export const GROSOR_NERVIO = ${r1(GROSOR_NERVIO * u.escala)};
+export const TRAZO = {
+  borde: ${r1(D.GROSOR_BORDE * k)},
+  opacidadBorde: ${D.OPACIDAD_BORDE},
+  nervio: ${r1(D.GROSOR_NERVIO * k)},
+  opacidadNervioHoja: ${D.OPACIDAD_NERVIO_HOJA},
+  opacidadNervioCotiledon: ${D.OPACIDAD_NERVIO_COTILEDON},
+} as const;
 
-export const OPACIDAD_NERVIO = ${OPACIDAD_NERVIO};
-
-export const SUELO = { cx: ${r1(u.suelo.cx)}, cy: ${r1(u.suelo.cy)}, rx: ${r1(u.suelo.rx)}, ry: ${r1(u.suelo.ry)}, opacidad: ${OPACIDAD_SUELO} } as const;
+export const SOMBRA = { dx: ${r1(D.SOMBRA.dx * k)}, dy: ${r1(D.SOMBRA.dy * k)}, opacidad: ${D.SOMBRA.opacidad} } as const;
 `;
 }
 

@@ -12,6 +12,9 @@ appId: com.brota.app
 - tapOn:
     id: "cultivo-Lechuga Maestro"
 - assertVisible: "Hacé tu primer registro para empezar la bitácora"
+- scrollUntilVisible:
+    element:
+      id: "registro-Riego"
 - tapOn:
     id: "registro-Riego"
 - scrollUntilVisible:

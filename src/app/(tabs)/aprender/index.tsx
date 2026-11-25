@@ -130,13 +130,13 @@ export default function Aprender() {
                     </Texto>
                     {mod.pro ? <Etiqueta tono="gold">{t('comun.pro')}</Etiqueta> : null}
                   </View>
-                  <Texto variante="cuerpo" color="gold" style={estilos.estrellas}>
+                  <Texto variante={dis.ok ? 'cuerpo' : 'secundario'} color="gold" style={dis.ok ? estilos.estrellas : null}>
                     {dis.ok ? estrellas(hecho ? prog.mejorAciertos : 0) : t('aprender.bloqueado')}
                   </Texto>
                 </View>
                 <Texto variante="secundario">{mod.d}</Texto>
                 <Texto variante="secundario">{estado}</Texto>
-                <Barra valor={dis.ok && hecho ? pts / MAX_PTS_MODULO : 0} />
+                {dis.ok ? <Barra valor={hecho ? pts / MAX_PTS_MODULO : 0} /> : null}
               </Pressable>
             );
           })}
