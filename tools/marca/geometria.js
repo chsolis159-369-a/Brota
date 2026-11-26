@@ -35,58 +35,73 @@ const ejeBajando = (L, n = 14) => Array.from({ length: n + 1 }, (_, i) => [0, -L
 /**
  * Hoja dentada con la base en (0,0) y la punta en (0,-L), separada en sus dos mitades. Los dientes miran
  * hacia la punta, como en la hoja de cannabis: el borde sube despacio hasta la punta del diente y vuelve
- * de golpe al valle. Devuelve el contorno, las dos mitades y las nervaduras que van del nervio a cada diente.
+ * de golpe al valle. Para que no parezca recortada: cada mitad tiene su ancho (la hoja se ve un poco de
+ * costado), el borde ondula apenas y los dientes varían en tamaño y separación.
+ * Devuelve el contorno, las dos mitades y las nervaduras que van del nervio a cada diente.
  */
-function hojaDentada(L, W, { dientes = 9, serr = 0.24, p = 0.72, q = 1.05, t0 = 0.12, t1 = 0.9, rnd = null } = {}) {
+function hojaDentada(L, W, { dientes = 9, serr = 0.22, p = 0.82, q = 0.95, t0 = 0.1, t1 = 0.9, anchoDer = 1, anchoIzq = 1, ondula = 0.05, rnd = null } = {}) {
   const h = perfil(p, q);
-  const lado = [];
-  const puntas = [];
-  for (let i = 0; i < 6; i++) lado.push([(t0 * i) / 6, h((t0 * i) / 6)]);
-  const dt = (t1 - t0) / dientes;
-  for (let k = 0; k < dientes; k++) {
-    // Un poco de variación en cada diente para que no parezca hecho con regla.
-    const v = rnd ? 0.85 + rnd() * 0.3 : 1;
-    const a = t0 + k * dt;
-    lado.push([a, h(a) * (1 - serr * v)]);
-    const tp = a + 0.8 * dt;
-    lado.push([tp, h(tp) * (1 + serr * 0.12)]);
-    puntas.push([tp, h(tp)]);
-  }
-  for (let i = 0; i <= 6; i++) {
-    const t = t1 + ((1 - t1) * i) / 6;
-    lado.push([t, h(t) * (i === 0 ? 1 - serr : 1)]);
-  }
-  const der = lado.map(([t, w]) => [W * w, -L * t]);
-  const izq = lado.map(([t, w]) => [-W * w, -L * t]);
+  const r = rnd ?? (() => 0.5);
+  const fase = r() * Math.PI * 2;
+  const onda = (t, signo) => 1 + ondula * Math.sin(2 * Math.PI * 1.4 * t + fase + (signo > 0 ? 0 : 1.7));
+  // Posiciones de los dientes con un poco de desorden (sin cruzarse).
+  const marcas = [];
+  for (let k = 0; k <= dientes; k++) marcas.push(t0 + ((t1 - t0) * k) / dientes);
+  for (let k = 1; k < dientes; k++) marcas[k] += ((t1 - t0) / dientes) * (r() - 0.5) * 0.35;
+  const lado = (signo) => {
+    const pts = [];
+    const puntas = [];
+    for (let i = 0; i < 6; i++) pts.push([(t0 * i) / 6, h((t0 * i) / 6)]);
+    for (let k = 0; k < dientes; k++) {
+      const a = marcas[k];
+      const b = marcas[k + 1];
+      const v = 0.8 + r() * 0.4;
+      pts.push([a, h(a) * (1 - serr * v) * onda(a, signo)]);
+      const tp = a + 0.8 * (b - a);
+      pts.push([tp, h(tp) * (1 + serr * 0.12) * onda(tp, signo)]);
+      puntas.push([tp, h(tp) * onda(tp, signo)]);
+    }
+    for (let i = 0; i <= 6; i++) {
+      const t = t1 + ((1 - t1) * i) / 6;
+      pts.push([t, h(t) * (i === 0 ? 1 - serr : 1)]);
+    }
+    return { pts, puntas };
+  };
+  const ld = lado(1);
+  const li = lado(-1);
+  const der = ld.pts.map(([t, w]) => [W * anchoDer * w, -L * t]);
+  const izq = li.pts.map(([t, w]) => [-W * anchoIzq * w, -L * t]);
   const contorno = der.concat(izq.slice(0, -1).reverse());
-  const venas = puntas
-    .filter(([t]) => t > 0.18 && t < 0.86)
-    .flatMap(([t, w]) => [
-      [
-        [0, -L * (t - 0.11)],
-        [W * w * 0.9, -L * t],
-      ],
-      [
-        [0, -L * (t - 0.11)],
-        [-W * w * 0.9, -L * t],
-      ],
-    ]);
+  const vena = (signo, ancho) => ([t, w]) => [
+    [0, -L * (t - 0.11)],
+    [signo * W * ancho * w * 0.9, -L * t],
+  ];
+  const venas = [
+    ...ld.puntas.filter(([t]) => t > 0.18 && t < 0.86).map(vena(1, anchoDer)),
+    ...li.puntas.filter(([t]) => t > 0.18 && t < 0.86).map(vena(-1, anchoIzq)),
+  ];
   return { contorno, mitadDer: der.concat(ejeBajando(L)), mitadIzq: izq.concat(ejeBajando(L)), venas };
 }
 
-/** Cotiledón: hoja lisa y ovalada, angosta en la base y de punta redonda. */
-function cotiledon(L, W, { p = 1.2, q = 0.5 } = {}) {
+/** Cotiledón: hoja lisa y ovalada, angosta en la base y de punta redonda, con mitades de distinto ancho. */
+function cotiledon(L, W, { p = 1.2, q = 0.5, anchoDer = 1, anchoIzq = 1 } = {}) {
   const h = perfil(p, q);
   const lado = [];
   for (let i = 0; i <= 32; i++) lado.push([i / 32, h(i / 32)]);
-  const der = lado.map(([t, w]) => [W * w, -L * t]);
-  const izq = lado.map(([t, w]) => [-W * w, -L * t]);
+  const der = lado.map(([t, w]) => [W * anchoDer * w, -L * t]);
+  const izq = lado.map(([t, w]) => [-W * anchoIzq * w, -L * t]);
   return { contorno: der.concat(izq.slice(0, -1).reverse()), mitadDer: der.concat(ejeBajando(L)), mitadIzq: izq.concat(ejeBajando(L)), venas: [] };
 }
 
-/** Curva una hoja a lo largo de su eje: corre los puntos de costado, más cuanto más cerca de la punta. */
-function curvar(pts, L, c) {
-  return pts.map(([x, y]) => [x + c * L * Math.pow(Math.max(0, -y) / L, 2), y]);
+/**
+ * Curva una hoja a lo largo de su eje: `levanta` corre la punta hacia un costado (más cuanto más cerca de
+ * la punta) y `arco` la abomba en el medio. El signo lo pone quien la ubica, según el lado.
+ */
+function curvar(pts, L, levanta, arco) {
+  return pts.map(([x, y]) => {
+    const t = Math.min(1, Math.max(0, -y / L));
+    return [x + L * (levanta * t * t + arco * Math.sin(Math.PI * t)), y];
+  });
 }
 
 /** Rota en sentido horario `ang` grados (0 = hacia arriba) y traslada a (x, y). */
@@ -100,62 +115,71 @@ function mover(pts, ang, x, y) {
 const punta = (ang, largo, x = 0, y = 0) => mover([[0, -largo]], ang, x, y)[0];
 
 /**
- * Plántula de costado con la base del tallo en (0,0), a ras de la tierra.
- * Ángulos en grados desde la vertical (positivos a la derecha). `curva` > 0 levanta las puntas.
+ * Plántula de costado con la base del tallo en (0,0), a ras de la tierra, como en la foto de referencia.
+ * Cada hoja tiene sus propios valores (nada es un espejo perfecto): ángulo en grados desde la vertical
+ * (positivo a la derecha), largo, ancho relativo, `levanta` (> 0: la punta sube; < 0: cae) y `arco`
+ * (> 0: se abomba hacia arriba).
  */
 function plantula({
   nodoCot = -165,
-  nodoHojas = -240,
-  cotiledones = { ang: 82, largo: 210, ancho: 0.26, curva: 0.14 },
-  hojas = { ang: 62, largo: 310, ancho: 0.15, curva: 0.08, dientes: 9 },
-  brote = [
-    [-9, 92],
-    [11, 80],
+  nodoHojas = -256,
+  cotiledones = [
+    { ang: -70, largo: 182, ancho: 0.29, levanta: -0.08, arco: 0.04 },
+    { ang: 73, largo: 189, ancho: 0.285, levanta: -0.09, arco: 0.035 },
   ],
-  grosor = [17, 10],
+  hojas = [
+    { ang: -50, largo: 292, ancho: 0.195, levanta: -0.07, arco: 0.05, dientes: 11 },
+    { ang: 47, largo: 304, ancho: 0.19, levanta: -0.06, arco: 0.055, dientes: 12 },
+  ],
+  brote = [
+    { ang: -5, largo: 128, levanta: -0.1 },
+    { ang: 8, largo: 112, levanta: -0.12 },
+  ],
+  grosor = [19, 14],
+  inclinacion = 0.035,
   semilla = 7,
 } = {}) {
   const rnd = azar(semilla);
   const [gBase, gArriba] = grosor;
-  // El pie del tallo termina apenas bajo la tierra: el montículo de adelante lo tapa entero.
+  // Tallo con una leve inclinación (nada crece a plomo). El pie termina apenas bajo la tierra.
+  const H = -nodoHojas;
+  const centro = (y) => inclinacion * H * Math.pow(Math.max(0, -y) / H, 2);
+  const alturas = [8, 0, -40, -80, -120, nodoCot, -200, nodoHojas];
+  const ancho = (y) => gBase + (gArriba - gBase) * Math.min(1, Math.max(0, -y / H));
   const tallo = [
-    [-gBase / 2, 8],
-    [-gArriba / 2 - 1, nodoCot],
-    [-gArriba / 2, nodoHojas],
-    [0, nodoHojas - 8],
-    [gArriba / 2, nodoHojas],
-    [gArriba / 2 + 1, nodoCot],
-    [gBase / 2, 8],
+    ...alturas.map((y) => [centro(y) - ancho(y) / 2, y]),
+    [centro(nodoHojas), nodoHojas - 8],
+    ...alturas
+      .slice()
+      .reverse()
+      .map((y) => [centro(y) + ancho(y) / 2, y]),
   ];
-  // Cada hoja se dibuja apuntando hacia arriba, se curva y se rota a su lado; la del lado izquierdo se
-  // curva al revés para que las dos levanten la punta. `arriba` dice qué mitad mira hacia la luz.
-  const ubicarHoja = (partes, a, largo, curva, y) => {
-    const c = a > 0 ? -curva : curva;
-    const [ox, oy] = punta(a, 3, 0, y);
-    const tf = (pts) => mover(curvar(pts, largo, c), a, ox, oy);
+  // Cada hoja se dibuja apuntando hacia arriba, se curva y se rota a su lado. Del lado derecho, "arriba"
+  // es -x en las coordenadas de la hoja; del izquierdo, +x. La mitad de arriba es la iluminada y, como la
+  // hoja se ve un poco de costado, la más ancha.
+  const ubicarHoja = (hacer, e, y) => {
+    const a = e.ang;
+    const signo = a > 0 ? -1 : 1;
+    const partes = hacer(a > 0 ? { anchoIzq: 1, anchoDer: 0.88 } : { anchoIzq: 0.88, anchoDer: 1 });
+    const [ox, oy] = punta(a, 3, centro(y), y);
+    const tf = (pts) => mover(curvar(pts, e.largo, signo * (e.levanta ?? 0), signo * (e.arco ?? 0)), a, ox, oy);
     return {
       contorno: tf(partes.contorno),
       mitadLuz: tf(a > 0 ? partes.mitadIzq : partes.mitadDer),
       mitadSombra: tf(a > 0 ? partes.mitadDer : partes.mitadIzq),
       venas: partes.venas.map(tf),
-      nervio: tf([
-        [0, -largo * 0.03],
-        [0, -largo * 0.3],
-        [0, -largo * 0.6],
-        [0, -largo * 0.88],
-      ]),
+      nervio: tf(Array.from({ length: 10 }, (_, i) => [0, -e.largo * (0.03 + (0.85 * i) / 9)])),
       base: tf([[0, 0]])[0],
-      puntaHoja: tf([[0, -largo]])[0],
+      puntaHoja: tf([[0, -e.largo]])[0],
       // Brillo de los cotiledones: un poco más allá de la mitad, sobre la mitad iluminada.
-      brillo: tf([[a > 0 ? -largo * 0.07 : largo * 0.07, -largo * 0.6]])[0],
+      brillo: tf([[signo * e.largo * 0.07, -e.largo * 0.6]])[0],
     };
   };
-  const par = ({ ang, largo, ancho, curva, dientes }, hacer, y) => [-ang, ang].map((a) => ubicarHoja(hacer(largo, largo * ancho, dientes), a, largo, curva, y));
   return {
     tallo,
-    cotiledones: par(cotiledones, (L, W) => cotiledon(L, W), nodoCot),
-    hojas: par(hojas, (L, W, n) => hojaDentada(L, W, { dientes: n, rnd }), nodoHojas),
-    brote: brote.map(([a, L]) => ubicarHoja(hojaDentada(L, L * 0.17, { dientes: 5, serr: 0.2 }), a, L, 0, nodoHojas - 4)),
+    cotiledones: cotiledones.map((e) => ubicarHoja((anchos) => cotiledon(e.largo, e.largo * e.ancho, anchos), e, nodoCot)),
+    hojas: hojas.map((e) => ubicarHoja((anchos) => hojaDentada(e.largo, e.largo * e.ancho, { dientes: e.dientes, rnd, ...anchos }), e, nodoHojas)),
+    brote: brote.map((e) => ubicarHoja((anchos) => hojaDentada(e.largo, e.largo * 0.2, { dientes: 6, serr: 0.2, ondula: 0.03, rnd, ...anchos }), e, nodoHojas - 4)),
     base: [0, 0],
   };
 }
@@ -220,7 +244,7 @@ function bordeTierra(suelo, { x0 = 0, x1 = 1024, alto = 52, semilla = 11 } = {})
 }
 
 /** Terrones y granitos de perlita repartidos bajo el borde de la tierra (semilla fija). */
-function detallesTierra(suelo, { terrones = 70, perlitas = 11, semilla = 23 } = {}) {
+function detallesTierra(suelo, { terrones = 60, perlitas = 10, fibras = 14, semilla = 23 } = {}) {
   const rnd = azar(semilla);
   const lista = (n, rMin, rMax, margen) =>
     Array.from({ length: n }, () => {
@@ -228,9 +252,24 @@ function detallesTierra(suelo, { terrones = 70, perlitas = 11, semilla = 23 } = 
       const arriba = arcoTierra(x, suelo) + margen;
       const y = arriba + rnd() * (1024 - arriba);
       const r = rMin + rnd() * (rMax - rMin);
-      return { x: r1(x), y: r1(y), rx: r1(r * (1 + rnd() * 0.6)), ry: r1(r * (0.55 + rnd() * 0.3)), giro: r1(rnd() * 180 - 90), claro: rnd() < 0.45 };
+      const lados = 7 + Math.floor(rnd() * 3);
+      const forma = Array.from({ length: lados }, (_, i) => {
+        const ang = (i / lados) * Math.PI * 2;
+        const rr = r * (0.65 + rnd() * 0.6);
+        return [r1(x + Math.cos(ang) * rr * 1.25), r1(y + Math.sin(ang) * rr * 0.8)];
+      });
+      return { x: r1(x), y: r1(y), rx: r1(r * (1 + rnd() * 0.6)), ry: r1(r * (0.55 + rnd() * 0.3)), giro: r1(rnd() * 180 - 90), claro: rnd() < 0.45, forma };
     });
-  return { terrones: lista(terrones, 4, 16, 14), perlitas: lista(perlitas, 6, 13, 22) };
+  const fibra = () => {
+    const x = rnd() * 1024;
+    const y = arcoTierra(x, suelo) + 18 + rnd() * (1024 - arcoTierra(x, suelo) - 18);
+    const largo = 18 + rnd() * 30;
+    const ang = rnd() * Math.PI;
+    const dx = Math.cos(ang) * largo;
+    const dy = Math.sin(ang) * largo * 0.5;
+    return { x1: r1(x), y1: r1(y), cx: r1(x + dx / 2 + (rnd() - 0.5) * 14), cy: r1(y + dy / 2 + (rnd() - 0.5) * 10), x2: r1(x + dx), y2: r1(y + dy) };
+  };
+  return { terrones: lista(terrones, 5, 18, 12), perlitas: lista(perlitas, 8, 15, 22), fibras: Array.from({ length: fibras }, fibra) };
 }
 
 /** Trazo SVG de una lista de puntos. */

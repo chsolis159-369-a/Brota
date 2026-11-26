@@ -28,8 +28,8 @@ const enIcono = ubicar(plantula(), 512, 200, SUELO_ICONO);
  * lado; la zona segura es un círculo de 66/108 del lado): la plántula entra en esa zona. La tierra va en
  * la capa de fondo, a la misma altura.
  */
-const SUELO_ADAPTABLE = 728;
-const enAdaptable = ubicar(plantula(), 512, 350, SUELO_ADAPTABLE);
+const SUELO_ADAPTABLE = 745;
+const enAdaptable = ubicar(plantula(), 512, 315, SUELO_ADAPTABLE);
 /** Original vectorial de la plántula sola, ocupando casi todo el lienzo. */
 const enGrande = ubicar(plantula(), 512, 70, 960);
 

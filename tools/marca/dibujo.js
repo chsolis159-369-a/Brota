@@ -61,6 +61,7 @@ function defsFijos(suelo) {
   <radialGradient id="vineta" cx="512" cy="470" r="720" gradientUnits="userSpaceOnUse"><stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.45"/></radialGradient>
   <linearGradient id="suelo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${COLORES.sueloClaro}"/><stop offset="1" stop-color="${COLORES.sueloOscuro}"/></linearGradient>
   <radialGradient id="perlita" cx="0.38" cy="0.32" r="0.75"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.6" stop-color="${COLORES.perlita}"/><stop offset="1" stop-color="${COLORES.perlitaSombra}"/></radialGradient>
+  <radialGradient id="terron" cx="0.4" cy="0.3" r="0.85"><stop offset="0" stop-color="#5E4430"/><stop offset="0.6" stop-color="#2E2015"/><stop offset="1" stop-color="#110B06"/></radialGradient>
   <radialGradient id="parche"><stop offset="0.55" stop-color="#FFFFFF"/><stop offset="1" stop-color="#000000"/></radialGradient>
   <clipPath id="recorteTierra"><path d="${contornoTierra(suelo)}"/></clipPath>
   <filter id="desenfoqueFondo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="34"/></filter>
@@ -89,7 +90,7 @@ function defsHojas(u) {
   };
   const luzHoja = [C.hojaBase, C.hojaMedio, C.hojaPunta];
   const sombraHoja = [C.sombraBase, C.sombraMedio, C.sombraPunta];
-  u.cotiledones.forEach((e, i) => hoja(`cot${i}`, e, [C.cotBase, C.cotMedio, C.cotPunta], null));
+  u.cotiledones.forEach((e, i) => hoja(`cot${i}`, e, [C.cotBase, C.cotMedio, C.cotPunta], ['#3A7527', '#62A23E', '#82BD55']));
   u.hojas.forEach((e, i) => hoja(`hoja${i}`, e, luzHoja, sombraHoja));
   u.brote.forEach((e, i) => hoja(`brote${i}`, e, luzHoja, sombraHoja));
   const [bx] = u.base;
@@ -110,15 +111,20 @@ function fondo() {
 
 /** Capas de la tierra (color, grano, terrones y perlita), en coordenadas absolutas para que coincidan siempre. */
 function capasTierra(suelo, { perlita = true } = {}) {
-  const { terrones, perlitas } = detallesTierra(suelo);
-  const terron = (t) =>
-    `<ellipse cx="${t.x}" cy="${t.y}" rx="${t.rx}" ry="${t.ry}" transform="rotate(${t.giro} ${t.x} ${t.y})" fill="${t.claro ? '#6E5039' : '#0E0906'}" fill-opacity="${t.claro ? 0.35 : 0.6}"/>`;
+  const { terrones, perlitas, fibras } = detallesTierra(suelo);
+  // Terrones con volumen: sombra abajo y luz arriba a la izquierda.
+  const terron = (t) => {
+    const d = trazoSuave(t.forma.concat([t.forma[0]]));
+    return `<path d="${d}" transform="translate(1.5 ${r1(t.ry * 0.45)})" fill="#000" fill-opacity="0.35"/><path d="${d}" fill="url(#terron)" fill-opacity="${t.claro ? 0.85 : 0.6}"/>`;
+  };
+  const fibra = (f) => `<path d="M${f.x1} ${f.y1}Q${f.cx} ${f.cy} ${f.x2} ${f.y2}" fill="none" stroke="#8A6A4C" stroke-opacity="0.55" stroke-width="2.2" stroke-linecap="round"/>`;
   const grano = (t) =>
     `<ellipse cx="${r1(t.x + 2)}" cy="${r1(t.y + t.ry * 0.7)}" rx="${t.rx}" ry="${r1(t.ry * 0.6)}" fill="#000" fill-opacity="0.45"/><ellipse cx="${t.x}" cy="${t.y}" rx="${r1(t.rx * 0.8)}" ry="${t.ry}" transform="rotate(${t.giro} ${t.x} ${t.y})" fill="url(#perlita)"/>`;
   return `<rect width="${LADO}" height="${LADO}" fill="url(#suelo)"/>
   <rect width="${LADO}" height="${LADO}" filter="url(#grano)" opacity="0.9"/>
   <rect width="${LADO}" height="${LADO}" filter="url(#granoClaro)" opacity="0.6"/>
   <g filter="url(#desenfoqueTerron)">${terrones.map(terron).join('')}</g>
+  ${fibras.map(fibra).join('')}
   ${perlita ? perlitas.map(grano).join('') : ''}
   <path d="${trazoSuave(bordeTierra(suelo), false)}" fill="none" stroke="#7A5A40" stroke-opacity="0.45" stroke-width="3"/>`;
 }
@@ -159,14 +165,14 @@ function hoja(e, id, recorte, k, { venas = true, pliegue = true, brillo = false,
   if (venas && e.venas.length) {
     partes.push(
       e.venas
-        .map((v) => `<path d="${trazo(v, false)}" stroke="${COLORES.nervio}" stroke-opacity="0.3" stroke-width="${r1(1.8 * k)}" stroke-linecap="round" fill="none"/>`)
+        .map((v) => `<path d="${trazo(v, false)}" stroke="${COLORES.nervio}" stroke-opacity="0.26" stroke-width="${r1(1.7 * k)}" stroke-linecap="round" fill="none"/>`)
         .join(''),
     );
   }
   partes.push(
     // Canaleta del nervio: una línea oscura más ancha debajo de la clara.
     `<path d="${trazo(e.nervio, false)}" stroke="${COLORES.bordeHoja}" stroke-opacity="${venas ? 0.3 : 0.15}" stroke-width="${r1((venas ? 7.5 : 5) * k)}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
-    `<path d="${trazo(e.nervio, false)}" stroke="${COLORES.nervio}" stroke-opacity="${venas ? 0.7 : 0.25}" stroke-width="${r1((venas ? 4 : 3) * k)}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
+    `<path d="${trazo(e.nervio, false)}" stroke="${COLORES.nervio}" stroke-opacity="${venas ? 0.38 : 0.2}" stroke-width="${r1((venas ? 3.2 : 2.6) * k)}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
     // Sombra interior: el borde un poco más oscuro, como el volumen de una hoja real.
     `<g clip-path="url(#${recorte})"><path d="${trazo(e.contorno)}" fill="none" stroke="${COLORES.bordeHoja}" stroke-opacity="${sombraBorde}" stroke-width="${r1(9 * k)}" filter="url(#desenfoqueBorde)"/></g>`,
     `<path d="${trazo(e.contorno)}" fill="none" stroke="${COLORES.pelusa}" stroke-opacity="0.22" stroke-width="${r1(2 * k)}" stroke-linejoin="round" filter="url(#pelusa)"/>`,
@@ -186,7 +192,7 @@ function planta(u) {
     `<path d="${trazo(u.tallo)}" fill="url(#tallo)"/>`,
     `<path d="${trazo(u.tallo)}" fill="url(#talloSombra)"/>`,
     `<path d="${trazo(u.tallo)}" fill="none" stroke="${COLORES.pelusa}" stroke-opacity="0.35" stroke-width="${r1(2 * k)}" filter="url(#pelusa)"/>`,
-    ...u.cotiledones.map((e, i) => hoja(e, `cot${i}`, `forma${i}`, k, { venas: false, pliegue: false, brillo: true, sombraBorde: 0.18 })),
+    ...u.cotiledones.map((e, i) => hoja(e, `cot${i}`, `forma${i}`, k, { venas: false, pliegue: true, brillo: true, sombraBorde: 0.18 })),
     ...u.hojas.map((e, i) => hoja(e, `hoja${i}`, `forma${nc + i}`, k)),
     ...u.brote.map((e, i) => hoja(e, `brote${i}`, `forma${nc + nh + i}`, k, { venas: false })),
   ].join('\n');
