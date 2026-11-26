@@ -20,17 +20,20 @@ const COLORES = {
   perlitaSombra: '#BDB6A8',
   talloClaro: '#D3F2AA',
   talloOscuro: '#6AA845',
-  hojaBase: '#3F8A2B',
-  hojaMedio: '#74BC45',
-  hojaPunta: '#B2E176',
-  sombraBase: '#367A24',
-  sombraMedio: '#64AA3A',
-  sombraPunta: '#9ACF62',
+  hojaBase: '#3E8829',
+  hojaMedio: '#6CB33E',
+  hojaPunta: '#A6D76A',
+  sombraBase: '#357623',
+  sombraMedio: '#5DA036',
+  sombraPunta: '#90C65A',
+  lomo: '#EEFAC9',
   cotBase: '#356F22',
   cotMedio: '#5C9E36',
   cotPunta: '#7DBA4F',
   bordeHoja: '#2F6E1F',
   nervio: '#EFFFD0',
+  vena: '#DDF2A6',
+  bordeTranslucido: '#D7F08C',
   pelusa: '#F3FFDC',
 };
 
@@ -70,6 +73,9 @@ function defsFijos(suelo) {
   <filter id="desenfoqueBrillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
   <filter id="desenfoqueBorde" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5"/></filter>
   <filter id="desenfoqueTerron" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.3"/></filter>
+  <filter id="desenfoqueLomo" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="3.6"/></filter>
+  <filter id="desenfoqueNervio" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="0.9"/></filter>
+  <filter id="desenfoqueVena" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.3"/></filter>
   <filter id="pelusa" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.1"/></filter>
   <filter id="grano" x="0" y="0" width="100%" height="100%">
     <feTurbulence type="fractalNoise" baseFrequency="0.055" numOctaves="4" seed="5" result="ruido"/>
@@ -90,11 +96,11 @@ function defsFijos(suelo) {
     <feComposite in="conBrillo" in2="SourceAlpha" operator="in"/>
   </filter>
   <filter id="hojaRelieve" filterUnits="userSpaceOnUse" x="0" y="0" width="${LADO}" height="${LADO}" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency="0.34 0.24" numOctaves="2" seed="4" result="alturas"/>
-    <feDiffuseLighting in="alturas" surfaceScale="0.9" diffuseConstant="1.16" lighting-color="#FFFFFF" result="luz"><feDistantLight azimuth="225" elevation="62"/></feDiffuseLighting>
-    <feSpecularLighting in="alturas" surfaceScale="0.9" specularConstant="0.4" specularExponent="24" lighting-color="#F6FFE8" result="brilloHoja"><feDistantLight azimuth="225" elevation="62"/></feSpecularLighting>
+    <feTurbulence type="fractalNoise" baseFrequency="0.75 0.55" numOctaves="1" seed="4" result="alturas"/>
+    <feDiffuseLighting in="alturas" surfaceScale="0.5" diffuseConstant="1.12" lighting-color="#FFFFFF" result="luz"><feDistantLight azimuth="225" elevation="62"/></feDiffuseLighting>
+    <feSpecularLighting in="alturas" surfaceScale="0.5" specularConstant="0.35" specularExponent="24" lighting-color="#F6FFE8" result="brilloHoja"><feDistantLight azimuth="225" elevation="62"/></feSpecularLighting>
     <feComposite in="luz" in2="SourceGraphic" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" result="sombreado"/>
-    <feComposite in="brilloHoja" in2="sombreado" operator="arithmetic" k1="0" k2="0.1" k3="1" k4="0" result="conBrillo"/>
+    <feComposite in="brilloHoja" in2="sombreado" operator="arithmetic" k1="0" k2="0.08" k3="1" k4="0" result="conBrillo"/>
     <feComposite in="conBrillo" in2="SourceAlpha" operator="in"/>
   </filter>
   <filter id="perlitaRelieve" filterUnits="userSpaceOnUse" x="0" y="0" width="${LADO}" height="${LADO}" color-interpolation-filters="sRGB">
@@ -121,7 +127,7 @@ function defsHojas(u) {
   };
   const luzHoja = [C.hojaBase, C.hojaMedio, C.hojaPunta];
   const sombraHoja = [C.sombraBase, C.sombraMedio, C.sombraPunta];
-  u.cotiledones.forEach((e, i) => hoja(`cot${i}`, e, [C.cotBase, C.cotMedio, C.cotPunta], ['#30651F', '#538F31', '#71A947']));
+  u.cotiledones.forEach((e, i) => hoja(`cot${i}`, e, [C.cotBase, C.cotMedio, C.cotPunta], ['#336A20', '#589935', '#78B34C']));
   u.hojas.forEach((e, i) => hoja(`hoja${i}`, e, luzHoja, sombraHoja));
   u.brote.forEach((e, i) => hoja(`brote${i}`, e, luzHoja, sombraHoja));
   const [bx] = u.base;
@@ -131,6 +137,13 @@ function defsHojas(u) {
   const [, by] = u.base;
   partes.push(`<linearGradient id="talloSombra" gradientUnits="userSpaceOnUse" x1="0" y1="${r1(by - 160 * u.escala)}" x2="0" y2="${r1(by)}"><stop offset="0" stop-color="#2F5A1E" stop-opacity="0"/><stop offset="1" stop-color="#2F5A1E" stop-opacity="0.6"/></linearGradient>`);
   u.cotiledones.concat(u.hojas, u.brote).forEach((e, i) => partes.push(`<clipPath id="forma${i}"><path d="${trazo(e.contorno)}"/></clipPath>`));
+  // Máscaras para que las nervaduras se esfumen hacia el borde: blanco sobre el nervio, negro lejos.
+  partes.push(`<filter id="esfumado" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="${r1(22 * u.escala)}"/></filter>`);
+  u.hojas.forEach((e, i) =>
+    partes.push(
+      `<mask id="hoja${i}Esfuma" maskUnits="userSpaceOnUse" x="0" y="0" width="${LADO}" height="${LADO}"><path d="${trazo(e.nervio, false)}" stroke="#FFFFFF" stroke-width="${r1(70 * u.escala)}" stroke-linecap="round" fill="none" filter="url(#esfumado)"/></mask>`,
+    ),
+  );
   return partes.join('\n  ');
 }
 
@@ -181,40 +194,58 @@ const sombraContacto = (u) => {
   return `<ellipse cx="${r1(bx)}" cy="${r1(by + 2 * k)}" rx="${r1(46 * k)}" ry="${r1(12 * k)}" fill="#000" fill-opacity="0.55" filter="url(#desenfoqueSombra)"/>`;
 };
 
-/** Una hoja: dos mitades (o un solo degradé), nervaduras, nervio, sombra interior en el borde y pelusa. */
-function hoja(e, id, recorte, k, { venas = true, pliegue = true, brillo = false, sombraBorde = 0.45, pelos = 0.22, relieve = 'hojaRelieve' } = {}) {
-  // Superficie con relieve iluminado (la textura de la hoja).
+/** Curva cuadrática de una nervadura [inicio, control, fin]. */
+const curvaVena = ([[x0, y0], [cx, cy], [x1, y1]]) => `M${r1(x0)} ${r1(y0)}Q${r1(cx)} ${r1(cy)} ${r1(x1)} ${r1(y1)}`;
+
+/**
+ * Una hoja, pintada como en la foto de referencia:
+ * - superficie en dos mitades (el pliegue del nervio) con textura de relieve;
+ * - nervaduras hundidas: una canaleta con sombra y la nervadura clara encima, que se esfuma hacia el borde;
+ * - nervio central afinado (grueso en la base), con su canaleta a los costados;
+ * - borde más claro, como la luz que atraviesa la hoja fina, y pelusa.
+ */
+function hoja(e, id, recorte, k, { venas = true, pliegue = true, brillo = false, sombraBorde = 0.12, bordeClaro = 0.24, pelos = 0.22, relieve = 'hojaRelieve', nervio = 0.62, surco = 0.24 } = {}) {
   const relleno = pliegue
     ? `<path d="${trazo(e.mitadSombra)}" fill="url(#${id}Sombra)"/><path d="${trazo(e.mitadLuz)}" fill="url(#${id}Luz)"/>`
     : `<path d="${trazo(e.contorno)}" fill="url(#${id}Luz)"/>`;
-  const partes = [`<g filter="url(#${relieve})">${relleno}</g>`];
+  const dentro = [];
   if (brillo) {
     const [bx, by] = e.brillo;
     const [x0, y0] = e.base;
     const [x1, y1] = e.puntaHoja;
     const giro = (Math.atan2(y1 - y0, x1 - x0) * 180) / Math.PI;
     const largo = Math.hypot(x1 - x0, y1 - y0);
-    partes.push(
-      `<ellipse cx="${r1(bx)}" cy="${r1(by)}" rx="${r1(largo * 0.3)}" ry="${r1(largo * 0.1)}" transform="rotate(${r1(giro)} ${r1(bx)} ${r1(by)})" fill="#F4FFE0" fill-opacity="0.14" filter="url(#desenfoqueBrillo)" clip-path="url(#${recorte})"/>`,
+    dentro.push(
+      `<ellipse cx="${r1(bx)}" cy="${r1(by)}" rx="${r1(largo * 0.3)}" ry="${r1(largo * 0.1)}" transform="rotate(${r1(giro)} ${r1(bx)} ${r1(by)})" fill="#F4FFE0" fill-opacity="0.14" filter="url(#desenfoqueBrillo)"/>`,
     );
+  }
+  if (venas && e.lomos.length) {
+    // Lomos: la hoja se abomba entre nervaduras y la luz los marca (la textura "acolchada" de la foto).
+    dentro.push(`<path d="${e.lomos.map(curvaVena).join('')}" stroke="${COLORES.lomo}" stroke-opacity="0.3" stroke-width="${r1(8 * k)}" stroke-linecap="round" fill="none" filter="url(#desenfoqueLomo)"/>`);
   }
   if (venas && e.venas.length) {
-    partes.push(
-      e.venas
-        .map((v) => `<path d="${trazo(v, false)}" stroke="${COLORES.nervio}" stroke-opacity="0.26" stroke-width="${r1(1.7 * k)}" stroke-linecap="round" fill="none"/>`)
-        .join(''),
-    );
+    const d = e.venas.map(curvaVena).join('');
+    // Canaletas: la nervadura va hundida y deja una sombra suave a cada lado.
+    dentro.push(`<path d="${d}" stroke="${COLORES.bordeHoja}" stroke-opacity="0.46" stroke-width="${r1(6 * k)}" stroke-linecap="round" fill="none" filter="url(#desenfoqueVena)"/>`);
+    // Nervaduras claras, que se esfuman hacia el borde (máscara con el degradé del nervio al borde).
+    dentro.push(`<path d="${d}" stroke="${COLORES.vena}" stroke-opacity="0.55" stroke-width="${r1(1.6 * k)}" stroke-linecap="round" fill="none" mask="url(#${id}Esfuma)"/>`);
   }
-  partes.push(
-    // Canaleta del nervio: una línea oscura más ancha debajo de la clara.
-    `<path d="${trazo(e.nervio, false)}" stroke="${COLORES.bordeHoja}" stroke-opacity="${venas ? 0.3 : 0.15}" stroke-width="${r1((venas ? 7.5 : 5) * k)}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
-    `<path d="${trazo(e.nervio, false)}" stroke="${COLORES.nervio}" stroke-opacity="${venas ? 0.38 : 0.2}" stroke-width="${r1((venas ? 3.2 : 2.6) * k)}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
-    // Sombra interior: el borde un poco más oscuro, como el volumen de una hoja real.
-    `<g clip-path="url(#${recorte})"><path d="${trazo(e.contorno)}" fill="none" stroke="${COLORES.bordeHoja}" stroke-opacity="${sombraBorde}" stroke-width="${r1(9 * k)}" filter="url(#desenfoqueBorde)"/></g>`,
-    `<path d="${trazo(e.contorno)}" fill="none" stroke="${COLORES.pelusa}" stroke-opacity="0.22" stroke-width="${r1(2 * k)}" stroke-linejoin="round" filter="url(#pelusa)"/>`,
-    pelitos(densificar(e.contorno, 3 * k), k, { cada: 1, largo: 2.2, ancho: 0.55, opacidad: pelos }),
+  // Nervio central: canaleta a los costados y el nervio claro, grueso en la base y fino en la punta.
+  dentro.push(
+    `<path d="${trazo(e.nervio, false)}" stroke="${COLORES.bordeHoja}" stroke-opacity="${surco}" stroke-width="${r1(9 * k)}" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#desenfoqueVena)"/>`,
+    `<path d="${trazo(e.nervioForma)}" fill="${COLORES.vena}" fill-opacity="${nervio}" filter="url(#desenfoqueNervio)"/>`,
   );
-  return partes.join('\n');
+  // Borde translúcido: la luz atraviesa la hoja fina y el borde se ve más claro; y una sombra muy leve.
+  dentro.push(
+    `<path d="${trazo(e.contorno)}" fill="none" stroke="${COLORES.bordeTranslucido}" stroke-opacity="${bordeClaro}" stroke-width="${r1(8 * k)}" filter="url(#desenfoqueBorde)"/>`,
+    `<path d="${trazo(e.contorno)}" fill="none" stroke="${COLORES.bordeHoja}" stroke-opacity="${sombraBorde}" stroke-width="${r1(3 * k)}" filter="url(#desenfoqueVena)"/>`,
+  );
+  return [
+    `<g filter="url(#${relieve})">${relleno}</g>`,
+    `<g clip-path="url(#${recorte})">${dentro.join('')}</g>`,
+    `<path d="${trazo(e.contorno)}" fill="none" stroke="${COLORES.pelusa}" stroke-opacity="0.2" stroke-width="${r1(1.6 * k)}" stroke-linejoin="round" filter="url(#pelusa)"/>`,
+    pelitos(densificar(e.contorno, 3 * k), k, { cada: 1, largo: 2.2, ancho: 0.55, opacidad: pelos }),
+  ].join('\n');
 }
 
 /** Agrega puntos intermedios a un contorno cerrado, cada `paso` como máximo. */
@@ -279,9 +310,11 @@ function planta(u) {
     `<path d="${trazo(u.tallo)}" fill="url(#talloSombra)"/>`,
     `<path d="${trazo(u.tallo)}" fill="none" stroke="${COLORES.pelusa}" stroke-opacity="0.35" stroke-width="${r1(2 * k)}" filter="url(#pelusa)"/>`,
     pelitos(densificar(u.tallo, 3.5 * k), k, { cada: 1, largo: 3.4, ancho: 0.65, opacidad: 0.34 }),
-    ...u.cotiledones.map((e, i) => hoja(e, `cot${i}`, `forma${i}`, k, { venas: false, pliegue: true, brillo: true, sombraBorde: 0.18, pelos: 0.18, relieve: 'cotRelieve' })),
+    ...u.cotiledones.map((e, i) =>
+      hoja(e, `cot${i}`, `forma${i}`, k, { venas: false, pliegue: true, brillo: true, sombraBorde: 0.14, bordeClaro: 0.2, pelos: 0.18, relieve: 'cotRelieve', nervio: 0.16, surco: 0.13 }),
+    ),
     ...u.hojas.map((e, i) => hoja(e, `hoja${i}`, `forma${nc + i}`, k)),
-    ...u.brote.map((e, i) => hoja(e, `brote${i}`, `forma${nc + nh + i}`, k, { venas: false })),
+    ...u.brote.map((e, i) => hoja(e, `brote${i}`, `forma${nc + nh + i}`, k, { venas: false, nervio: 0.45 })),
   ].join('\n');
 }
 

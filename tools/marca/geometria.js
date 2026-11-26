@@ -33,64 +33,123 @@ function perfil(p, q) {
 const ejeBajando = (L, n = 14) => Array.from({ length: n + 1 }, (_, i) => [0, -L * (1 - i / n)]);
 
 /**
- * Hoja dentada con la base en (0,0) y la punta en (0,-L), separada en sus dos mitades. Los dientes miran
- * hacia la punta, como en la hoja de cannabis: el borde sube despacio hasta la punta del diente y vuelve
- * de golpe al valle. Para que no parezca recortada: cada mitad tiene su ancho (la hoja se ve un poco de
- * costado), el borde ondula apenas y los dientes varían en tamaño y separación.
- * Devuelve el contorno, las dos mitades y las nervaduras que van del nervio a cada diente.
+ * Hoja dentada con la base en (0,0) y la punta en (0,-L), separada en sus dos mitades, como la hoja de
+ * cannabis de la foto de referencia:
+ * - Dientes que miran hacia la punta, con el borde de ataque abombado (convexo) y el de salida cóncavo,
+ *   de tamaños y separaciones desparejos.
+ * - Cada mitad con su ancho (la hoja se ve un poco de costado) y el borde que ondula apenas.
+ * - Nervaduras que salen del nervio en ángulo agudo y se curvan hacia la punta de cada diente.
+ * - Nervio central más grueso en la base y fino en la punta.
+ * Las nervaduras se devuelven como [inicio, control, fin] de una curva cuadrática.
  */
-function hojaDentada(L, W, { dientes = 9, serr = 0.22, p = 0.82, q = 0.95, t0 = 0.1, t1 = 0.9, anchoDer = 1, anchoIzq = 1, ondula = 0.05, rnd = null } = {}) {
+function hojaDentada(L, W, { dientes = 9, serr = 0.27, p = 0.82, q = 0.95, t0 = 0.1, t1 = 0.9, anchoDer = 1, anchoIzq = 1, ondula = 0.05, rnd = null } = {}) {
   const h = perfil(p, q);
   const r = rnd ?? (() => 0.5);
   const fase = r() * Math.PI * 2;
   const onda = (t, signo) => 1 + ondula * Math.sin(2 * Math.PI * 1.4 * t + fase + (signo > 0 ? 0 : 1.7));
+  const mezcla = (x, y, f) => x + (y - x) * f;
   // Posiciones de los dientes con un poco de desorden (sin cruzarse).
   const marcas = [];
   for (let k = 0; k <= dientes; k++) marcas.push(t0 + ((t1 - t0) * k) / dientes);
-  for (let k = 1; k < dientes; k++) marcas[k] += ((t1 - t0) / dientes) * (r() - 0.5) * 0.35;
+  for (let k = 1; k < dientes; k++) marcas[k] += ((t1 - t0) / dientes) * (r() - 0.5) * 0.4;
   const lado = (signo) => {
+    // Profundidad de cada valle, precalculada para conocer también la del siguiente.
+    const prof = marcas.map(() => 0.55 + r() * 0.8);
+    const anchoValle = (k) => h(marcas[k]) * (1 - serr * prof[k]) * onda(marcas[k], signo);
     const pts = [];
     const puntas = [];
-    for (let i = 0; i < 6; i++) pts.push([(t0 * i) / 6, h((t0 * i) / 6)]);
+    const valles = [];
+    for (let i = 0; i < 6; i++) {
+      const t = (t0 * i) / 6;
+      pts.push([t, h(t) * onda(t, signo)]);
+    }
     for (let k = 0; k < dientes; k++) {
       const a = marcas[k];
       const b = marcas[k + 1];
-      const v = 0.8 + r() * 0.4;
-      pts.push([a, h(a) * (1 - serr * v) * onda(a, signo)]);
-      const tp = a + 0.8 * (b - a);
-      pts.push([tp, h(tp) * (1 + serr * 0.12) * onda(tp, signo)]);
-      puntas.push([tp, h(tp) * onda(tp, signo)]);
+      const wa = anchoValle(k);
+      const wb = k + 1 < dientes ? anchoValle(k + 1) : h(b) * (1 - serr);
+      const tp = a + (0.76 + r() * 0.14) * (b - a);
+      const wp = h(tp) * (1 + serr * (0.06 + r() * 0.12)) * onda(tp, signo);
+      const abomba = serr * h(tp) * 0.2;
+      pts.push([a, wa]);
+      if (k > 0) valles.push([a, wa]);
+      // Borde de ataque abombado: sube despacio hasta la punta del diente.
+      for (const f of [0.3, 0.55, 0.8]) pts.push([mezcla(a, tp, f), mezcla(wa, wp, f) + abomba * Math.sin(Math.PI * f)]);
+      pts.push([tp, wp]);
+      // Borde de salida cóncavo: vuelve al valle siguiente.
+      pts.push([mezcla(tp, b, 0.5), mezcla(wp, wb, 0.5) - abomba * 0.55]);
+      puntas.push([tp, wp]);
     }
     for (let i = 0; i <= 6; i++) {
       const t = t1 + ((1 - t1) * i) / 6;
       pts.push([t, h(t) * (i === 0 ? 1 - serr : 1)]);
     }
-    return { pts, puntas };
+    return { pts, puntas, valles };
   };
   const ld = lado(1);
   const li = lado(-1);
   const der = ld.pts.map(([t, w]) => [W * anchoDer * w, -L * t]);
   const izq = li.pts.map(([t, w]) => [-W * anchoIzq * w, -L * t]);
   const contorno = der.concat(izq.slice(0, -1).reverse());
+  // Nervaduras: nacen en el nervio un poco más abajo, en ángulo agudo, y se abren hacia la punta del diente.
   const vena = (signo, ancho) => ([t, w]) => [
-    [0, -L * (t - 0.11)],
-    [signo * W * ancho * w * 0.9, -L * t],
+    [0, -L * (t - 0.13)],
+    [signo * W * ancho * w * 0.42, -L * (t - 0.035)],
+    [signo * W * ancho * w * 0.86, -L * (t - 0.004)],
   ];
   const venas = [
-    ...ld.puntas.filter(([t]) => t > 0.18 && t < 0.86).map(vena(1, anchoDer)),
-    ...li.puntas.filter(([t]) => t > 0.18 && t < 0.86).map(vena(-1, anchoIzq)),
+    ...ld.puntas.filter(([t]) => t > 0.16 && t < 0.86).map(vena(1, anchoDer)),
+    ...li.puntas.filter(([t]) => t > 0.16 && t < 0.86).map(vena(-1, anchoIzq)),
   ];
-  return { contorno, mitadDer: der.concat(ejeBajando(L)), mitadIzq: izq.concat(ejeBajando(L)), venas };
+  // Lomos: la hoja se abomba entre nervaduras; van del nervio hacia cada hueco entre dientes.
+  const lomo = (signo, ancho) => ([t, w]) => [
+    [0, -L * (t - 0.12)],
+    [signo * W * ancho * w * 0.45, -L * (t - 0.04)],
+    [signo * W * ancho * w * 0.97, -L * t],
+  ];
+  const lomos = [
+    ...ld.valles.filter(([t]) => t > 0.18 && t < 0.86).map(lomo(1, anchoDer)),
+    ...li.valles.filter(([t]) => t > 0.18 && t < 0.86).map(lomo(-1, anchoIzq)),
+  ];
+  return { contorno, mitadDer: der.concat(ejeBajando(L)), mitadIzq: izq.concat(ejeBajando(L)), venas, lomos, nervioForma: nervioAfinado(L, W, 0.05, 0.95) };
+}
+
+/** Nervio central como forma: más grueso en la base y fino en la punta (de t = 0,02 a `hasta`). */
+function nervioAfinado(L, W, grosor, hasta) {
+  const n = 18;
+  const ida = Array.from({ length: n + 1 }, (_, i) => {
+    const t = 0.02 + ((hasta - 0.02) * i) / n;
+    return [W * (grosor * (1 - t / hasta) + grosor * 0.16), -L * t];
+  });
+  return ida.concat(
+    ida
+      .slice()
+      .reverse()
+      .map(([x, y]) => [-x, y]),
+  );
 }
 
 /** Cotiledón: hoja lisa y ovalada, angosta en la base y de punta redonda, con mitades de distinto ancho. */
-function cotiledon(L, W, { p = 1.2, q = 0.5, anchoDer = 1, anchoIzq = 1 } = {}) {
-  const h = perfil(p, q);
+function cotiledon(L, W, { c = 0.56, anchoDer = 1, anchoIzq = 1 } = {}) {
+  // Forma de cuchara: base angosta que se ensancha y punta redonda (un semicírculo, sin pico).
+  const h = (t) => (t >= c ? Math.sqrt(Math.max(0, 1 - Math.pow((t - c) / (1 - c), 2))) : Math.pow(Math.sin((Math.PI / 2) * (t / c)), 1.25));
   const lado = [];
-  for (let i = 0; i <= 32; i++) lado.push([i / 32, h(i / 32)]);
+  // Más puntos cerca de la punta para que el redondeo salga liso.
+  for (let i = 0; i <= 40; i++) {
+    const u = i / 40;
+    const t = u < 0.5 ? u * 1.1 : 0.55 + (1 - Math.pow(1 - (u - 0.5) * 2, 2)) * 0.45;
+    lado.push([Math.min(1, t), h(Math.min(1, t))]);
+  }
   const der = lado.map(([t, w]) => [W * anchoDer * w, -L * t]);
   const izq = lado.map(([t, w]) => [-W * anchoIzq * w, -L * t]);
-  return { contorno: der.concat(izq.slice(0, -1).reverse()), mitadDer: der.concat(ejeBajando(L)), mitadIzq: izq.concat(ejeBajando(L)), venas: [] };
+  return {
+    contorno: der.concat(izq.slice(0, -1).reverse()),
+    mitadDer: der.concat(ejeBajando(L)),
+    mitadIzq: izq.concat(ejeBajando(L)),
+    venas: [],
+    lomos: [],
+    nervioForma: nervioAfinado(L, W, 0.035, 0.8),
+  };
 }
 
 /**
@@ -128,8 +187,8 @@ function plantula({
     { ang: 73, largo: 189, ancho: 0.285, levanta: -0.09, arco: 0.035 },
   ],
   hojas = [
-    { ang: -50, largo: 292, ancho: 0.195, levanta: -0.07, arco: 0.05, dientes: 11 },
-    { ang: 47, largo: 304, ancho: 0.19, levanta: -0.06, arco: 0.055, dientes: 12 },
+    { ang: -50, largo: 292, ancho: 0.195, levanta: -0.07, arco: 0.05, dientes: 10 },
+    { ang: 47, largo: 304, ancho: 0.19, levanta: -0.06, arco: 0.055, dientes: 11 },
   ],
   brote = [
     { ang: -5, largo: 128, levanta: -0.1 },
@@ -168,6 +227,8 @@ function plantula({
       mitadLuz: tf(a > 0 ? partes.mitadIzq : partes.mitadDer),
       mitadSombra: tf(a > 0 ? partes.mitadDer : partes.mitadIzq),
       venas: partes.venas.map(tf),
+      lomos: partes.lomos.map(tf),
+      nervioForma: tf(partes.nervioForma),
       nervio: tf(Array.from({ length: 10 }, (_, i) => [0, -e.largo * (0.03 + (0.85 * i) / 9)])),
       base: tf([[0, 0]])[0],
       puntaHoja: tf([[0, -e.largo]])[0],
@@ -207,6 +268,8 @@ function ubicar(p, cx, arriba, suelo) {
     mitadLuz: t(x.mitadLuz),
     mitadSombra: t(x.mitadSombra),
     venas: x.venas.map(t),
+    lomos: x.lomos.map(t),
+    nervioForma: t(x.nervioForma),
     nervio: t(x.nervio),
     base: pt(x.base),
     puntaHoja: pt(x.puntaHoja),
