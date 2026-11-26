@@ -131,7 +131,7 @@ function CajaPlan(p: { nombre: string; etiqueta?: string; precio: string; items:
         <Texto variante="subtitulo">{p.nombre}</Texto>
         {p.etiqueta ? <Etiqueta tono="gold">{p.etiqueta}</Etiqueta> : null}
       </View>
-      <Texto variante="tituloGrande" style={estilos.precio}>
+      <Texto variante="titulo" style={estilos.precio}>
         {p.precio}
       </Texto>
       {p.items.map((item) => (

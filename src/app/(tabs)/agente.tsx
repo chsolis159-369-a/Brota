@@ -253,8 +253,8 @@ function Burbuja({ m, ultima, alt }: { m: MensajeChat; ultima: boolean; alt: str
 const estilos = StyleSheet.create({
   flex: { flex: 1 },
   cabeceraFoto: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 },
-  botonesFoto: { flexDirection: 'row', gap: 10 },
-  botonFoto: { flex: 1, paddingHorizontal: 10 },
+  botonesFoto: { gap: 0 },
+  botonFoto: { paddingHorizontal: 10 },
   filaVos: { alignItems: 'flex-end', marginBottom: 10 },
   filaAgente: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, marginBottom: 10 },
   burbuja: { maxWidth: '84%', paddingVertical: 10, paddingHorizontal: 14, borderRadius: MEDIDAS.radioTarjeta, gap: 8 },

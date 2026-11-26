@@ -91,8 +91,9 @@ describe('marca (D-28)', () => {
     expect(salida).toContain('Marca al día.');
   });
 
-  it('el fondo del ícono es el verde oscuro tipo tierra de la foto de referencia', () => {
-    expect(COLORES_MARCA.fondoDesde).toBe('#1B4A33');
-    expect(COLORES_MARCA.fondoHasta).toBe('#061710');
+  it('la plántula sale de la tierra sobre un fondo verde oscuro, como en la foto de referencia', () => {
+    expect(COLORES_MARCA.fondoDesde).toBe('#1F5C3D');
+    expect(COLORES_MARCA.fondoHasta).toBe('#0A2117');
+    expect(COLORES_MARCA.sueloOscuro).toBe('#1A120C');
   });
 });

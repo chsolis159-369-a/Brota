@@ -1,8 +1,8 @@
 /**
- * Geometría de la marca de BROTA (D-28): una plántula de cannabis vista desde arriba, como en la foto de
- * referencia del usuario: dos cotiledones lisos y ovalados, el primer par de hojas verdaderas (una sola
- * hoja dentada cada una, con su nervio) y el brote del centro. Funciones puras: devuelven listas de
- * puntos [x, y] (y crece hacia abajo).
+ * Geometría de la marca de BROTA (D-28): una plántula de cannabis de costado, saliendo de la tierra,
+ * como en la foto de referencia del usuario: tallo fino, dos cotiledones redondeados abiertos a los
+ * costados, el primer par de hojas verdaderas (una sola hoja dentada cada una, larga, abierta en V) y el
+ * brote nuevo en el centro. Funciones puras: devuelven listas de puntos [x, y] (y crece hacia abajo).
  */
 
 const r1 = (n) => Math.round(n * 10) / 10;
@@ -29,7 +29,7 @@ function simetrico(lado, L, W) {
  * Hoja dentada con la base en (0,0) y la punta en (0,-L). Los dientes miran hacia la punta, como en la
  * hoja de cannabis: el borde sube despacio hasta la punta del diente y vuelve de golpe al valle.
  */
-function hojaDentada(L, W, { dientes = 8, serr = 0.22, p = 0.78, q = 0.95, t0 = 0.16, t1 = 0.9 } = {}) {
+function hojaDentada(L, W, { dientes = 9, serr = 0.24, p = 0.72, q = 1.05, t0 = 0.12, t1 = 0.9 } = {}) {
   const h = perfil(p, q);
   const lado = [];
   for (let i = 0; i < 6; i++) lado.push([(t0 * i) / 6, h((t0 * i) / 6)]);
@@ -48,11 +48,16 @@ function hojaDentada(L, W, { dientes = 8, serr = 0.22, p = 0.78, q = 0.95, t0 = 
 }
 
 /** Cotiledón: hoja lisa y ovalada, angosta en la base y de punta redonda. */
-function cotiledon(L, W, { p = 1.3, q = 0.55 } = {}) {
+function cotiledon(L, W, { p = 1.2, q = 0.5 } = {}) {
   const h = perfil(p, q);
   const lado = [];
   for (let i = 0; i <= 32; i++) lado.push([i / 32, h(i / 32)]);
   return simetrico(lado, L, W);
+}
+
+/** Curva una hoja a lo largo de su eje: corre los puntos de costado, más cuanto más cerca de la punta. */
+function curvar(pts, L, c) {
+  return pts.map(([x, y]) => [x + c * L * Math.pow(Math.max(0, -y) / L, 2), y]);
 }
 
 /** Rota en sentido horario `ang` grados (0 = hacia arriba) y traslada a (x, y). */
@@ -66,63 +71,74 @@ function mover(pts, ang, x, y) {
 const punta = (ang, largo, x = 0, y = 0) => mover([[0, -largo]], ang, x, y)[0];
 
 /**
- * Plántula vista desde arriba, centrada en (0,0).
- * - cotiledones: [ángulo, largo] de cada uno; ancho relativo `anchoCot`.
- * - hojas: [ángulo, largo] de cada hoja verdadera; ancho relativo `anchoHoja`.
- * - brote: hojitas nuevas del centro, cruzadas con las verdaderas.
+ * Plántula de costado con la base del tallo en (0,0), a ras de la tierra.
+ * Ángulos en grados desde la vertical (positivos a la derecha). `curva` > 0 levanta las puntas.
  */
 function plantula({
-  cotiledones = [
-    [-74, 330],
-    [106, 320],
-  ],
-  anchoCot = 0.3,
-  hojas = [
-    [22, 250],
-    [-166, 232],
-  ],
-  anchoHoja = 0.24,
-  dientes = 6,
+  nodoCot = -165,
+  nodoHojas = -240,
+  cotiledones = { ang: 82, largo: 210, ancho: 0.26, curva: 0.14 },
+  hojas = { ang: 62, largo: 310, ancho: 0.15, curva: 0.08, dientes: 9 },
   brote = [
-    [-62, 70],
-    [122, 64],
+    [-9, 92],
+    [11, 80],
   ],
-  centro = 20,
+  grosor = [17, 10],
 } = {}) {
-  const base = 12;
-  const elemento = (forma, ang, L) => ({
-    contorno: mover(forma, ang, ...punta(ang, base)),
-    nervio: [punta(ang, base + L * 0.06), punta(ang, base + L * 0.86)],
-  });
+  const [gBase, gArriba] = grosor;
+  // El pie del tallo termina apenas bajo la tierra: el montículo de adelante lo tapa entero.
+  const tallo = [
+    [-gBase / 2, 8],
+    [-gArriba / 2 - 1, nodoCot],
+    [-gArriba / 2, nodoHojas],
+    [0, nodoHojas - 8],
+    [gArriba / 2, nodoHojas],
+    [gArriba / 2 + 1, nodoCot],
+    [gBase / 2, 8],
+  ];
+  // Cada hoja se dibuja apuntando hacia arriba, se curva y se rota a su lado; la del lado izquierdo se
+  // curva al revés para que las dos levanten la punta.
+  const par = ({ ang, largo, ancho, curva }, forma, y) =>
+    [-ang, ang].map((a) => {
+      const contorno = mover(curvar(forma(largo, largo * ancho), largo, a > 0 ? -curva : curva), a, ...punta(a, 3, 0, y));
+      const eje = mover(curvar([[0, -largo * 0.04], [0, -largo * 0.3], [0, -largo * 0.6], [0, -largo * 0.86]], largo, a > 0 ? -curva : curva), a, ...punta(a, 3, 0, y));
+      return { contorno, nervio: eje };
+    });
   return {
-    cotiledones: cotiledones.map(([ang, L]) => elemento(cotiledon(L, L * anchoCot), ang, L)),
-    hojas: hojas.map(([ang, L]) => elemento(hojaDentada(L, L * anchoHoja, { dientes }), ang, L)),
-    brote: brote.map(([ang, L]) => mover(hojaDentada(L, L * 0.22, { dientes: 4, serr: 0.18 }), ang, 0, 0)),
-    centro: { cx: 0, cy: 0, r: centro },
+    tallo,
+    cotiledones: par(cotiledones, (L, W) => cotiledon(L, W), nodoCot),
+    hojas: par(hojas, (L, W) => hojaDentada(L, W, { dientes: hojas.dientes }), nodoHojas),
+    brote: brote.map(([a, L]) => mover(hojaDentada(L, L * 0.17, { dientes: 5, serr: 0.2 }), a, 0, nodoHojas - 4)),
+    base: [0, 0],
   };
 }
 
 function caja(p) {
-  const todos = [...p.cotiledones.flatMap((e) => e.contorno), ...p.hojas.flatMap((e) => e.contorno), ...p.brote.flat()];
+  const todos = [...p.tallo, ...p.cotiledones.flatMap((e) => e.contorno), ...p.hojas.flatMap((e) => e.contorno), ...p.brote.flat()];
   const xs = todos.map((q) => q[0]);
   const ys = todos.map((q) => q[1]);
   return { x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys) };
 }
 
-/** Ubica la plántula para que su caja quede centrada en (cx, cy) dentro del ancho y alto máximos. */
-function ubicar(p, cx, cy, maxAncho, maxAlto) {
+/**
+ * Ubica la plántula: centrada en x = cx, con la punta más alta en `arriba` y la base del tallo en
+ * `suelo` (la escala sale de esas dos alturas).
+ */
+function ubicar(p, cx, arriba, suelo) {
   const b = caja(p);
-  const k = Math.min(maxAncho / (b.x1 - b.x0), maxAlto / (b.y1 - b.y0));
+  const k = (suelo - arriba) / (0 - b.y0);
   const dx = cx - ((b.x0 + b.x1) / 2) * k;
-  const dy = cy - ((b.y0 + b.y1) / 2) * k;
+  const dy = suelo;
   const t = (pts) => pts.map(([x, y]) => [x * k + dx, y * k + dy]);
   const e = (x) => ({ contorno: t(x.contorno), nervio: t(x.nervio) });
   return {
     escala: k,
+    tallo: t(p.tallo),
     cotiledones: p.cotiledones.map(e),
     hojas: p.hojas.map(e),
     brote: p.brote.map(t),
-    centro: { cx: p.centro.cx * k + dx, cy: p.centro.cy * k + dy, r: p.centro.r * k },
+    base: t([p.base])[0],
+    ancho: (b.x1 - b.x0) * k,
   };
 }
 
