@@ -18,7 +18,7 @@
     "android": {
       "package": "com.brota.app",
       "adaptiveIcon": {
-        "backgroundColor": "#123D2A",
+        "backgroundColor": "#1A4A33",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -30,11 +30,11 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#123D2A",
+          "backgroundColor": "#1A4A33",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "dark": {
-            "backgroundColor": "#0A2117"
+            "backgroundColor": "#0B2318"
           }
         }
       ],

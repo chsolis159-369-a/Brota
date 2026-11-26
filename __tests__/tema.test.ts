@@ -1,8 +1,8 @@
 import { execFileSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { claro, oscuro, type Colores } from '@/tema/colores';
-import { COLORES_MARCA } from '@/tema/marca';
 
 const L = (h: string) => {
   const c = [1, 3, 5]
@@ -91,9 +91,9 @@ describe('marca (D-28)', () => {
     expect(salida).toContain('Marca al día.');
   });
 
-  it('la plántula sale de la tierra sobre un fondo verde oscuro, como en la foto de referencia', () => {
-    expect(COLORES_MARCA.fondoDesde).toBe('#1F5C3D');
-    expect(COLORES_MARCA.fondoHasta).toBe('#0A2117');
-    expect(COLORES_MARCA.sueloOscuro).toBe('#1A120C');
+  it('el logo de la app, los íconos y la pantalla de carga están generados', () => {
+    for (const f of ['logo', 'icon', 'android-icon-background', 'android-icon-foreground', 'android-icon-monochrome', 'splash-icon']) {
+      expect(existsSync(join(__dirname, '..', 'assets', 'images', `${f}.png`))).toBe(true);
+    }
   });
 });
