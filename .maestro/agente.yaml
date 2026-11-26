@@ -1,4 +1,4 @@
-# Agente: pregunta rápida y negativa ante dosis, consumo o venta.
+# Agente: pregunta rápida y negativa ante dosis, consumo o venta (enviada con la tecla Enter).
 # Con servidor responde la IA (texto variable) y sin servidor, las reglas (D-25, D-27): el flujo verifica
 # lo que es igual en los dos modos. La negativa siempre la resuelve la app, sin llamar a la IA.
 appId: com.brota.app
@@ -13,18 +13,18 @@ appId: com.brota.app
 - extendedWaitUntil:
     notVisible: "Pensando…"
     timeout: 30000
+# La respuesta de la IA cambia el largo de la pantalla: se espera a que se acomode antes de escribir.
+- waitForAnimationToEnd:
+    timeout: 5000
 - scrollUntilVisible:
     element:
       id: "campo-pregunta"
 - tapOn:
     id: "campo-pregunta"
 - inputText: "que dosis uso"
-- hideKeyboard
-- scrollUntilVisible:
-    element:
-      id: "enviar-pregunta"
-- tapOn:
-    id: "enviar-pregunta"
+# Se manda con la tecla Enter del teclado (envía, como el botón). "hideKeyboard" en Android aprieta
+# "atrás" y, si el teclado ya estaba cerrado, cambia de pestaña.
+- pressKey: Enter
 - scrollUntilVisible:
     element:
       text: "Solo puedo orientarte sobre cultivo. No doy información sobre dosis, consumo ni venta."
