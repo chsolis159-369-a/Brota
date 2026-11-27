@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { Boton, BotonRapido, Campo, Fila, Medalla, Subtitulo } from '@/componentes/controles';
+import { Etiqueta } from '@/componentes/Etiqueta';
 import { ClimaConsejo } from '@/componentes/hoy';
 import { Icono } from '@/componentes/Icono';
 import { Logo } from '@/componentes/Logo';
@@ -13,7 +14,16 @@ import { Texto } from '@/componentes/Texto';
 import { FOTO_AGENTE } from '@/config/flags';
 import { PREGUNTAS_RAPIDAS, responder, type RespuestaAgente } from '@/reglas/agente';
 import { diasDeCultivo } from '@/reglas/cultivos';
-import { ErrorAgente, hayAgenteIA, LIMITE_FOTOS_DIARIO, preguntarAgenteIA, type CultivoContexto, type Foto } from '@/servicios/agenteIA';
+import { preguntasDeLaRonda, resumenReconocimiento } from '@/reglas/reconocimiento';
+import {
+  ErrorAgente,
+  hayAgenteIA,
+  LIMITE_FOTOS_DIARIO,
+  preguntarAgenteIA,
+  type CultivoContexto,
+  type Foto,
+  type Reconocimiento,
+} from '@/servicios/agenteIA';
 import { lluviaManana } from '@/servicios/clima';
 import { fotoParaAnalizar } from '@/servicios/fotoAgente';
 import { useApp, type MensajeChat } from '@/store/app';
@@ -49,8 +59,13 @@ function useTextoRespuesta() {
   };
 }
 
-/** El historial que se manda al servidor: solo texto; las fotos anteriores quedan marcadas. */
-const historialParaServidor = (chat: MensajeChat[]) => chat.slice(1).map((m) => ({ de: m.de, t: m.foto ? `(Foto) ${m.t}`.trim() : m.t }));
+/** El historial que se manda al servidor: solo texto; las fotos anteriores quedan marcadas y el reconocimiento, resumido. */
+const historialParaServidor = (chat: MensajeChat[]) =>
+  chat.slice(1).map((m) => {
+    if (m.foto) return { de: m.de, t: `(Foto) ${m.t}`.trim() };
+    const resumen = m.reco ? resumenReconocimiento(m.reco) : '';
+    return { de: m.de, t: resumen ? `${m.t}\n${resumen}` : m.t };
+  });
 
 /**
  * Agente (agenteHTML del prototipo). Con servidor responde con IA (Edge Function `agente`, D-27) y
@@ -88,7 +103,10 @@ export default function Agente() {
    * respuesta. El historial se toma antes de sumar el mensaje nuevo, que va aparte.
    */
   const consultar = async (mensaje: MensajeChat, foto?: Foto) => {
-    const historial = historialParaServidor(useApp.getState().chat);
+    const chatPrevio = useApp.getState().chat;
+    const historial = historialParaServidor(chatPrevio);
+    // Una foto nueva empieza otra ronda de reconocimiento.
+    const preguntasHechas = foto ? 0 : preguntasDeLaRonda(chatPrevio);
     useApp.getState().agregarAlChat(mensaje);
     const texto = mensaje.t;
     setPensando(foto ? 'foto' : 'texto');
@@ -99,9 +117,10 @@ export default function Agente() {
         // El servidor solo los usa si confirma que el usuario es Pro.
         cultivos: plan === 'pro' ? contextoCultivos(cultivos) : [],
         mes: new Date().getMonth() + 1,
+        preguntasHechas,
         ...(foto ? { foto } : {}),
       });
-      useApp.getState().agregarAlChat({ de: 'agente', t: respuesta });
+      useApp.getState().agregarAlChat({ de: 'agente', t: respuesta.texto, ...(respuesta.reconocimiento ? { reco: respuesta.reconocimiento } : {}) });
     } catch (e) {
       const motivo = e instanceof ErrorAgente ? e.motivo : 'sin_conexion';
       const aviso =
@@ -196,6 +215,25 @@ export default function Agente() {
       {chat.map((m, i) => (
         <Burbuja key={i} m={m} ultima={i === chat.length - 1} alt={t('agente.foto.alt')} />
       ))}
+      {(() => {
+        // Opciones de la pregunta de reconocimiento (D-31): solo en el último mensaje del guía.
+        const ultimo = chat[chat.length - 1];
+        const pregunta = ultimo?.de === 'agente' ? ultimo.reco?.pregunta : null;
+        if (!pregunta || pensando) return null;
+        return (
+          <View style={estilos.opciones}>
+            <Fila>
+              {pregunta.opciones.map((op, i) => (
+                <BotonRapido key={op} texto={op} onPress={() => void enviar(op)} testID={`opcion-${i}`} />
+              ))}
+              <BotonRapido texto={t('agente.reco.noSe')} onPress={() => void enviar(t('agente.reco.noSe'))} testID="opcion-nose" />
+              {conFotos ? (
+                <BotonRapido texto={t('agente.reco.mandarFoto')} icono="camara" onPress={() => void analizarFoto('camara')} testID="opcion-foto" />
+              ) : null}
+            </Fila>
+          </View>
+        );
+      })()}
       {pensando ? (
         <View style={estilos.filaAgente} accessibilityLiveRegion="polite">
           <Logo tamano={28} />
@@ -225,6 +263,40 @@ export default function Agente() {
   );
 }
 
+const TONO_CERTEZA = { alta: 'ok', media: 'gold', baja: 'muted' } as const;
+
+/** Candidatos del reconocimiento, con su certeza, la foto pedida y el aviso de derivar (D-31). */
+function TarjetaReconocimiento({ r }: { r: Reconocimiento }) {
+  const { t } = useTranslation();
+  const { c } = useTema();
+  return (
+    <View style={[estilos.reco, { borderTopColor: c.border }]}>
+      {r.candidatos.length && r.certeza ? (
+        <View style={estilos.recoCabecera}>
+          <Texto variante="cuerpoFuerte">{t('agente.reco.titulo')}</Texto>
+          <Etiqueta tono={TONO_CERTEZA[r.certeza]}>{t(`agente.reco.certeza.${r.certeza}`)}</Etiqueta>
+        </View>
+      ) : null}
+      {r.candidatos.map((x) => {
+        const n = Math.round(x.confianza * 100);
+        return (
+          <View key={x.nombre} style={estilos.candidato} accessible accessibilityLabel={t('agente.reco.a11y', { nombre: x.nombre, n })}>
+            <View style={estilos.flex}>
+              <Texto variante="cuerpo">{x.nombre}</Texto>
+              {x.cientifico ? <Texto variante="secundario">{x.cientifico}</Texto> : null}
+            </View>
+            <Texto variante="cuerpoFuerte" color="accent">
+              {t('agente.reco.confianza', { n })}
+            </Texto>
+          </View>
+        );
+      })}
+      {r.pedirFoto ? <Texto variante="secundario">{t('agente.reco.pedirFoto', { que: r.pedirFoto })}</Texto> : null}
+      {r.derivar ? <Texto variante="secundario">{t('agente.reco.derivar')}</Texto> : null}
+    </View>
+  );
+}
+
 /** Mensaje del chat: los tuyos a la derecha en verde; los del guía a la izquierda, con el logo. */
 function Burbuja({ m, ultima, alt }: { m: MensajeChat; ultima: boolean; alt: string }) {
   const { c } = useTema();
@@ -239,6 +311,7 @@ function Burbuja({ m, ultima, alt }: { m: MensajeChat; ultima: boolean; alt: str
           {m.t}
         </Texto>
       ) : null}
+      {!vos && m.reco ? <TarjetaReconocimiento r={m.reco} /> : null}
     </View>
   );
   if (vos) return <View style={estilos.filaVos}>{contenido}</View>;
@@ -263,4 +336,8 @@ const estilos = StyleSheet.create({
   foto: { width: 220, maxWidth: '100%', aspectRatio: 4 / 3, borderRadius: 14 },
   campo: { marginTop: 8 },
   pie: { flexDirection: 'row', alignItems: 'flex-start', gap: 6, marginTop: 2 },
+  opciones: { marginLeft: 36, marginBottom: 10 },
+  reco: { borderTopWidth: 1, paddingTop: 8, gap: 6 },
+  recoCabecera: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 4 },
+  candidato: { flexDirection: 'row', alignItems: 'center', gap: 8 },
 });

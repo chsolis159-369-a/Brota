@@ -95,6 +95,7 @@ Solo en el servidor (secretos de las Edge Functions de Supabase, nunca en la app
 | `ANTHROPIC_API_KEY` | API de Claude para el Agente |
 | `ANTHROPIC_MODEL` | Modelo del Agente; por defecto `claude-sonnet-5-5` |
 | `REVENUECAT_SECRET_KEY` | Validar el entitlement `pro` antes del Examen final y del historial del Agente |
+| `KINDWISE_API_KEY` | Opcional: reconocimiento de especies y problemas con plant.id antes de Claude (D-31). Consume créditos por foto |
 
 Sin estas variables la app funciona en modo local: exámenes y Agente avisan que requieren conexión y el plan queda en Gratis (D-09).
 

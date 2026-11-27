@@ -9,7 +9,7 @@ Cerrado el 2026-11-23 sobre el prototipo v9 (`prueba 0.9`). Reglas en `CLAUDE.md
 | H2 · Hoy y Cultivos | hecho (Jest 440, Maestro 4/4 en GitHub Actions) |
 | H3 · Reglas y Aprender | hecho (más Agente por reglas y Plan sin servidor, D-25) |
 | H4 · Exámenes en el servidor y constancia | pendiente |
-| H5 · Plan y Agente | Agente con IA activo en Supabase (D-27), con análisis de fotos (D-30); RevenueCat pendiente |
+| H5 · Plan y Agente | Agente con IA activo en Supabase (D-27), con análisis de fotos (D-30) y reconocimiento con fotos y preguntas (D-31); RevenueCat pendiente |
 | Marca y diseño | logo de plántula de cannabis (D-28) y rediseño visual (D-29) |
 | H6 · Sincronización, cuenta, observabilidad y builds | pendiente |
 

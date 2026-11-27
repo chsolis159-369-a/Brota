@@ -1,11 +1,15 @@
 import { create } from 'zustand';
 
 import type { Plan } from '@/db/repos/perfil';
+import type { Reconocimiento } from '@/servicios/agenteIA';
 
 export type { Plan };
 
-/** Mensaje del chat con el Agente. `foto`: URI local de la foto que mandó el usuario (D-30). */
-export type MensajeChat = { de: 'agente' | 'vos'; t: string; foto?: string };
+/**
+ * Mensaje del chat con el Agente. `foto`: URI local de la foto que mandó el usuario (D-30).
+ * `reco`: candidatos, pregunta y avisos del reconocimiento con fotos y preguntas (D-31).
+ */
+export type MensajeChat = { de: 'agente' | 'vos'; t: string; foto?: string; reco?: Reconocimiento };
 
 type EstadoApp = {
   /** Plan vigente. En H5 lo decide el entitlement `pro` de RevenueCat; mientras tanto, el perfil local. */

@@ -1,10 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import type { CultivoContexto, Foto, Turno } from '../../supabase/functions/_shared/agente';
+import type { Candidato, Certeza, CultivoContexto, Foto, Reconocimiento, Turno } from '../../supabase/functions/_shared/agente';
 import { asegurarSesion, supabase } from './supabase';
 
-export type { CultivoContexto, Foto, Turno };
-export { LIMITE_FOTOS_DIARIO } from '../../supabase/functions/_shared/agente';
+export type { Candidato, Certeza, CultivoContexto, Foto, Reconocimiento, Turno };
+export { LIMITE_FOTOS_DIARIO, MAX_PREGUNTAS_RECO } from '../../supabase/functions/_shared/agente';
 
 /** Motivo por el que el Agente con IA no respondió. */
 export class ErrorAgente extends Error {
@@ -13,7 +13,18 @@ export class ErrorAgente extends Error {
   }
 }
 
-export type PedidoAgente = { pregunta: string; historial: Turno[]; cultivos: CultivoContexto[]; mes: number; foto?: Foto };
+export type PedidoAgente = {
+  pregunta: string;
+  historial: Turno[];
+  cultivos: CultivoContexto[];
+  mes: number;
+  foto?: Foto;
+  /** Preguntas de reconocimiento que el agente ya hizo en esta ronda (D-31). */
+  preguntasHechas?: number;
+};
+
+/** Respuesta del Agente con IA: el texto y, si reconoció algo, los candidatos y la pregunta (D-31). */
+export type RespuestaIA = { texto: string; reconocimiento: Reconocimiento | null };
 
 /** Hay Agente con IA si la app tiene servidor configurado. */
 export const hayAgenteIA = (cliente: SupabaseClient | null = supabase): boolean => cliente !== null;
@@ -35,19 +46,19 @@ async function motivoLimite(contexto: ContextoError): Promise<'limite' | 'limite
  * Anthropic nunca está en la app. Lanza ErrorAgente('limite' o 'limite_fotos') si se pasó un límite
  * diario y ErrorAgente('sin_conexion') ante cualquier otra falla.
  */
-export async function preguntarAgenteIA(pedido: PedidoAgente, cliente: SupabaseClient | null = supabase): Promise<string> {
+export async function preguntarAgenteIA(pedido: PedidoAgente, cliente: SupabaseClient | null = supabase): Promise<RespuestaIA> {
   if (!cliente) throw new ErrorAgente('sin_conexion');
   try {
     await asegurarSesion(cliente);
   } catch {
     throw new ErrorAgente('sin_conexion');
   }
-  const { data, error } = await cliente.functions.invoke<{ texto?: string }>('agente', { body: pedido });
+  const { data, error } = await cliente.functions.invoke<{ texto?: string; reconocimiento?: Reconocimiento | null }>('agente', { body: pedido });
   if (error) {
     const contexto = (error as { context?: ContextoError }).context;
     if (contexto?.status === 429) throw new ErrorAgente(await motivoLimite(contexto));
     throw new ErrorAgente('sin_conexion');
   }
   if (!data?.texto) throw new ErrorAgente('sin_conexion');
-  return data.texto;
+  return { texto: data.texto, reconocimiento: data.reconocimiento ?? null };
 }

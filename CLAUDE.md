@@ -12,7 +12,7 @@ App móvil (iOS y Android) de bitácora de cultivo con aprendizaje, exámenes y 
 
 ## Alcance
 - Pestañas: Hoy, Cultivos, Agente, Aprender, Plan.
-- Fuera de alcance y **sin código accesible**: plan Business y contenido de cannabis (`CANNABIS_HABILITADO = false`). El análisis de fotos por IA en el Agente está prendido (`FOTO_AGENTE = true`, D-30).
+- Fuera de alcance y **sin código accesible**: plan Business y contenido de cannabis (`CANNABIS_HABILITADO = false`). El análisis de fotos por IA en el Agente está prendido (`FOTO_AGENTE = true`, D-30), con reconocimiento por fotos y preguntas (candidatos, certeza y opciones como botones, D-31).
 - **Gratis (US$ 0)**: hasta 2 cultivos propios (los de ejemplo no cuentan), bitácora y registro rápido, tareas diarias, logros y racha, 16 módulos con test, 3 exámenes por bloque, agente con consejos generales.
 - **Pro (US$ 5.99/mes o US$ 49.99/año)**: todo lo de Gratis más cultivos ilimitados, módulo `diagnostico`, Examen final con constancia y nivel Maestro de cultivo, exportar la bitácora como texto, agente que usa el historial del cultivo.
 - Puntos de paywall (como en el prototipo): límite de 2 cultivos, módulo Diagnóstico bloqueado, Examen final, aviso de Maestro pendiente, exportar, historial del agente.
@@ -74,7 +74,7 @@ Migración inicial desde datos locales: reconstruir el ledger con los topes diar
 
 ## Variables de entorno (documentadas en el README, sin valores)
 - App: `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`, `EXPO_PUBLIC_REVENUECAT_IOS_KEY`, `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY`.
-- Solo servidor: `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`, `REVENUECAT_SECRET_KEY`.
+- Solo servidor: `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`, `REVENUECAT_SECRET_KEY` y, opcional, `KINDWISE_API_KEY` (plant.id, D-31).
 - Nunca commitear valores. `.env*` va en `.gitignore`.
 
 ## Cómo trabajar

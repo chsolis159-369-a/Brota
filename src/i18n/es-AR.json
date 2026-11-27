@@ -117,6 +117,20 @@
       "error": "No pude abrir la foto. Probá de nuevo o elegí otra.",
       "sinConexion": "No pude analizar la foto porque no hay conexión con el guía. Probá de nuevo en un rato.",
       "limite": "Llegaste al límite de {{n}} fotos por día. Mañana podés mandar más."
+    },
+    "reco": {
+      "titulo": "Lo que puede ser",
+      "certeza": {
+        "alta": "Muy probable",
+        "media": "Probable",
+        "baja": "Poco seguro"
+      },
+      "confianza": "{{n}} %",
+      "a11y": "{{nombre}}: {{n}} % de confianza",
+      "pedirFoto": "Para estar más seguro, mandame una foto de: {{que}}",
+      "derivar": "Conviene que lo vea un técnico o un ingeniero agrónomo.",
+      "noSe": "No sé",
+      "mandarFoto": "Mandar foto"
     }
   },
   "aprender": {
