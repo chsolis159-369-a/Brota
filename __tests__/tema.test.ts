@@ -18,7 +18,7 @@ const contraste = (a: string, b: string) => {
 const SOMBRAS: (keyof Colores)[] = ['sombra', 'sombraBoton'];
 const HEX = /^#[0-9A-F]{6}$/;
 
-describe('paleta del rediseño (D-29)', () => {
+describe('paleta de confianza y confort (D-32, sobre D-29)', () => {
   it('claro y oscuro tienen los mismos tokens, en hexadecimal', () => {
     expect(Object.keys(oscuro).sort()).toEqual(Object.keys(claro).sort());
     for (const tema of [claro, oscuro]) {
@@ -76,6 +76,10 @@ describe('paleta del rediseño (D-29)', () => {
 
     it('el botón blanco de las tarjetas destacadas (texto heroHasta) ≥ 4,5', () => {
       expect(contraste(c.heroHasta, '#FFFFFF')).toBeGreaterThanOrEqual(4.5);
+    });
+
+    it.each(['surface', 'surfaceAlt', 'bg'] as const)('el borde de campos y controles sobre %s ≥ 3 (WCAG 1.4.11)', (fondo) => {
+      expect(contraste(c.bordeCampo, c[fondo])).toBeGreaterThanOrEqual(3);
     });
 
     it('el lima de los gráficos sobre el degradé ≥ 3 (objetos gráficos)', () => {

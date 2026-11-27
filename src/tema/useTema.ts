@@ -10,14 +10,19 @@ export function useTema(): Tema {
   return esquema === 'dark' ? { modo: 'oscuro', c: oscuro } : { modo: 'claro', c: claro };
 }
 
-/** Medidas compartidas (D-29). */
+/** Medidas compartidas (D-32: más aire y objetivos táctiles más grandes). */
 export const MEDIDAS = {
-  margen: 16,
+  margen: 20,
   radioTarjeta: 20,
   radioControl: 14,
+  /** Relleno interno de las tarjetas. */
+  rellenoTarjeta: 20,
+  /** Separación entre tarjetas. */
+  separacion: 16,
+  /** Ancho máximo de la columna: líneas cortas, cómodas de leer. */
   anchoMaximo: 440,
   /** Objetivo táctil mínimo (accesibilidad). */
-  toque: 44,
+  toque: 48,
 } as const;
 
 /**

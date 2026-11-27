@@ -1,11 +1,13 @@
 /**
- * Paleta de BROTA (D-29, rediseño visual pedido por el usuario): el verde esmeralda de la marca (D-28)
- * con acentos lima, ámbar y celeste. Reemplaza los colores del prototipo, que sigue siendo la fuente de
- * los textos y del comportamiento. Mantiene los nombres de los tokens del prototipo y suma los del
- * rediseño (degradés, superficies suaves y sombras).
+ * Paleta de BROTA: diseño de confianza y confort (D-32), evolución del rediseño D-29.
+ * - Claro: papel cálido, verde salvia profundo como único color de acción, terracota para problemas,
+ *   ocre para atención y azul pizarra para información (clima).
+ * - Oscuro: "verde noche", nunca negro puro ni verde neón, para no encandilar en el indoor.
+ * El color siempre significa algo y nunca va solo: lo acompaña un ícono o un texto.
  *
- * Todo texto cumple contraste AA (≥ 4,5) sobre los fondos donde se usa; lo verifica __tests__/tema.test.ts.
- * `lima` es solo para gráficos (anillos y barras sobre el degradé), no para texto.
+ * Todo texto cumple contraste AA (≥ 4,5) sobre los fondos donde se usa, y el borde de campos y controles
+ * (`bordeCampo`) llega a 3:1 (WCAG 1.4.11); lo verifica __tests__/tema.test.ts.
+ * `lima` es solo para gráficos (anillos y barras sobre el bloque destacado), no para texto.
  */
 export type Colores = {
   bg: string;
@@ -16,7 +18,10 @@ export type Colores = {
   muted: string;
   accent: string;
   accentSoft: string;
+  /** Bordes decorativos (separadores, tarjetas en oscuro). */
   border: string;
+  /** Borde de campos y controles: contraste de 3:1 o más (D-32). */
+  bordeCampo: string;
   alert: string;
   alertSoft: string;
   ok: string;
@@ -26,10 +31,10 @@ export type Colores = {
   infoSoft: string;
   /** Texto sobre fondo accent (botones primarios, chips activos). */
   sobreAccent: string;
-  /** Degradé del botón primario (el texto es sobreAccent). */
+  /** Botón primario: plano desde D-32 (los dos extremos iguales). */
   botonDesde: string;
   botonHasta: string;
-  /** Degradé de las tarjetas destacadas (resumen de Hoy, nivel, plan Pro). */
+  /** Bloque destacado (uno por pantalla): degradé muy sutil. */
   heroDesde: string;
   heroHasta: string;
   sobreHero: string;
@@ -37,62 +42,64 @@ export type Colores = {
   lima: string;
   /** Sombra de las tarjetas (boxShadow); vacía en modo oscuro, donde se usa el borde. */
   sombra: string;
-  /** Sombra del botón primario. */
+  /** Sombra del botón primario: ninguna desde D-32. */
   sombraBoton: string;
 };
 
 export const claro: Colores = {
-  bg: '#F2F6F3',
+  bg: '#F7F5EF',
   surface: '#FFFFFF',
-  surfaceAlt: '#F6FAF7',
-  fg: '#0F2418',
-  muted: '#53685A',
-  accent: '#147A3B',
-  accentSoft: '#E3F4E8',
-  border: '#DCE7DF',
-  alert: '#C2410C',
-  alertSoft: '#FDEDE4',
-  ok: '#147A3B',
-  gold: '#93560A',
-  goldSoft: '#FEF3C7',
-  info: '#0369A1',
-  infoSoft: '#E0F2FE',
+  surfaceAlt: '#F2EFE7',
+  fg: '#1C2620',
+  muted: '#56615A',
+  accent: '#2D6A4C',
+  accentSoft: '#E5EFE8',
+  border: '#E3DED3',
+  bordeCampo: '#7F8781',
+  alert: '#A8452C',
+  alertSoft: '#FAE9E3',
+  ok: '#2D6A4C',
+  gold: '#87580F',
+  goldSoft: '#F7EEDC',
+  info: '#2E5E83',
+  infoSoft: '#E4EDF5',
   sobreAccent: '#FFFFFF',
-  botonDesde: '#168342',
-  botonHasta: '#0E6630',
-  heroDesde: '#147A3B',
-  heroHasta: '#0A4227',
+  botonDesde: '#2D6A4C',
+  botonHasta: '#2D6A4C',
+  heroDesde: '#2D6A4C',
+  heroHasta: '#25573F',
   sobreHero: '#FFFFFF',
-  sobreHeroSuave: '#E3F9EA',
-  lima: '#BEF264',
-  sombra: '0 1px 2px rgba(15, 36, 24, 0.06), 0 8px 20px rgba(15, 36, 24, 0.07)',
-  sombraBoton: '0 6px 14px rgba(20, 122, 59, 0.28)',
+  sobreHeroSuave: '#DDEDE3',
+  lima: '#C7E6A3',
+  sombra: '0 1px 2px rgba(28, 38, 32, 0.05), 0 4px 12px rgba(28, 38, 32, 0.05)',
+  sombraBoton: '',
 };
 
 export const oscuro: Colores = {
-  bg: '#08130D',
-  surface: '#102019',
-  surfaceAlt: '#0C1913',
-  fg: '#E8F3EC',
-  muted: '#9CB5A6',
-  accent: '#4ADE80',
-  accentSoft: '#143322',
-  border: '#21392B',
-  alert: '#FB923C',
-  alertSoft: '#3A1E0E',
-  ok: '#4ADE80',
-  gold: '#FBBF24',
-  goldSoft: '#3A2C0A',
-  info: '#7DD3FC',
-  infoSoft: '#0B2A3A',
-  sobreAccent: '#052E16',
-  botonDesde: '#5EE88E',
-  botonHasta: '#34C46A',
-  heroDesde: '#166534',
-  heroHasta: '#0A3A22',
-  sobreHero: '#FFFFFF',
-  sobreHeroSuave: '#CDEFD8',
-  lima: '#BEF264',
+  bg: '#121A16',
+  surface: '#1A2420',
+  surfaceAlt: '#16201B',
+  fg: '#E7EDE9',
+  muted: '#A6B2AA',
+  accent: '#8CCBA6',
+  accentSoft: '#1F3329',
+  border: '#2C3B33',
+  bordeCampo: '#6C7B72',
+  alert: '#F0957D',
+  alertSoft: '#3A231D',
+  ok: '#8CCBA6',
+  gold: '#E3BA68',
+  goldSoft: '#352B18',
+  info: '#96C0E0',
+  infoSoft: '#1B2C39',
+  sobreAccent: '#10201A',
+  botonDesde: '#8CCBA6',
+  botonHasta: '#8CCBA6',
+  heroDesde: '#22503B',
+  heroHasta: '#1A3F2E',
+  sobreHero: '#F3F8F5',
+  sobreHeroSuave: '#D2E6DA',
+  lima: '#C7E6A3',
   sombra: '',
   sombraBoton: '',
 };
