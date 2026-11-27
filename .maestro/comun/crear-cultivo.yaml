@@ -1,12 +1,26 @@
 # Subflujo: crea un cultivo de interior con el nombre ${NOMBRE} desde la pestaña Cultivos.
+# Con la letra más grande y las etiquetas sobre los campos (D-32), se baja hasta cada control.
 appId: com.brota.app
 ---
+# "Nuevo cultivo" está arriba: si la pantalla quedó bajada, se sube.
+- scrollUntilVisible:
+    element:
+      id: "nuevo-cultivo"
+    direction: UP
 - tapOn:
     id: "nuevo-cultivo"
+- scrollUntilVisible:
+    element:
+      id: "campo-nombre"
 - tapOn:
     id: "campo-nombre"
 - inputText: ${NOMBRE}
 - hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "guardar-cultivo"
 - tapOn:
     id: "guardar-cultivo"
-- assertVisible: ${NOMBRE}
+- scrollUntilVisible:
+    element:
+      text: ${NOMBRE}

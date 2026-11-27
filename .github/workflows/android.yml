@@ -92,22 +92,26 @@ jobs:
           profile: pixel_6
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot
-          # Después de las pruebas, capturas de las pantallas en claro y en oscuro para revisar el diseño
-          # (D-29). Se sacan aunque falle una prueba; el paso falla al final si falló alguna prueba, y una
-          # captura que falla no cambia ese resultado.
+          # Después de las pruebas, capturas de las pantallas en claro, en oscuro y con la letra del sistema
+          # al máximo (D-29, D-32). Se sacan aunque falle una prueba; el paso falla al final si falló alguna
+          # prueba, y una captura que falla no cambia ese resultado.
           script: |
             adb install -r android/app/build/outputs/apk/release/app-release.apk
             maestro test .maestro --format junit --output maestro-resultados.xml || touch maestro-fallo
             maestro test .maestro/capturas/pantallas.yaml -e MODO=claro || echo "::warning::Fallaron las capturas en modo claro"
             adb shell cmd uimode night yes
             maestro test .maestro/capturas/pantallas.yaml -e MODO=oscuro || echo "::warning::Fallaron las capturas en modo oscuro"
+            adb shell cmd uimode night no
+            adb shell settings put system font_scale 2.0
+            maestro test .maestro/capturas/pantallas.yaml -e MODO=grande || echo "::warning::Fallaron las capturas con letra grande"
+            adb shell settings put system font_scale 1.0
             test ! -f maestro-fallo
 
       - name: Juntar las capturas
         if: always()
         run: |
           mkdir -p capturas-ui
-          find . "$HOME/.maestro" -type f \( -name 'claro-*.png' -o -name 'oscuro-*.png' \) -not -path './capturas-ui/*' -exec cp {} capturas-ui/ \; 2>/dev/null || true
+          find . "$HOME/.maestro" -type f \( -name 'claro-*.png' -o -name 'oscuro-*.png' -o -name 'grande-*.png' \) -not -path './capturas-ui/*' -exec cp {} capturas-ui/ \; 2>/dev/null || true
           ls capturas-ui
 
       - name: Guardar las capturas

@@ -11,10 +11,17 @@ appId: com.brota.app
     file: comun/crear-cultivo.yaml
     env:
       NOMBRE: "Propio dos"
-- assertVisible: "Llegaste al límite del plan Gratis"
+# El aviso de límite está arriba: si la pantalla quedó bajada, se sube.
+- scrollUntilVisible:
+    element:
+      text: "Llegaste al límite del plan Gratis"
+    direction: UP
 - assertVisible: "Incluye 2 cultivos propios. Pro es ilimitado."
 - assertNotVisible:
     id: "nuevo-cultivo"
+- scrollUntilVisible:
+    element:
+      id: "ver-planes-limite"
 - tapOn:
     id: "ver-planes-limite"
 - assertVisible: "Planes"

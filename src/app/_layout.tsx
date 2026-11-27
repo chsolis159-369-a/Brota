@@ -16,6 +16,7 @@ import { NOMBRE_BD, prepararBaseDatos } from '@/db';
 import { capturarErrores } from '@/servicios/errores';
 import { borrarArchivo } from '@/servicios/fotos';
 import { useDatos } from '@/store/datos';
+import { animacionPantallas, useMovimientoReducido } from '@/tema/movimiento';
 import { useTema } from '@/tema/useTema';
 
 void SplashScreen.preventAutoHideAsync();
@@ -32,6 +33,7 @@ function CargarDatos() {
 
 export default function RaizLayout() {
   const { modo, c } = useTema();
+  const reducido = useMovimientoReducido();
   const [cargadas, error] = useFonts({
     Fraunces_600SemiBold,
     NunitoSans_400Regular,
@@ -56,7 +58,7 @@ export default function RaizLayout() {
       <ThemeProvider value={temaNavegacion}>
         <CargarDatos />
         <StatusBar style={modo === 'oscuro' ? 'light' : 'dark'} />
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg } }} />
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg }, ...animacionPantallas(reducido) }} />
       </ThemeProvider>
     </SQLiteProvider>
   );

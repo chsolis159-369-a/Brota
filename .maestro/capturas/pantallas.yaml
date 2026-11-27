@@ -1,5 +1,5 @@
-# Capturas de las pantallas principales para revisar el diseño (D-29). No es una prueba: el workflow de
-# Android lo corre aparte, una vez en modo claro y otra en oscuro (MODO=claro u oscuro), y guarda las
+# Capturas de las pantallas principales para revisar el diseño (D-29, D-32). No es una prueba: el workflow de
+# Android lo corre aparte en modo claro, en oscuro y con la letra al máximo (MODO=claro, oscuro o grande) y guarda las
 # imágenes en el artefacto "capturas".
 appId: com.brota.app
 ---
