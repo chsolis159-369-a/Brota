@@ -30,11 +30,10 @@ export default function Onboarding() {
 
   return (
     <SafeAreaView style={[estilos.raiz, { backgroundColor: c.bg }]}>
-      <View pointerEvents="none" style={[estilos.brillo, { backgroundImage: `radial-gradient(circle at 50% 0%, ${c.accentSoft} 0%, ${c.bg} 70%)` }]} />
       <ScrollView contentContainerStyle={estilos.scroll}>
         <View style={estilos.columna}>
           <View style={estilos.marca}>
-            <View style={[estilos.logo, { boxShadow: c.sombra ? '0 14px 30px rgba(10, 66, 39, 0.30)' : undefined }]}>
+            <View style={[estilos.logo, { boxShadow: c.sombra || undefined }]}>
               <Logo tamano={104} />
             </View>
             <Texto variante="marca" color="accent" style={estilos.nombre}>
@@ -72,14 +71,13 @@ export default function Onboarding() {
 
 const estilos = StyleSheet.create({
   raiz: { flex: 1 },
-  brillo: { position: 'absolute', top: 0, left: 0, right: 0, height: 420 },
-  scroll: { flexGrow: 1, justifyContent: 'center', padding: 16 },
+  scroll: { flexGrow: 1, justifyContent: 'center', padding: MEDIDAS.margen },
   columna: { width: '100%', maxWidth: MEDIDAS.anchoMaximo, alignSelf: 'center', paddingVertical: 32 },
   marca: { alignItems: 'center', gap: 14 },
   logo: { borderRadius: 24 },
   nombre: { fontSize: 26, lineHeight: 32, letterSpacing: 3 },
   titulo: { marginTop: 32, marginBottom: 12 },
   chips: { marginTop: 8 },
-  puntos: { flexDirection: 'row', justifyContent: 'center', gap: 8, marginVertical: 22 },
+  puntos: { flexDirection: 'row', justifyContent: 'center', gap: 8, marginVertical: 24 },
   punto: { width: 8, height: 8, borderRadius: 4 },
 });

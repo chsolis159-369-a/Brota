@@ -5,7 +5,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Boton, Campo, Chip, Fila, Mensaje, Subtitulo } from '@/componentes/controles';
 import { Etiqueta } from '@/componentes/Etiqueta';
-import { Hero, useEnHero } from '@/componentes/Hero';
 import { Icono } from '@/componentes/Icono';
 import { Pantalla } from '@/componentes/Pantalla';
 import { Tarjeta } from '@/componentes/Tarjeta';
@@ -18,6 +17,7 @@ import { hoyStr } from '@/reglas/fechas';
 import { erroresRecientes } from '@/servicios/errores';
 import { useApp } from '@/store/app';
 import { useDatos } from '@/store/datos';
+import { TAMANO_ICONO, type NombreIcono } from '@/tema/iconos';
 import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
 /** Plan (planHTML del prototipo): planes, opinión de la prueba, privacidad y borrado de datos. */
@@ -77,7 +77,7 @@ export default function PantallaPlan() {
             {t('privacidad.version')}
           </Texto>
           {(t('privacidad.items', { returnObjects: true }) as string[]).map((item) => (
-            <ItemPlan key={item} texto={item} />
+            <ItemPlan key={item} texto={item} icono="privacidad" />
           ))}
           <Boton texto={t('privacidad.ocultar')} variante="fantasma" onPress={() => setVerPrivacidad(false)} style={estilos.arriba} />
         </Tarjeta>
@@ -121,15 +121,18 @@ function EnlaceBorrar({ texto, onPress }: { texto: string; onPress: () => void }
   );
 }
 
-/** Caja de un plan. El Pro va destacado con el degradé de la marca (D-29). */
+/**
+ * Caja de un plan. Gratis y Pro con la misma tarjeta (D-32): precios claros, sin bloque destacado ni
+ * colores de urgencia. El plan actual se marca con un borde verde.
+ */
 function CajaPlan(p: { nombre: string; etiqueta?: string; precio: string; items: string[]; activo: boolean; destacada?: boolean; children: ReactNode }) {
   const { c } = useTema();
   const contenido = (
     <>
       <View style={estilos.cabecera}>
-        {p.destacada ? <Icono nombre="pro" color={c.lima} tamano={22} /> : null}
+        {p.destacada ? <Icono nombre="pro" color={c.accent} /> : null}
         <Texto variante="subtitulo">{p.nombre}</Texto>
-        {p.etiqueta ? <Etiqueta tono="gold">{p.etiqueta}</Etiqueta> : null}
+        {p.etiqueta ? <Etiqueta tono="ok">{p.etiqueta}</Etiqueta> : null}
       </View>
       <Texto variante="titulo" style={estilos.precio}>
         {p.precio}
@@ -140,16 +143,14 @@ function CajaPlan(p: { nombre: string; etiqueta?: string; precio: string; items:
       <View style={estilos.arriba}>{p.children}</View>
     </>
   );
-  if (p.destacada) return <Hero style={p.activo ? { ...estilos.caja, borderWidth: 3, borderColor: c.lima } : estilos.caja}>{contenido}</Hero>;
   return <View style={[estilos.caja, superficie(c), p.activo ? { borderWidth: 2, borderColor: c.accent } : null]}>{contenido}</View>;
 }
 
-function ItemPlan({ texto }: { texto: string }) {
+function ItemPlan({ texto, icono = 'tarea' }: { texto: string; icono?: NombreIcono }) {
   const { c } = useTema();
-  const enHero = useEnHero();
   return (
     <View style={estilos.item}>
-      <Icono nombre="tarea" color={enHero ? c.lima : c.accent} tamano={18} />
+      <Icono nombre={icono} color={c.accent} tamano={TAMANO_ICONO.chico} />
       <Texto variante="cuerpo" style={estilos.flex}>
         {texto}
       </Texto>
@@ -210,10 +211,10 @@ function Opinion() {
 }
 
 const estilos = StyleSheet.create({
-  caja: { borderRadius: MEDIDAS.radioTarjeta, padding: 18, marginBottom: 14 },
+  caja: { borderRadius: MEDIDAS.radioTarjeta, padding: MEDIDAS.rellenoTarjeta, marginBottom: MEDIDAS.separacion },
   cabecera: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   precio: { marginTop: 6, marginBottom: 10 },
-  item: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginBottom: 6 },
+  item: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, marginBottom: 8 },
   flex: { flex: 1 },
   arriba: { marginTop: 8 },
   parrafo: { marginVertical: 6 },

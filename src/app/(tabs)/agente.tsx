@@ -29,6 +29,7 @@ import { fotoParaAnalizar } from '@/servicios/fotoAgente';
 import { useApp, type MensajeChat } from '@/store/app';
 import { useClima } from '@/store/clima';
 import { useDatos, type CultivoCompleto } from '@/store/datos';
+import { TAMANO_ICONO } from '@/tema/iconos';
 import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
 /** Contexto de los cultivos para el Agente con IA (solo se manda en Pro; el servidor lo vuelve a verificar). */
@@ -253,8 +254,8 @@ export default function Agente() {
         testID="campo-pregunta"
       />
       <Boton texto={t('agente.enviar')} icono="enviar" onPress={() => void enviar(pregunta)} disabled={!!pensando} testID="enviar-pregunta" />
-      <View style={estilos.pie}>
-        {conIA ? <Icono nombre="ia" color={c.accent} tamano={16} /> : null}
+      <View style={[estilos.pie, { backgroundColor: c.surfaceAlt, borderColor: c.border }]}>
+        <Icono nombre={conIA ? 'ia' : 'info'} color={c.muted} tamano={TAMANO_ICONO.chico} />
         <Texto variante="secundario" style={estilos.flex}>
           {conIA ? t('agente.modoIA') : t('agente.modoReglas')}
         </Texto>
@@ -263,7 +264,12 @@ export default function Agente() {
   );
 }
 
-const TONO_CERTEZA = { alta: 'ok', media: 'gold', baja: 'muted' } as const;
+/** Certeza (D-31) con color, ícono y texto; "Poco seguro" en tono neutro, no de alerta (D-32). */
+const CERTEZA = {
+  alta: { tono: 'ok', icono: 'tarea' },
+  media: { tono: 'gold', icono: 'duda' },
+  baja: { tono: 'muted', icono: 'info' },
+} as const;
 
 /** Candidatos del reconocimiento, con su certeza, la foto pedida y el aviso de derivar (D-31). */
 function TarjetaReconocimiento({ r }: { r: Reconocimiento }) {
@@ -274,7 +280,9 @@ function TarjetaReconocimiento({ r }: { r: Reconocimiento }) {
       {r.candidatos.length && r.certeza ? (
         <View style={estilos.recoCabecera}>
           <Texto variante="cuerpoFuerte">{t('agente.reco.titulo')}</Texto>
-          <Etiqueta tono={TONO_CERTEZA[r.certeza]}>{t(`agente.reco.certeza.${r.certeza}`)}</Etiqueta>
+          <Etiqueta tono={CERTEZA[r.certeza].tono} icono={CERTEZA[r.certeza].icono}>
+            {t(`agente.reco.certeza.${r.certeza}`)}
+          </Etiqueta>
         </View>
       ) : null}
       {r.candidatos.map((x) => {
@@ -328,16 +336,16 @@ const estilos = StyleSheet.create({
   cabeceraFoto: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 },
   botonesFoto: { gap: 0 },
   botonFoto: { paddingHorizontal: 10 },
-  filaVos: { alignItems: 'flex-end', marginBottom: 10 },
-  filaAgente: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, marginBottom: 10 },
-  burbuja: { maxWidth: '84%', paddingVertical: 10, paddingHorizontal: 14, borderRadius: MEDIDAS.radioTarjeta, gap: 8 },
+  filaVos: { alignItems: 'flex-end', marginBottom: 14 },
+  filaAgente: { flexDirection: 'row', alignItems: 'flex-end', gap: 10, marginBottom: 14 },
+  burbuja: { maxWidth: '86%', paddingVertical: 12, paddingHorizontal: 16, borderRadius: MEDIDAS.radioTarjeta, gap: 10 },
   burbujaVos: { borderBottomRightRadius: 6 },
   burbujaAgente: { borderBottomLeftRadius: 6, flexShrink: 1 },
   foto: { width: 220, maxWidth: '100%', aspectRatio: 4 / 3, borderRadius: 14 },
   campo: { marginTop: 8 },
-  pie: { flexDirection: 'row', alignItems: 'flex-start', gap: 6, marginTop: 2 },
-  opciones: { marginLeft: 36, marginBottom: 10 },
-  reco: { borderTopWidth: 1, paddingTop: 8, gap: 6 },
+  pie: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginTop: 4, padding: 14, borderRadius: MEDIDAS.radioControl, borderWidth: 1 },
+  opciones: { marginLeft: 38, marginBottom: 12 },
+  reco: { borderTopWidth: 1, paddingTop: 10, gap: 8 },
   recoCabecera: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 4 },
   candidato: { flexDirection: 'row', alignItems: 'center', gap: 8 },
 });

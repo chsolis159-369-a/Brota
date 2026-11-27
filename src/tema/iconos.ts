@@ -30,6 +30,9 @@ export const ICONOS = {
   volver: i('chevron.left', 'chevron_left'),
   ir: i('chevron.right', 'chevron_right'),
   ubicacion: i('location.fill', 'location_on'),
+  duda: i('questionmark.circle.fill', 'help'),
+  info: i('info.circle.fill', 'info'),
+  privacidad: i('lock.shield.fill', 'shield_lock'),
   // Clima (descripcionClima)
   soleado: i('sun.max.fill', 'sunny'),
   parcial: i('cloud.sun.fill', 'partly_cloudy_day'),

@@ -60,9 +60,9 @@ export default function Cultivos() {
       {hay ? (
         <Estadisticas
           items={[
-            { valor: cultivos.length, etiqueta: t('cultivos.stats.cultivos'), icono: 'cultivo', tono: 'accent' },
-            { valor: cultivos.filter((c) => c.etapa === 'Cosecha').length, etiqueta: t('cultivos.stats.enCosecha'), icono: 'cosecha', tono: 'gold' },
-            { valor: cultivos.filter(alerta).length, etiqueta: t('cultivos.stats.conAlertas'), icono: 'alerta', tono: 'alert' },
+            { valor: cultivos.length, etiqueta: t('cultivos.stats.cultivos'), icono: 'cultivo' },
+            { valor: cultivos.filter((c) => c.etapa === 'Cosecha').length, etiqueta: t('cultivos.stats.enCosecha'), icono: 'cosecha' },
+            { valor: cultivos.filter(alerta).length, etiqueta: t('cultivos.stats.conAlertas'), icono: 'alerta', tono: cultivos.some(alerta) ? 'alert' : 'neutro' },
           ]}
         />
       ) : null}
@@ -135,7 +135,7 @@ export default function Cultivos() {
                       setCreando(true);
                     }}
                     style={({ pressed }) => [estilos.plantilla, superficie(colores), { transform: [{ scale: pressed ? 0.98 : 1 }] }]}>
-                    <Medalla icono={p.ubicacion === 'interior' ? 'luz' : 'huerta'} tono={p.ubicacion === 'interior' ? 'gold' : 'accent'} tamano={34} />
+                    <Medalla icono={p.ubicacion === 'interior' ? 'luz' : 'huerta'} tamano={36} />
                     <Texto variante="cuerpoFuerte">{p.nombre}</Texto>
                     <Texto variante="secundario">{t('cultivos.plantilla', { tipo: p.tipo, ubicacion: p.ubicacion })}</Texto>
                   </Pressable>
@@ -153,6 +153,6 @@ export default function Cultivos() {
 const estilos = StyleSheet.create({
   parrafo: { marginVertical: 6 },
   filtros: { marginTop: 10 },
-  plantillas: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginVertical: 8 },
-  plantilla: { width: '48.5%', borderRadius: 18, padding: 14, gap: 6, minHeight: MEDIDAS.toque },
+  plantillas: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginVertical: 10 },
+  plantilla: { flexGrow: 1, flexBasis: '45%', borderRadius: MEDIDAS.radioTarjeta, padding: 16, gap: 6, minHeight: MEDIDAS.toque },
 });

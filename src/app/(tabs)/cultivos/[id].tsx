@@ -95,13 +95,12 @@ function Detalle({ c }: { c: CultivoCompleto }) {
 
       <Estadisticas
         items={[
-          { valor: c.bitacora.length, etiqueta: t('cultivo.stats.registros'), icono: 'registros', tono: 'accent' },
-          { valor: riegos, etiqueta: t('cultivo.stats.riegos'), icono: 'Riego', tono: 'info' },
+          { valor: c.bitacora.length, etiqueta: t('cultivo.stats.registros'), icono: 'registros' },
+          { valor: riegos, etiqueta: t('cultivo.stats.riegos'), icono: 'Riego' },
           {
             valor: ultDias === null ? '-' : ultDias === 0 ? t('cultivo.stats.hoy') : ultDias,
             etiqueta: ultDias === 1 ? t('cultivo.stats.diaDesde') : t('cultivo.stats.diasDesde'),
             icono: 'tiempo',
-            tono: 'gold',
           },
         ]}
       />
@@ -119,7 +118,7 @@ function Detalle({ c }: { c: CultivoCompleto }) {
               onPress={() => void datos.cambiarEtapa(c.id, e)}
               style={[
                 estilos.etapa,
-                { borderColor: actual || pasada ? tema.c.accent : tema.c.border, backgroundColor: actual ? tema.c.accent : tema.c.surface },
+                { borderColor: actual || pasada ? tema.c.accent : tema.c.bordeCampo, backgroundColor: actual ? tema.c.accent : tema.c.surface },
               ]}>
               <Texto variante={actual ? 'cuerpoFuerte' : 'cuerpo'} color={actual ? 'sobreAccent' : pasada ? 'accent' : 'fg'} style={estilos.centro}>
                 {(pasada ? '✓ ' : '') + t(`etapas.${e}`)}
@@ -176,7 +175,7 @@ function Detalle({ c }: { c: CultivoCompleto }) {
       ) : (
         bitacora.map((r) => (
           <View key={r.id} style={[estilos.entrada, superficie(tema.c)]} accessible>
-            <Medalla icono={r.tipo} tono={r.tipo === 'Riego' ? 'info' : r.tipo === 'Plaga' ? 'alert' : r.tipo === 'Fertilizante' ? 'gold' : 'accent'} tamano={34} />
+            <Medalla icono={r.tipo} tamano={36} />
             <View style={estilos.flex}>
               <Texto variante="secundario">{t('cultivo.entrada', { fecha: r.fecha, tipo: t(`tiposRegistro.${r.tipo}`) })}</Texto>
               <Texto variante="cuerpo">{r.nota}</Texto>
@@ -186,7 +185,7 @@ function Detalle({ c }: { c: CultivoCompleto }) {
       )}
 
       <Subtitulo>{t('cultivo.zonaPeligro')}</Subtitulo>
-      <Boton texto={confirmar ? t('comun.cancelar') : t('cultivo.eliminar')} variante="fantasma" onPress={() => setConfirmar(!confirmar)} testID="eliminar-cultivo" />
+      <Boton texto={confirmar ? t('comun.cancelar') : t('cultivo.eliminar')} variante={confirmar ? 'fantasma' : 'peligro'} onPress={() => setConfirmar(!confirmar)} testID="eliminar-cultivo" />
       {confirmar ? <Boton texto={t('cultivo.confirmarEliminar')} variante="peligroLleno" onPress={() => void eliminar()} testID="confirmar-eliminar" /> : null}
     </Pantalla>
   );
@@ -252,12 +251,12 @@ const estilos = StyleSheet.create({
   proximo: { borderLeftWidth: 5, marginTop: 12 },
   guia: { marginTop: 6 },
   etapas: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 6, marginBottom: 12 },
-  etapa: { width: '48.5%', borderWidth: 1.5, borderRadius: MEDIDAS.radioControl, padding: 10, minHeight: 48, justifyContent: 'center' },
+  etapa: { flexGrow: 1, flexBasis: '45%', borderWidth: 1.5, borderRadius: MEDIDAS.radioControl, padding: 12, minHeight: MEDIDAS.toque + 4, justifyContent: 'center' },
   separado: { marginTop: 12 },
   ayudaMedicion: { marginBottom: 8 },
   botonFoto: { marginTop: 8 },
   fotos: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 },
   figura: { width: '48.5%', gap: 4 },
   imagen: { width: '100%', aspectRatio: 1, borderRadius: 14 },
-  entrada: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 16, padding: 12, marginBottom: 8 },
+  entrada: { flexDirection: 'row', alignItems: 'center', gap: 14, borderRadius: MEDIDAS.radioTarjeta, padding: 16, marginBottom: 12 },
 });

@@ -72,7 +72,7 @@ export function TarjetaCultivo({ c, onPress, ahora }: { c: CultivoCompleto; onPr
 }
 
 const estilos = StyleSheet.create({
-  tarjeta: { borderRadius: MEDIDAS.radioTarjeta, padding: 16, marginBottom: 12 },
+  tarjeta: { borderRadius: MEDIDAS.radioTarjeta, padding: MEDIDAS.rellenoTarjeta, marginBottom: MEDIDAS.separacion },
   cabecera: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 4 },
   nombreFila: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' },
   nombre: { flexShrink: 1, marginRight: 'auto' },

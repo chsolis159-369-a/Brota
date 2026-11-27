@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useAprendizaje } from '@/componentes/aprender';
 import { Boton, Chip, Explicacion, Mensaje } from '@/componentes/controles';
 import { Barra } from '@/componentes/graficos';
+import { Icono } from '@/componentes/Icono';
 import { Pantalla } from '@/componentes/Pantalla';
 import { Tarjeta } from '@/componentes/Tarjeta';
 import { Texto } from '@/componentes/Texto';
@@ -136,10 +137,13 @@ function Test({ m, fase, setFase }: { m: Modulo; fase: Extract<Fase, { tipo: 'te
               estilos.opcion,
               {
                 backgroundColor: esCorrecta ? c.accentSoft : esMal ? c.alertSoft : c.surface,
-                borderColor: esCorrecta ? c.ok : esMal ? c.alert : resp === idx ? c.accent : c.border,
+                borderColor: esCorrecta ? c.ok : esMal ? c.alert : resp === idx ? c.accent : c.bordeCampo,
               },
             ]}>
-            <Texto variante="cuerpo">{op}</Texto>
+            <Texto variante="cuerpo" style={estilos.flex}>
+              {op}
+            </Texto>
+            {esCorrecta ? <Icono nombre="tarea" color={c.ok} /> : esMal ? <Icono nombre="alerta" color={c.alert} /> : null}
           </Pressable>
         );
       })}
@@ -220,10 +224,21 @@ function Resultado({ m, fase, repetir }: { m: Modulo; fase: Extract<Fase, { tipo
 const estilos = StyleSheet.create({
   subnav: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 4, flexWrap: 'wrap' },
   titulo: { marginTop: 8, marginBottom: 12 },
-  leccion: { fontSize: 16, lineHeight: 26 },
+  leccion: { fontSize: 18, lineHeight: 29 },
   nota: { marginBottom: 8 },
-  pregunta: { fontSize: 18, lineHeight: 24, marginTop: 4, marginBottom: 12 },
-  opcion: { borderWidth: 1.5, borderRadius: MEDIDAS.radioControl, paddingVertical: 14, paddingHorizontal: 16, marginBottom: 10, minHeight: 52, justifyContent: 'center' },
+  pregunta: { fontSize: 19, lineHeight: 27, marginTop: 6, marginBottom: 16 },
+  opcion: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderWidth: 1.5,
+    borderRadius: MEDIDAS.radioControl,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    marginBottom: 12,
+    minHeight: MEDIDAS.toque + 8,
+  },
+  flex: { flex: 1 },
   resultado: { paddingVertical: 24, alignItems: 'stretch' },
   centro: { textAlign: 'center' },
   centrado: { alignItems: 'center' },

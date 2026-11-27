@@ -23,7 +23,7 @@ export default function PestanasLayout() {
       indicatorColor={c.accentSoft}
       labelVisibilityMode="labeled"
       iconColor={{ default: c.muted, selected: c.accent }}
-      labelStyle={{ default: { color: c.muted }, selected: { color: c.accent } }}>
+      labelStyle={{ default: { color: c.muted, fontSize: 13 }, selected: { color: c.accent, fontSize: 13 } }}>
       {PESTANAS.map((p) => (
         <NativeTabs.Trigger key={p.ruta} name={p.ruta} disabled={pestanaDeshabilitada(p.ruta, examenEnCurso)}>
           <NativeTabs.Trigger.Label>{t(`pestanas.${p.clave}`)}</NativeTabs.Trigger.Label>

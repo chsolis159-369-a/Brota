@@ -58,9 +58,9 @@ export default function Hoy() {
 
       <Estadisticas
         items={[
-          { valor: r.puntos, etiqueta: t('hoy.puntos'), icono: 'puntos', tono: 'gold' },
-          { valor: r.racha, etiqueta: t('hoy.diasSeguidos'), icono: 'racha', tono: 'alert' },
-          { valor: r.nivel.t, etiqueta: t('hoy.nivel'), texto: true, icono: 'nivel', tono: 'accent' },
+          { valor: r.puntos, etiqueta: t('hoy.puntos'), icono: 'puntos' },
+          { valor: r.racha, etiqueta: t('hoy.diasSeguidos'), icono: 'racha' },
+          { valor: r.nivel.t, etiqueta: t('hoy.nivel'), texto: true, icono: 'nivel' },
         ]}
       />
 

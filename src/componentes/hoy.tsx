@@ -8,7 +8,7 @@ import { LOGROS, type IdLogro, type MotivoModulo, type Recomendacion } from '@/r
 import { nivelPorPuntos } from '@/reglas/niveles';
 import { descripcionClima } from '@/servicios/clima';
 import { useClima } from '@/store/clima';
-import { superficie, useTema } from '@/tema/useTema';
+import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
 import { Boton, Explicacion, Medalla } from './controles';
 import { Icono } from './Icono';
@@ -52,8 +52,8 @@ export function FilaTarea({ tarea, onPress }: { tarea: Tarea; onPress: () => voi
         style={[estilos.flex, tarea.hecha ? estilos.tachado : null]}>
         {texto}
       </Texto>
-      <View style={[estilos.pts, { backgroundColor: c.goldSoft }]}>
-        <Texto variante="secundario" color="gold" style={estilos.ptsTexto}>
+      <View style={[estilos.pts, { backgroundColor: c.accentSoft }]}>
+        <Texto variante="secundario" color="accent" style={estilos.ptsTexto}>
           {t('tareas.puntos', { pts: tarea.puntos, dificultad: t(`tareas.dificultad.${tarea.dificultad}`) })}
         </Texto>
       </View>
@@ -74,8 +74,8 @@ export function Logros({ obtenidos }: { obtenidos: Record<IdLogro, boolean> }) {
             key={id}
             accessible
             accessibilityState={{ checked: ok }}
-            style={[estilos.badge, ok ? { borderColor: c.goldSoft, borderStyle: 'solid', backgroundColor: c.goldSoft } : { borderColor: c.border }]}>
-            <Icono nombre={ok ? 'logro' : 'bloqueado'} color={ok ? c.gold : c.muted} tamano={22} />
+            style={[estilos.badge, ok ? { borderColor: c.accentSoft, borderStyle: 'solid', backgroundColor: c.accentSoft } : { borderColor: c.bordeCampo, backgroundColor: c.surfaceAlt }]}>
+            <Icono nombre={ok ? 'logro' : 'bloqueado'} color={ok ? c.accent : c.muted} />
             <Texto variante={ok ? 'cuerpoFuerte' : 'secundario'} color={ok ? 'fg' : 'muted'} style={estilos.flex}>
               {t(`logros.${id}`)}
             </Texto>
@@ -197,15 +197,15 @@ const estilos = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    borderRadius: 18,
+    borderRadius: MEDIDAS.radioTarjeta,
     paddingVertical: 12,
     paddingHorizontal: 14,
     marginBottom: 10,
     minHeight: 56,
   },
-  check: { width: 26, height: 26, borderRadius: 13, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
+  check: { width: 28, height: 28, borderRadius: 14, borderWidth: 2, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   tachado: { textDecorationLine: 'line-through' },
-  pts: { flexShrink: 0, borderRadius: 999, paddingHorizontal: 9, paddingVertical: 3 },
+  pts: { flexShrink: 0, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 },
   ptsTexto: { fontFamily: 'NunitoSans_700Bold' },
   badges: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   badge: {
