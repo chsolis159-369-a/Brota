@@ -48,7 +48,11 @@ appId: com.brota.app
       id: "confirmar-eliminar"
 - tapOn:
     id: "confirmar-eliminar"
-- assertVisible: "Mis cultivos"
+# Al volver, la lista conserva dónde había quedado: se sube hasta el título.
+- scrollUntilVisible:
+    element:
+      text: "Mis cultivos"
+    direction: UP
 - assertNotVisible: "Lechuga Maestro"
 # Los puntos del registro (2) y la medición (4) no se pierden al borrar el cultivo.
 - tapOn: "Hoy"

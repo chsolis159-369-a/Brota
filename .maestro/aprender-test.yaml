@@ -39,7 +39,11 @@ appId: com.brota.app
       id: "volver-modulos"
 - tapOn:
     id: "volver-modulos"
-- assertVisible: "Tu nivel"
+# Al volver, la lista conserva dónde había quedado: se sube hasta el nivel.
+- scrollUntilVisible:
+    element:
+      text: "Tu nivel"
+    direction: UP
 # La lista de módulos es larga: se le da más tiempo para llegar al final.
 - scrollUntilVisible:
     element:
