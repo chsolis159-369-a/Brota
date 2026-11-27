@@ -3,6 +3,7 @@ import { NativeTabs } from 'expo-router/native-tabs';
 import { useTranslation } from 'react-i18next';
 
 import { PESTANAS, pestanaDeshabilitada } from '@/config/pestanas';
+import { PantallaCargando } from '@/componentes/estados';
 import { useApp } from '@/store/app';
 import { useDatos } from '@/store/datos';
 import { useTema } from '@/tema/useTema';
@@ -14,7 +15,7 @@ export default function PestanasLayout() {
   const listo = useDatos((s) => s.listo);
   const onboarded = useDatos((s) => s.perfil.onboarded);
 
-  if (!listo) return null;
+  if (!listo) return <PantallaCargando />;
   if (!onboarded) return <Redirect href="/onboarding" />;
 
   return (

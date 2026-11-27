@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Boton, Campo, Chip, Estadisticas, Fila, Medalla, Subtitulo } from '@/componentes/controles';
 import { TarjetaCultivo, datosSalud } from '@/componentes/cultivo';
+import { Vacio } from '@/componentes/estados';
 import { Pantalla } from '@/componentes/Pantalla';
 import { Tarjeta } from '@/componentes/Tarjeta';
 import { Texto } from '@/componentes/Texto';
@@ -116,12 +117,12 @@ export default function Cultivos() {
           {lista.length ? (
             lista.map((c) => <TarjetaCultivo key={c.id} c={c} ahora={ahora} onPress={() => router.push({ pathname: '/cultivos/[id]', params: { id: c.id } })} />)
           ) : (
-            <Texto variante="secundario">{t('cultivos.sinCoincidencias')}</Texto>
+            <Vacio icono="cultivo">{t('cultivos.sinCoincidencias')}</Vacio>
           )}
         </>
       ) : (
         <>
-          <Texto variante="secundario">{t('cultivos.vacio')}</Texto>
+          <Vacio icono="cultivo">{t('cultivos.vacio')}</Vacio>
           {!creando ? (
             <>
               <Subtitulo>{t('cultivos.empezarRapido')}</Subtitulo>

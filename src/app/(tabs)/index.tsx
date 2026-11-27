@@ -8,6 +8,7 @@ import { MODULOS } from '@/contenido';
 import { Boton, Estadisticas, Mensaje, Subtitulo } from '@/componentes/controles';
 import { TarjetaCultivo } from '@/componentes/cultivo';
 import { Anillo } from '@/componentes/graficos';
+import { Vacio } from '@/componentes/estados';
 import { Hero } from '@/componentes/Hero';
 import { ClimaConsejo, FilaTarea, Logros, TarjetasRecomendacion } from '@/componentes/hoy';
 import { Pantalla } from '@/componentes/Pantalla';
@@ -67,7 +68,7 @@ export default function Hoy() {
       <Subtitulo>{t('hoy.tituloTareas')}</Subtitulo>
       {total === 0 ? (
         <Tarjeta>
-          <Texto variante="secundario">{t('hoy.sinCultivos')}</Texto>
+          <Vacio icono="cultivo">{t('hoy.sinCultivos')}</Vacio>
           <Boton texto={t('hoy.crearPrimero')} onPress={() => router.navigate({ pathname: '/cultivos', params: { crear: '1' } })} style={estilos.boton} />
         </Tarjeta>
       ) : (

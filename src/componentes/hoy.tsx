@@ -11,6 +11,7 @@ import { useClima } from '@/store/clima';
 import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
 import { Boton, Explicacion, Medalla } from './controles';
+import { LineasCargando, Vacio } from './estados';
 import { Icono } from './Icono';
 import { Tarjeta } from './Tarjeta';
 import { Texto } from './Texto';
@@ -89,7 +90,7 @@ export function Logros({ obtenidos }: { obtenidos: Record<IdLogro, boolean> }) {
 /** Clima y consejo del día (consejoHTML del prototipo). */
 export function ClimaConsejo({ ahora }: { ahora: Date }) {
   const { t } = useTranslation();
-  const { clima, ciudad } = useClima();
+  const { clima, ciudad, cargando } = useClima();
   const tips = t('tips', { returnObjects: true }) as string[];
   const porque = t('tipsPorque', { returnObjects: true }) as string[];
   const dias = t('clima.diasSemana', { returnObjects: true }) as string[];
@@ -117,7 +118,7 @@ export function ClimaConsejo({ ahora }: { ahora: Date }) {
           </Texto>
         </>
       ) : (
-        <Texto variante="secundario">{t('clima.sinPronostico')}</Texto>
+        cargando ? <LineasCargando /> : <Vacio icono="nublado">{t('clima.sinPronostico')}</Vacio>
       )}
       <Explicacion icono="consejo">
         <Texto variante="cuerpo">

@@ -7,6 +7,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Boton, BotonRapido, Campo, Chip, Estadisticas, Fila, Medalla, Mensaje, Subtitulo } from '@/componentes/controles';
 import { datosSalud, useTextoProximo, useTextoSalud } from '@/componentes/cultivo';
 import { Etiqueta } from '@/componentes/Etiqueta';
+import { Vacio } from '@/componentes/estados';
 import { MedidorVPD, Punto, SparkPPFD } from '@/componentes/graficos';
 import { Pantalla } from '@/componentes/Pantalla';
 import { Tarjeta } from '@/componentes/Tarjeta';
@@ -171,7 +172,7 @@ function Detalle({ c }: { c: CultivoCompleto }) {
         ))}
       </Fila>
       {bitacora.length === 0 ? (
-        <Texto variante="secundario">{t('cultivo.sinRegistros') + (filtro === 'Todas' ? t('cultivo.sinRegistrosTodas') : t('cultivo.sinRegistrosTipo'))}</Texto>
+        <Vacio icono="registros">{t('cultivo.sinRegistros') + (filtro === 'Todas' ? t('cultivo.sinRegistrosTodas') : t('cultivo.sinRegistrosTipo'))}</Vacio>
       ) : (
         bitacora.map((r) => (
           <View key={r.id} style={[estilos.entrada, superficie(tema.c)]} accessible>
