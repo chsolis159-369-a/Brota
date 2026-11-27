@@ -55,3 +55,6 @@ export const ICONOS = {
 } satisfies Record<string, DefIcono>;
 
 export type NombreIcono = keyof typeof ICONOS;
+
+/** Dos tamaños fijos para que los íconos se vean iguales en toda la app (D-32). */
+export const TAMANO_ICONO = { chico: 18, normal: 22 } as const;

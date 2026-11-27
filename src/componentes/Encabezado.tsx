@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { VERSION_PRUEBA } from '@/config/flags';
 import { useApp } from '@/store/app';
-import { superficie, useTema } from '@/tema/useTema';
+import { useTema } from '@/tema/useTema';
 
 import { Etiqueta } from './Etiqueta';
 import { Logo } from './Logo';
@@ -23,7 +23,7 @@ export function Encabezado() {
           {t('marca')}
         </Texto>
       </View>
-      <View style={[estilos.plan, superficie(c)]}>
+      <View style={[estilos.plan, { backgroundColor: c.surface, borderColor: c.border }]}>
         <Texto variante="secundario" color="fg" style={estilos.nombrePlan}>
           {etiqueta}
         </Texto>
@@ -42,14 +42,16 @@ export function Encabezado() {
 
 const estilos = StyleSheet.create({
   fila: {
-    paddingTop: 14,
-    paddingBottom: 10,
+    paddingTop: 16,
+    paddingBottom: 12,
+    flexWrap: 'wrap',
+    rowGap: 8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 8,
   },
   marca: { flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 0 },
-  plan: { flexDirection: 'row', alignItems: 'center', flexShrink: 1, borderRadius: 999, paddingLeft: 12, paddingRight: 6, paddingVertical: 5 },
+  plan: { flexDirection: 'row', alignItems: 'center', flexShrink: 1, borderWidth: 1, borderRadius: 999, paddingLeft: 14, paddingRight: 6, paddingVertical: 5 },
   nombrePlan: { fontFamily: 'NunitoSans_600SemiBold' },
 });

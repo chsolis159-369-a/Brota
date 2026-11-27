@@ -9,15 +9,11 @@ import { Texto } from './Texto';
 
 type Props = { titulo?: string; children?: ReactNode };
 
-/** Columna centrada con el encabezado de BROTA y un degradé suave de la marca arriba (D-29). */
+/** Columna centrada con el encabezado de BROTA sobre un fondo liso y cálido (D-32). */
 export function Pantalla({ titulo, children }: Props) {
   const { c } = useTema();
   return (
     <SafeAreaView edges={['top', 'left', 'right']} style={[estilos.raiz, { backgroundColor: c.bg }]}>
-      <View
-        pointerEvents="none"
-        style={[estilos.brillo, { backgroundImage: `linear-gradient(180deg, ${c.accentSoft} 0%, ${c.bg} 100%)` }]}
-      />
       <ScrollView contentContainerStyle={estilos.scroll} keyboardShouldPersistTaps="handled">
         <View style={estilos.columna}>
           <Encabezado />
@@ -35,8 +31,7 @@ export function Pantalla({ titulo, children }: Props) {
 
 const estilos = StyleSheet.create({
   raiz: { flex: 1 },
-  brillo: { position: 'absolute', top: 0, left: 0, right: 0, height: 280 },
-  scroll: { paddingHorizontal: MEDIDAS.margen, paddingBottom: 32 },
+  scroll: { paddingHorizontal: MEDIDAS.margen, paddingBottom: 40 },
   columna: { width: '100%', maxWidth: MEDIDAS.anchoMaximo, alignSelf: 'center' },
-  titulo: { marginTop: 10, marginBottom: 14 },
+  titulo: { marginTop: 12, marginBottom: MEDIDAS.separacion },
 });

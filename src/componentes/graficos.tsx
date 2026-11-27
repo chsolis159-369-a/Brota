@@ -64,7 +64,6 @@ export function Barra({ valor }: { valor: number }) {
         style={[
           estilos.barraLlena,
           { backgroundColor: enHero ? c.lima : c.accent, width: `${Math.max(0, Math.min(1, valor)) * 100}%` },
-          enHero ? null : { backgroundImage: `linear-gradient(90deg, ${c.botonDesde} 0%, ${c.accent} 100%)` },
         ]}
       />
     </View>
@@ -114,7 +113,7 @@ const estilos = StyleSheet.create({
   seg: { flexDirection: 'row', gap: 4, marginVertical: 8 },
   segItem: { flex: 1, height: 7, borderRadius: 999 },
   punto: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
-  barra: { height: 9, borderRadius: 999, overflow: 'hidden', marginVertical: 8 },
+  barra: { height: 8, borderRadius: 999, overflow: 'hidden', marginVertical: 10 },
   barraLlena: { height: '100%', borderRadius: 999 },
   gauge: { height: 10, borderRadius: 999, marginTop: 12, marginBottom: 6 },
   banda: { position: 'absolute', top: 0, bottom: 0, borderRadius: 999 },
