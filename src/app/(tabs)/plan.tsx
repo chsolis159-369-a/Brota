@@ -1,7 +1,7 @@
 import * as Clipboard from 'expo-clipboard';
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Boton, Campo, Chip, Fila, Mensaje, Subtitulo } from '@/componentes/controles';
 import { Etiqueta } from '@/componentes/Etiqueta';
@@ -17,15 +17,16 @@ import { hoyStr } from '@/reglas/fechas';
 import { erroresRecientes } from '@/servicios/errores';
 import { useApp } from '@/store/app';
 import { useDatos } from '@/store/datos';
-import { TAMANO_ICONO, type NombreIcono } from '@/tema/iconos';
+import { TAMANO_ICONO } from '@/tema/iconos';
 import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
-/** Plan (planHTML del prototipo): planes, opinión de la prueba, privacidad y borrado de datos. */
+/**
+ * Plan (planHTML del prototipo): planes y opinión de la prueba. La privacidad y el borrado de la cuenta
+ * pasaron a Configuración > Perfil (D-35).
+ */
 export default function PantallaPlan() {
   const { t } = useTranslation();
   const plan = useApp((s) => s.plan);
-  const [confirmar, setConfirmar] = useState(false);
-  const [verPrivacidad, setVerPrivacidad] = useState(false);
 
   const elegir = async (p: Plan, ciclo: 'mensual' | 'anual' = 'mensual') => {
     useApp.getState().setCiclo(ciclo);
@@ -69,55 +70,7 @@ export default function PantallaPlan() {
       <Opinion />
       <Texto variante="secundario">{t('planes.cobroLocal')}</Texto>
 
-      <Subtitulo>{t('privacidad.titulo')}</Subtitulo>
-      {verPrivacidad ? (
-        <Tarjeta>
-          <Texto variante="cuerpoFuerte">{t('privacidad.tusDatos')}</Texto>
-          <Texto variante="secundario" style={estilos.parrafo}>
-            {t('privacidad.version')}
-          </Texto>
-          {(t('privacidad.items', { returnObjects: true }) as string[]).map((item) => (
-            <ItemPlan key={item} texto={item} icono="privacidad" />
-          ))}
-          <Boton texto={t('privacidad.ocultar')} variante="fantasma" onPress={() => setVerPrivacidad(false)} style={estilos.arriba} />
-        </Tarjeta>
-      ) : (
-        <Boton texto={t('privacidad.ver')} variante="fantasma" onPress={() => setVerPrivacidad(true)} />
-      )}
-
-      {confirmar ? (
-        <Tarjeta style={estilos.arriba}>
-          <Texto variante="cuerpo">{t('privacidad.confirmarTexto')}</Texto>
-          <Boton
-            texto={t('privacidad.confirmar')}
-            variante="peligro"
-            onPress={() => {
-              setConfirmar(false);
-              void useDatos.getState().borrarTodo();
-            }}
-            style={estilos.arriba}
-            testID="confirmar-borrado"
-          />
-          <Boton texto={t('comun.cancelar')} variante="fantasma" onPress={() => setConfirmar(false)} />
-        </Tarjeta>
-      ) : (
-        <EnlaceBorrar texto={t('privacidad.borrar')} onPress={() => setConfirmar(true)} />
-      )}
     </Pantalla>
-  );
-}
-
-/**
- * Borrar la cuenta como enlace chico y discreto, para que no se toque sin querer (pedido del usuario, D-26).
- * Mantiene un área táctil de 44 px y siempre pide confirmación.
- */
-function EnlaceBorrar({ texto, onPress }: { texto: string; onPress: () => void }) {
-  return (
-    <Pressable onPress={onPress} accessibilityRole="button" testID="borrar-cuenta" style={estilos.enlace}>
-      <Texto variante="secundario" color="alert" style={estilos.subrayado}>
-        {texto}
-      </Texto>
-    </Pressable>
   );
 }
 
@@ -146,11 +99,11 @@ function CajaPlan(p: { nombre: string; etiqueta?: string; precio: string; items:
   return <View style={[estilos.caja, superficie(c), p.activo ? { borderWidth: 2, borderColor: c.accent } : null]}>{contenido}</View>;
 }
 
-function ItemPlan({ texto, icono = 'tarea' }: { texto: string; icono?: NombreIcono }) {
+function ItemPlan({ texto }: { texto: string }) {
   const { c } = useTema();
   return (
     <View style={estilos.item}>
-      <Icono nombre={icono} color={c.accent} tamano={TAMANO_ICONO.chico} />
+      <Icono nombre="tarea" color={c.accent} tamano={TAMANO_ICONO.chico} />
       <Texto variante="cuerpo" style={estilos.flex}>
         {texto}
       </Texto>
@@ -217,9 +170,6 @@ const estilos = StyleSheet.create({
   item: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, marginBottom: 8 },
   flex: { flex: 1 },
   arriba: { marginTop: 8 },
-  parrafo: { marginVertical: 6 },
   opinion: { marginTop: 10, fontFamily: 'monospace', fontSize: 12, lineHeight: 18 },
   copiada: { opacity: 0.85 },
-  enlace: { alignSelf: 'flex-start', minHeight: MEDIDAS.toque, justifyContent: 'center', marginTop: 16, paddingVertical: 4 },
-  subrayado: { textDecorationLine: 'underline' },
 });

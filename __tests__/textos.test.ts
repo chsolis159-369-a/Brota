@@ -11,6 +11,11 @@ const HTML = readFileSync(join(__dirname, '..', 'reference', 'brota-v9-prototipo
  * Textos que no están en el prototipo porque reemplazan limitaciones del prototipo web o cubren
  * casos que el prototipo no tenía (DECISIONS D-12 y D-19). Todo texto nuevo tiene que figurar acá.
  */
+/** Claves completas de una sección de es-AR.json. */
+function hojasDe(seccion: string): Record<string, true> {
+  return Object.fromEntries(hojas((esAR as Record<string, unknown>)[seccion], seccion).map(([k]) => [k, true]));
+}
+
 const NUEVOS = new Set([
   'clima.sinPronostico',
   'clima.desc.niebla',
@@ -41,6 +46,10 @@ const NUEVOS = new Set([
   'planes.itemsGratis.agente',
   'examenes.hidro.d',
   ...['suelo', 'siembra', 'inerte', 'luz', 'plagas'].flatMap((k) => [`examenes.${k}.t`, `examenes.${k}.d`]),
+  // Configuración y términos genéricos, pedido del usuario (D-35). El borrado se mudó a Configuración > Perfil.
+  ...Object.keys(hojasDe('configuracion')),
+  ...Object.keys(hojasDe('terminos')),
+  'privacidad.items.2',
 ]);
 
 /** Hojas de un objeto de textos, con su clave completa. */

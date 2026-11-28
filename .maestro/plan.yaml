@@ -1,4 +1,5 @@
-# Plan (D-25): elegir Pro (cambio local de la versión de prueba) y borrar la cuenta con confirmación (D-26).
+# Plan (D-25): elegir Pro (cambio local de la versión de prueba). Borrar la cuenta con confirmación (D-26),
+# desde Configuración > Perfil (D-35).
 appId: com.brota.app
 ---
 - runFlow: comun/onboarding.yaml
@@ -12,6 +13,17 @@ appId: com.brota.app
 - scrollUntilVisible:
     element:
       text: "Plan actual"
+# El engranaje está en el encabezado: si la pantalla quedó bajada, se sube.
+- scrollUntilVisible:
+    element:
+      id: "abrir-configuracion"
+    direction: UP
+- tapOn:
+    id: "abrir-configuracion"
+- assertVisible: "Configuración"
+- scrollUntilVisible:
+    element:
+      text: "Tu plan: Pro"
 - scrollUntilVisible:
     element:
       id: "borrar-cuenta"
@@ -25,6 +37,7 @@ appId: com.brota.app
       id: "confirmar-borrado"
 - tapOn:
     id: "confirmar-borrado"
+# Después de borrar vuelve a las pestañas.
 - tapOn: "Hoy"
 - scrollUntilVisible:
     element:

@@ -60,7 +60,7 @@
     "items": [
       "Guardamos lo que cargás: cultivos, registros, mediciones, fotos, progreso y resultados de exámenes.",
       "Tus cultivos, registros, mediciones y progreso quedan en tu teléfono. Las preguntas y las fotos que le mandás al guía viajan a nuestro servidor y al servicio de inteligencia artificial solo para responderte: no guardamos las fotos.",
-      "Podés borrar tu cuenta y todos los datos desde esta pantalla."
+      "Podés borrar tu cuenta y todos los datos desde Configuración > Perfil."
     ],
     "borrar": "Borrar mi cuenta y todos los datos",
     "confirmarTexto": "Se eliminan cultivos, bitácora, progreso, exámenes y tareas de este dispositivo. No se puede deshacer.",
@@ -521,5 +521,48 @@
     "Poda": "Poda",
     "Plaga": "Plaga",
     "Observación": "Observación"
+  },
+  "configuracion": {
+    "titulo": "Configuración",
+    "abrir": "Abrir configuración",
+    "volver": "← Volver",
+    "idioma": "Idioma",
+    "idiomaNota": "Las lecciones, las preguntas y el glosario están en español por ahora.",
+    "letra": "Tamaño de letra",
+    "letras": {
+      "normal": "Normal",
+      "grande": "Grande",
+      "muyGrande": "Muy grande"
+    },
+    "letraEjemplo": "Así se ve el texto de las lecciones y del guía.",
+    "tema": "Modo de pantalla",
+    "temas": {
+      "sistema": "Automático",
+      "claro": "Claro",
+      "oscuro": "Oscuro"
+    },
+    "temaAyuda": "Automático sigue el modo del teléfono.",
+    "perfil": "Perfil",
+    "formaCultivar": "Forma de cultivar",
+    "formaAyuda": "Elegimos los módulos recomendados según tu forma de cultivar.",
+    "planActual": "Tu plan: {{plan}}",
+    "documentos": "Privacidad y términos",
+    "version": "Versión {{v}}"
+  },
+  "terminos": {
+    "titulo": "Términos y condiciones",
+    "ver": "Ver términos y condiciones",
+    "version": "Versión de prueba. El texto final se publica antes del lanzamiento.",
+    "items": [
+      "BROTA es una app para registrar tus cultivos y aprender sobre ellos. Al usarla aceptás estos términos.",
+      "El contenido es educativo y general. No reemplaza el consejo de un ingeniero agrónomo o de un técnico: ante un problema grave, consultá a un profesional.",
+      "El guía usa inteligencia artificial y puede equivocarse. Revisá sus respuestas antes de aplicar cualquier tratamiento.",
+      "BROTA no da información sobre dosis, consumo ni venta de sustancias.",
+      "Sos responsable de cumplir las leyes de tu país sobre lo que cultivás.",
+      "El plan Pro se paga con las compras de App Store o Google Play. La suscripción se renueva sola hasta que la canceles desde tu cuenta de la tienda, al menos 24 horas antes de que termine el período.",
+      "La constancia del Examen final es un reconocimiento interno de BROTA, sin validez académica ni legal.",
+      "Podés borrar tu cuenta y todos tus datos cuando quieras, desde Configuración > Perfil.",
+      "Podemos actualizar estos términos. Si el cambio es importante, te avisamos en la app."
+    ]
   }
 }

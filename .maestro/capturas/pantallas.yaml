@@ -22,3 +22,8 @@ appId: com.brota.app
 - takeScreenshot: capturas/${MODO}-8-aprender-modulos
 - tapOn: "Plan"
 - takeScreenshot: capturas/${MODO}-9-plan
+- tapOn:
+    id: "abrir-configuracion"
+- takeScreenshot: capturas/${MODO}-10-configuracion
+- scroll
+- takeScreenshot: capturas/${MODO}-11-configuracion-perfil

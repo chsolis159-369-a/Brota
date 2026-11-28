@@ -7,16 +7,17 @@ import { MEDIDAS, useTema } from '@/tema/useTema';
 import { Encabezado } from './Encabezado';
 import { Texto } from './Texto';
 
-type Props = { titulo?: string; children?: ReactNode };
+/** `cabecera`: reemplaza el encabezado de BROTA (por ejemplo, el botón para volver de Configuración). */
+type Props = { titulo?: string; cabecera?: ReactNode; children?: ReactNode };
 
 /** Columna centrada con el encabezado de BROTA sobre un fondo liso y cálido (D-32). */
-export function Pantalla({ titulo, children }: Props) {
+export function Pantalla({ titulo, cabecera, children }: Props) {
   const { c } = useTema();
   return (
     <SafeAreaView edges={['top', 'left', 'right']} style={[estilos.raiz, { backgroundColor: c.bg }]}>
       <ScrollView contentContainerStyle={estilos.scroll} keyboardShouldPersistTaps="handled">
         <View style={estilos.columna}>
-          <Encabezado />
+          {cabecera ?? <Encabezado />}
           {titulo ? (
             <Texto variante="tituloGrande" style={estilos.titulo}>
               {titulo}

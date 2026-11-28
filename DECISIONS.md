@@ -195,3 +195,13 @@ El usuario definió qué incluye el plan Gratis. Cambia reglas y textos del prot
 - **Agente**: 6 preguntas por día en Gratis (30 en Pro), las fotos siguen con su propio límite de 10. Memoria limitada en Gratis: el servidor manda al modelo los últimos 2 mensajes y los datos básicos de cada cultivo (nombre, tipo, ubicación, etapa y día); Pro suma los últimos 6 mensajes, los registros y la última medición. El plan lo decide el servidor (RevenueCat, H5); hasta entonces todos son Gratis.
 - **Textos**: los ítems de Gratis y los nombres de los exámenes nuevos se escribieron con el mismo tono del prototipo y figuran en la lista de textos nuevos de `__tests__/textos.test.ts`.
 - **Pruebas de Maestro**: el flujo del Agente reintenta escribir y mandar la pregunta si la respuesta anterior de la IA es larga (un reconocimiento con opciones movía la pantalla y el texto no llegaba al campo).
+
+## D-35 · Configuración (pedido del usuario, 2026-11-28)
+Pantalla nueva que se abre con un engranaje en el encabezado de todas las pestañas (se desactiva durante un examen, como las pestañas). Las cinco pestañas del prototipo no cambian.
+- **Idioma**: español (por defecto), inglés, italiano, francés y chino simplificado (D-36). Cada idioma se muestra con su propio nombre.
+- **Tamaño de letra**: Normal, Grande (×1,15) y Muy grande (×1,3). Se suma al tamaño de letra del sistema, que la app ya respetaba (D-32).
+- **Modo de pantalla**: Automático (sigue al teléfono, como hasta ahora), Claro u Oscuro. Se aplica a toda la app con `Appearance.setColorScheme`.
+- **Perfil**: forma de cultivar (la del onboarding), el plan actual con un botón a Planes y el enlace chico "Borrar mi cuenta y todos los datos" con confirmación (D-26), que se mudó desde Plan. Después de borrar vuelve a las pestañas.
+- **Privacidad y términos**: la privacidad se mudó desde Plan (su texto dice ahora dónde está el borrado). Los términos y condiciones son genéricos, marcados como versión de prueba: uso educativo, el guía puede equivocarse, nada de dosis, consumo ni venta, leyes de cada país, suscripción por las tiendas con renovación automática, constancia sin validez, borrado de datos y cambios. Hay que revisarlos con un abogado antes de publicar.
+- **Dónde se guarda**: idioma, letra y modo son preferencias del dispositivo y se guardan en el almacén clave-valor de expo-sqlite, que se lee de forma sincrónica al abrir (la app arranca ya con lo elegido). "Borrar mi cuenta" no las cambia.
+- **Textos**: nuevos, en el tono del prototipo, en la lista de textos nuevos de `__tests__/textos.test.ts`.

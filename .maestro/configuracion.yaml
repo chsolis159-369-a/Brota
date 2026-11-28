@@ -1,0 +1,33 @@
+# Configuración (D-35): modo oscuro, letra más grande y vuelta a las pestañas. Al final deja todo como estaba.
+appId: com.brota.app
+---
+- runFlow: comun/onboarding.yaml
+- tapOn:
+    id: "abrir-configuracion"
+- assertVisible: "Configuración"
+- assertVisible: "Idioma"
+- tapOn:
+    id: "tema-oscuro"
+- tapOn:
+    id: "letra-muyGrande"
+- assertVisible: "Así se ve el texto de las lecciones y del guía."
+- tapOn:
+    id: "letra-normal"
+- tapOn:
+    id: "tema-sistema"
+- scrollUntilVisible:
+    element:
+      id: "ver-terminos"
+- tapOn:
+    id: "ver-terminos"
+- scrollUntilVisible:
+    element:
+      text: "Términos y condiciones"
+    direction: UP
+- scrollUntilVisible:
+    element:
+      id: "volver-configuracion"
+    direction: UP
+- tapOn:
+    id: "volver-configuracion"
+- assertVisible: "Hoy"

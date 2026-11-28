@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, TextInput, useWindowDimensions, View, type TextI
 import type { Colores } from '@/tema/colores';
 import { TAMANO_ICONO, type NombreIcono } from '@/tema/iconos';
 import { FUENTES } from '@/tema/tipografia';
+import { useEscalaLetra } from '@/store/preferencias';
 import { MEDIDAS, superficie, useTema } from '@/tema/useTema';
 
 import { useEnHero } from './Hero';
@@ -129,6 +130,7 @@ type CampoProps = TextInputProps & { etiqueta: string };
  */
 export function Campo({ etiqueta, style, multiline, onFocus, onBlur, ...resto }: CampoProps) {
   const { c } = useTema();
+  const escala = useEscalaLetra();
   const [foco, setFoco] = useState(false);
   return (
     <View style={estilos.campoCaja}>
@@ -154,6 +156,7 @@ export function Campo({ etiqueta, style, multiline, onFocus, onBlur, ...resto }:
             borderWidth: foco ? 2 : 1.5,
             backgroundColor: c.surface,
             color: c.fg,
+            fontSize: 17 * escala,
             minHeight: multiline ? 88 : MEDIDAS.toque + 4,
             // Con el borde más grueso, el texto no se mueve.
             paddingHorizontal: foco ? 13.5 : 14,

@@ -218,25 +218,9 @@ describe('Plan', () => {
     expect(copiado).toMatch(/Errores capturados: ninguno\n\nComentario:\nMuy clara$/);
   });
 
-  it('privacidad se despliega y se oculta', async () => {
+  it('ya no muestra privacidad ni el borrado: pasaron a Configuración (D-35)', async () => {
     await render(<PantallaPlan />);
-    await fireEvent.press(screen.getByText('Ver cómo tratamos tus datos'));
-    expect(screen.getByText(/^Tus cultivos, registros, mediciones y progreso quedan en tu teléfono. Las preguntas y las fotos/)).toBeTruthy();
-    await fireEvent.press(screen.getByText('Ocultar'));
-    expect(screen.queryByText('Tus datos')).toBeNull();
-  });
-
-  it('borrar la cuenta es un enlace chico que pide confirmación y borra todo', async () => {
-    await aprobar('suelo');
-    await render(<PantallaPlan />);
-    await fireEvent.press(screen.getByTestId('borrar-cuenta'));
-    expect(screen.getByText('Se eliminan cultivos, bitácora, progreso, exámenes y tareas de este dispositivo. No se puede deshacer.')).toBeTruthy();
-    await fireEvent.press(screen.getByText('Cancelar'));
-    expect(S().cultivos).toHaveLength(2);
-    await fireEvent.press(screen.getByTestId('borrar-cuenta'));
-    await fireEvent.press(screen.getByTestId('confirmar-borrado'));
-    expect(S().cultivos).toEqual([]);
-    expect(S().progreso).toEqual({});
-    expect(S().perfil.plan).toBe('gratis');
+    expect(screen.queryByText('Ver cómo tratamos tus datos')).toBeNull();
+    expect(screen.queryByTestId('borrar-cuenta')).toBeNull();
   });
 });

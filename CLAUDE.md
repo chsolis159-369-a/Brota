@@ -11,7 +11,7 @@ App móvil (iOS y Android) de bitácora de cultivo con aprendizaje, exámenes y 
 - Lo que no esté definido se decide con el criterio más simple y se anota en `DECISIONS.md`. Solo se le pregunta al usuario por cuentas o claves que solo él puede crear.
 
 ## Alcance
-- Pestañas: Hoy, Cultivos, Agente, Aprender, Plan.
+- Pestañas: Hoy, Cultivos, Agente, Aprender, Plan. Configuración (D-35) se abre con el engranaje del encabezado: idioma (es-AR, en, it, fr, zh-CN; D-36), tamaño de letra, modo claro u oscuro, perfil con "Borrar mi cuenta y todos los datos", privacidad y términos.
 - Fuera de alcance y **sin código accesible**: plan Business y contenido de cannabis (`CANNABIS_HABILITADO = false`). El análisis de fotos por IA en el Agente está prendido (`FOTO_AGENTE = true`, D-30), con reconocimiento por fotos y preguntas (candidatos, certeza y opciones como botones, D-31).
 - **Gratis (US$ 0)** (D-34): hasta 3 cultivos propios (los de ejemplo no cuentan), bitácora y registro rápido, tareas diarias, logros y racha, 16 módulos con test, 6 exámenes con nota y repaso de errores con fundamentos, agente con respuestas generales (6 preguntas por día y memoria limitada: últimos 2 mensajes y datos básicos de los cultivos).
 - **Pro (US$ 5.99/mes o US$ 49.99/año)**: todo lo de Gratis más cultivos ilimitados, módulo `diagnostico`, Examen final con constancia y nivel Maestro de cultivo, exportar la bitácora como texto, agente que usa el historial del cultivo.

@@ -37,6 +37,8 @@ export const ICONOS = {
   duda: i('questionmark.circle', 'help'),
   info: i('info.circle', 'info'),
   privacidad: i('lock.shield', 'shield_lock'),
+  ajustes: i('gearshape', 'settings'),
+  terminos: i('doc.text', 'description'),
   // Dónde está el cultivo (plantillas)
   interior: i('house', 'home'),
   exterior: i('sun.max', 'sunny'),
