@@ -9,6 +9,10 @@ appId: com.brota.app
 - takeScreenshot: capturas/${MODO}-2-hoy-tareas
 - tapOn: "Cultivos"
 - takeScreenshot: capturas/${MODO}-3-cultivos
+# Con letra grande la lista queda más abajo: se baja hasta el cultivo.
+- scrollUntilVisible:
+    element:
+      id: "cultivo-Albahaca 1"
 - tapOn:
     id: "cultivo-Albahaca 1"
 - takeScreenshot: capturas/${MODO}-4-cultivo
