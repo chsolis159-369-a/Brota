@@ -18,7 +18,7 @@ App móvil (iOS y Android) de bitácora de cultivo con aprendizaje, exámenes y 
 - Puntos de paywall (como en el prototipo): límite de 2 cultivos, módulo Diagnóstico bloqueado, Examen final, aviso de Maestro pendiente, exportar, historial del agente.
 
 ## Stack
-- Expo (SDK vigente) + TypeScript estricto + Expo Router + Zustand. Modo claro/oscuro; colores y estilo visual del rediseño D-29 (el prototipo manda en textos y comportamiento). Logo: plántula de cannabis generada con `tools/marca/` (D-28). Fraunces (títulos) y Nunito Sans (texto). i18n preparado, `es-AR` por defecto.
+- Expo (SDK vigente) + TypeScript estricto + Expo Router + Zustand. Modo claro/oscuro; colores y estilo visual del rediseño D-29 (el prototipo manda en textos y comportamiento). Logo: plántula de cannabis generada con `tools/marca/` (D-28). Fraunces (títulos) y Nunito Sans (texto). i18n con `es-AR` por defecto y `en`, `it`, `fr`, `zh-CN` (D-36; el contenido de `modulos.json` queda en español).
 - Local primero: `expo-sqlite` para cultivos, registros, mediciones y progreso. Lecciones y tests de módulo funcionan sin conexión.
 - Backend: Supabase (Auth con email, Google y Apple; Postgres con RLS; Edge Functions).
 - Suscripciones: RevenueCat (`react-native-purchases`, `react-native-purchases-ui`). Requiere development build (`expo-dev-client`); Expo Go no procesa compras. Entitlement `pro`; productos `brota_pro_mensual` y `brota_pro_anual`. La prueba de 14 días es una oferta introductoria de las tiendas, **no** un botón local. Obligatorio: "Restaurar compras", enlaces a términos y privacidad, texto de renovación automática.

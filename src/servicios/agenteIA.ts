@@ -21,6 +21,8 @@ export type PedidoAgente = {
   foto?: Foto;
   /** Preguntas de reconocimiento que el agente ya hizo en esta ronda (D-31). */
   preguntasHechas?: number;
+  /** Idioma de la app (D-36): el guía responde en ese idioma. */
+  idioma?: string;
 };
 
 /** Respuesta del Agente con IA: el texto y, si reconoció algo, los candidatos y la pregunta (D-31). */

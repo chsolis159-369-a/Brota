@@ -49,7 +49,10 @@ describe('Agente con IA', () => {
     await preguntar('¿Cada cuánto riego la albahaca?');
     expect(screen.getByText('Regá cuando los primeros centímetros estén secos. Así la raíz respira.')).toBeTruthy();
     const pedido = mockPreguntar.mock.calls[0][0];
-    expect(pedido).toMatchObject({ pregunta: '¿Cada cuánto riego la albahaca?', cultivos: [] });
+    expect(pedido).toMatchObject({ pregunta: '¿Cada cuánto riego la albahaca?', idioma: 'es-AR' });
+    // En Gratis viajan solo los datos básicos de los cultivos, sin registros ni mediciones (D-34).
+    expect(pedido.cultivos.map((x: { nombre: string }) => x.nombre)).toEqual(['Albahaca 1', 'Tomates del patio']);
+    expect(pedido.cultivos.every((x: { registros: unknown[]; medicion: unknown }) => x.registros.length === 0 && x.medicion === null)).toBe(true);
     expect(pedido.mes).toBeGreaterThanOrEqual(1);
     // El saludo inicial no se manda como historial.
     expect(pedido.historial).toEqual([]);

@@ -22,7 +22,7 @@ export function useTextoMotivoModulo() {
   return (m: MotivoModulo): string => {
     switch (m.tipo) {
       case 'puntos':
-        return t('motivos.puntos', { nivel: nivelPorPuntos(m.req).t, req: m.req });
+        return t('motivos.puntos', { nivel: t(`niveles.${nivelPorPuntos(m.req).t}`), req: m.req });
       case 'pre':
         return t('motivos.pre', { lista: m.ids.map((id) => moduloPorId(id)?.t ?? id).join(', ') });
       default:

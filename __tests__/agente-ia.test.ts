@@ -5,11 +5,13 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { REGLAS_AGENTE } from '@/reglas/agente';
+import { IDIOMAS } from '@/i18n';
 import { PREGUNTAS_AGENTE_GRATIS } from '@/reglas/dominio';
 import { ErrorAgente, hayAgenteIA, preguntarAgenteIA } from '@/servicios/agenteIA';
 
 import {
   ESQUEMA_RESPUESTA,
+  IDIOMAS_RESPUESTA,
   LIMITE_DIARIO,
   LIMITE_FOTOS_DIARIO,
   MAX_FOTO_BASE64,
@@ -45,7 +47,7 @@ const cultivo = {
   registros: [{ fecha: '2026-11-03 09:10', tipo: 'Riego', nota: 'Riego ligero; tierra seca a 3 cm' }],
   medicion: { ppfd: 420, temp: 24, humedad: 60, alturaCm: 35 },
 };
-const pedido = (o: Partial<Pedido> = {}): Pedido => ({ pregunta: '¿Cuándo riego?', historial: [], cultivos: [cultivo], mes: 11, foto: null, preguntasHechas: 0, ...o });
+const pedido = (o: Partial<Pedido> = {}): Pedido => ({ pregunta: '¿Cuándo riego?', historial: [], cultivos: [cultivo], mes: 11, foto: null, preguntasHechas: 0, idioma: 'es-AR', ...o });
 /** Un JPEG mínimo en base64 (alcanza para validar el formato). */
 const JPEG = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE=';
 
@@ -179,6 +181,28 @@ describe('mensajes para Claude', () => {
     expect(m.map((x) => x.role)).toEqual(['user', 'assistant', 'user']);
     expect(m[0]!.content).toBe('tengo pulgones');
     expect(m.at(-1)!.content).toBe('¿Cuándo riego?');
+  });
+});
+
+describe('idioma de la respuesta (D-36)', () => {
+  it('valida el idioma: uno de la app o, si no, español', () => {
+    const ok = (idioma: unknown) => {
+      const v = validarPedido({ pregunta: 'hola', idioma });
+      if (!v.ok) throw new Error(v.error);
+      return v.pedido.idioma;
+    };
+    expect([ok('en'), ok('zh-CN'), ok('klingon'), ok(undefined)]).toEqual(['en', 'zh-CN', 'es-AR', 'es-AR']);
+  });
+
+  it('en otro idioma pide responder en ese idioma; en español no agrega nada', () => {
+    const ingles = armarMensajes(pedido({ idioma: 'en', cultivos: [], mes: 0 }), false).at(-1)!.content as string;
+    expect(ingles).toContain('Respondé en inglés (English)');
+    expect(ingles.endsWith('Pregunta: ¿Cuándo riego?')).toBe(true);
+    expect(armarMensajes(pedido({ cultivos: [], mes: 0 }), false).at(-1)!.content).toBe('¿Cuándo riego?');
+  });
+
+  it('hay una instrucción para cada idioma de la app', () => {
+    expect(Object.keys(IDIOMAS_RESPUESTA)).toEqual(IDIOMAS.map((x) => x.codigo));
   });
 });
 

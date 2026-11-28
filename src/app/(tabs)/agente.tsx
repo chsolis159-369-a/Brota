@@ -74,7 +74,7 @@ const historialParaServidor = (chat: MensajeChat[]) =>
  * con las reglas del prototipo.
  */
 export default function Agente() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { c } = useTema();
   const chat = useApp((s) => s.chat);
   const plan = useApp((s) => s.plan);
@@ -115,10 +115,13 @@ export default function Agente() {
       const respuesta = await preguntarAgenteIA({
         pregunta: texto,
         historial,
-        // El servidor solo los usa si confirma que el usuario es Pro.
-        cultivos: plan === 'pro' ? contextoCultivos(cultivos) : [],
+        // Memoria según el plan (D-34): en Gratis viajan solo los datos básicos de cada cultivo; en Pro,
+        // también los registros y la última medición. El servidor igual recorta según el plan que confirma.
+        cultivos: contextoCultivos(cultivos).map((x) => (plan === 'pro' ? x : { ...x, registros: [], medicion: null })),
         mes: new Date().getMonth() + 1,
         preguntasHechas,
+        // El guía responde en el idioma elegido en Configuración (D-36).
+        idioma: i18n.language,
         ...(foto ? { foto } : {}),
       });
       useApp.getState().agregarAlChat({ de: 'agente', t: respuesta.texto, ...(respuesta.reconocimiento ? { reco: respuesta.reconocimiento } : {}) });

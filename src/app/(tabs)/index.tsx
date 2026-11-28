@@ -61,7 +61,7 @@ export default function Hoy() {
         items={[
           { valor: r.puntos, etiqueta: t('hoy.puntos'), icono: 'puntos' },
           { valor: r.racha, etiqueta: t('hoy.diasSeguidos'), icono: 'racha' },
-          { valor: r.nivel.t, etiqueta: t('hoy.nivel'), texto: true, icono: 'nivel' },
+          { valor: t(`niveles.${r.nivel.t}`), etiqueta: t('hoy.nivel'), texto: true, icono: 'nivel' },
         ]}
       />
 

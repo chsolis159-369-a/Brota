@@ -564,5 +564,13 @@
       "Podés borrar tu cuenta y todos tus datos cuando quieras, desde Configuración > Perfil.",
       "Podemos actualizar estos términos. Si el cambio es importante, te avisamos en la app."
     ]
+  },
+  "niveles": {
+    "Inexperto": "Inexperto",
+    "Aprendiz": "Aprendiz",
+    "Aprendiz avanzado": "Aprendiz avanzado",
+    "Cultivador": "Cultivador",
+    "Cultivador experto": "Cultivador experto",
+    "Maestro de cultivo": "Maestro de cultivo"
   }
 }

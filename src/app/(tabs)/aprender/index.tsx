@@ -39,7 +39,7 @@ export default function Aprender() {
     m.tipo === 'pendiente'
       ? t('aprender.pendiente')
       : m.tipo === 'faltan'
-        ? t('aprender.faltan', { n: m.puntos, nivel: m.nivel }) + (m.hastaMaestro ? t('aprender.hastaMaestro') : '') + '.'
+        ? t('aprender.faltan', { n: m.puntos, nivel: t(`niveles.${m.nivel}`) }) + (m.hastaMaestro ? t('aprender.hastaMaestro') : '') + '.'
         : t('aprender.maximo');
   const delPlan = modulosDelPlan(MODULOS, a.plan);
   const aprobados = delPlan.filter((x) => moduloAprobado(a.datos.progreso, x.id)).length;
@@ -52,7 +52,7 @@ export default function Aprender() {
           <View style={estilos.encoger}>
             <Texto variante="secundario">{t('aprender.tuNivel')}</Texto>
             <Texto variante="titulo" style={estilos.nivelNombre}>
-              {nivel.nivel.t}
+              {t(`niveles.${nivel.nivel.t}`)}
             </Texto>
           </View>
           <Texto variante="cuerpo">
@@ -70,7 +70,7 @@ export default function Aprender() {
         {NIVELES.map((n, k) => (
           <View key={n.t} style={[estilos.nv, nivel.idx >= k ? { borderColor: c.accentSoft, backgroundColor: c.accentSoft } : { borderColor: c.border, backgroundColor: c.surface }]}>
             <Texto variante="secundario" color={nivel.idx >= k ? 'fg' : 'muted'} style={nivel.idx >= k ? estilos.negrita : null}>
-              {t('aprender.nivelChip', { t: n.t, min: n.min })}
+              {t('aprender.nivelChip', { t: t(`niveles.${n.t}`), min: n.min })}
             </Texto>
           </View>
         ))}

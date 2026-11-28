@@ -1,4 +1,5 @@
-# Configuración (D-35): modo oscuro, letra más grande y vuelta a las pestañas. Al final deja todo como estaba.
+# Configuración (D-35 y D-36): idioma, modo oscuro, letra más grande y vuelta a las pestañas. Al final deja todo
+# como estaba.
 appId: com.brota.app
 ---
 - runFlow: comun/onboarding.yaml
@@ -6,6 +7,16 @@ appId: com.brota.app
     id: "abrir-configuracion"
 - assertVisible: "Configuración"
 - assertVisible: "Idioma"
+- tapOn:
+    id: "idioma-en"
+- assertVisible: "Settings"
+- assertVisible: "Lessons, questions and the glossary are in Spanish for now."
+- tapOn:
+    id: "idioma-zh-CN"
+- assertVisible: "设置"
+- tapOn:
+    id: "idioma-es-AR"
+- assertVisible: "Configuración"
 - tapOn:
     id: "tema-oscuro"
 - tapOn:

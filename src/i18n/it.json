@@ -1,0 +1,576 @@
+{
+  "marca": "BROTA",
+  "encabezado": {
+    "planGratis": "Piano gratuito",
+    "prueba": "Beta"
+  },
+  "planes": {
+    "gratis": "Gratuito",
+    "pro": "Pro",
+    "verPlanes": "Vedi i piani",
+    "precioGratis": "US$ 0",
+    "precioPro": "US$ 5.99 / mese · o US$ 49.99 / anno (risparmi circa il 30 %)",
+    "recomendado": "Consigliato",
+    "itemsGratis": {
+      "cultivos": "Fino a {{n}} coltivazioni tue",
+      "bitacora": "Diario di coltivazione e registrazione rapida",
+      "tareas": "Attività giornaliere, traguardi e serie",
+      "modulos": "{{n}} moduli con quiz: orto, nutrizione, idroponica, substrato inerte, luce e parassiti",
+      "examenes": "{{n}} esami con voto e ripasso degli errori con le spiegazioni",
+      "agente": "Guida con risposte generali: fino a {{n}} domande al giorno e memoria limitata dei tuoi dati"
+    },
+    "itemsPro": [
+      "Tutto quello del piano Gratuito, con coltivazioni illimitate",
+      "Modulo di diagnosi avanzata di parassiti e carenze",
+      "Esame finale con attestato e livello Maestro coltivatore",
+      "Esporta il diario come testo da copiare",
+      "Guida che usa lo storico di ogni coltivazione"
+    ],
+    "actual": "Piano attuale",
+    "elegir": "Scegli {{plan}}",
+    "elegirMensual": "Scegli Pro mensile · US$ 5.99",
+    "elegirAnual": "Scegli Pro annuale · US$ 49.99",
+    "cobroLocal": "Il pagamento reale si collega più avanti. Per ora il cambio vale solo su questo dispositivo."
+  },
+  "opinion": {
+    "titulo": "La tua opinione sulla beta",
+    "pregunta": "Quanto ti è utile BROTA finora?",
+    "placeholder": "Cosa ti è piaciuto? Cosa non ha funzionato o ti ha confuso?",
+    "copiar": "Copia la mia opinione",
+    "aviso": "L'app non invia nulla da sola: incolla il testo nel modulo o nel messaggio che ti indichiamo.",
+    "plan": "Piano: {{plan}}",
+    "mensual": " mensile",
+    "anual": " annuale",
+    "calificacion": "Valutazione: {{c}}",
+    "sinCalificar": "senza valutazione",
+    "cultivos": "Coltivazioni tue: {{n}}",
+    "modulos": "Moduli superati: {{a}} su {{n}}",
+    "examenes": "Esami superati: {{a}} su {{n}}",
+    "errores": "Errori registrati: {{e}}",
+    "ninguno": "nessuno",
+    "comentario": "Commento:",
+    "sinComentario": "(nessun commento)"
+  },
+  "privacidad": {
+    "titulo": "Privacy",
+    "ver": "Vedi come trattiamo i tuoi dati",
+    "ocultar": "Nascondi",
+    "tusDatos": "I tuoi dati",
+    "version": "Versione di prova. Il testo definitivo sulla privacy sarà pubblicato prima del lancio.",
+    "items": [
+      "Salviamo ciò che inserisci: coltivazioni, registrazioni, misurazioni, foto, progressi e risultati degli esami.",
+      "Le tue coltivazioni, registrazioni, misurazioni e progressi restano sul tuo telefono. Le domande e le foto che invii alla guida arrivano al nostro server e al servizio di intelligenza artificiale solo per risponderti: non conserviamo le foto.",
+      "Puoi eliminare il tuo account e tutti i dati da Impostazioni > Profilo."
+    ],
+    "borrar": "Elimina il mio account e tutti i dati",
+    "confirmarTexto": "Verranno eliminati coltivazioni, diario, progressi, esami e attività da questo dispositivo. Non si può annullare.",
+    "confirmar": "Conferma eliminazione"
+  },
+  "agente": {
+    "saludo": "Ciao, sono la tua guida di coltivazione. Chiedimi quello che vuoi o usa le domande rapide.",
+    "preguntasRapidas": "Domande rapide",
+    "chat": "Chat",
+    "placeholder": "Scrivi la tua domanda",
+    "enviar": "Invia",
+    "modoReglas": "Modalità di esempio senza connessione: le risposte vengono da regole semplici. La guida vera si collega al server.",
+    "modoIA": "La guida usa l'intelligenza artificiale e risponde solo sulla coltivazione. Può sbagliare: per un problema serio, consulta un tecnico.",
+    "pensando": "Sto pensando…",
+    "limite": "Hai raggiunto il limite di domande alla guida per oggi. Domani puoi continuare; nel frattempo ripassa i moduli di Impara.",
+    "sinConexion": "Non sono riuscito a collegarmi alla guida. Ti rispondo con regole semplici:",
+    "rapidas": {
+      "0": "Foglie gialle",
+      "1": "Parassiti",
+      "2": "Nutrienti",
+      "3": "Substrato inerte",
+      "4": "Idroponica e pH",
+      "5": "Orto e compost",
+      "6": "Luce LED"
+    },
+    "respuestas": {
+      "negativa": "Posso aiutarti solo sulla coltivazione. Non do informazioni su dosi, consumo o vendita.",
+      "amarillas": "Le foglie gialle di solito indicano troppa o poca acqua, carenza di azoto o stress da luce. Controlla prima l'irrigazione e la distanza dalla lampada. Se continua a peggiorare, consulta uno specialista.",
+      "plagas": "Controlla la pagina inferiore delle foglie e isola la pianta colpita mentre indaghi. Se l'infestazione avanza, uno specialista può consigliarti il trattamento adatto.",
+      "diagnostico": "Per fare una diagnosi, metti in ordine gli indizi: le foglie colpite sono nuove o vecchie? Il problema è uniforme o a macchie? Come sono irrigazione, pH e luce? Escludi prima le cause più semplici (irrigazione, luce, pH) prima di pensare a carenze o parassiti, e cambia una sola cosa alla volta per sapere cosa ha funzionato.",
+      "nutrientes": "I nutrienti si dividono in macronutrienti (N, P, K, calcio, magnesio e zolfo) e micronutrienti (ferro, boro, zinco, ecc.). Quelli mobili (N, P, K e Mg) si notano prima sulle foglie vecchie; quelli poco mobili (Ca, Fe e B), sulle nuove. Prima di concimare, controlla irrigazione, luce e pH: molte \"carenze\" sono in realtà problemi di pH o di irrigazione.",
+      "inerte": "Nei substrati inerti il substrato non apporta nutrienti, quindi l'irrigazione con soluzione è fondamentale. Irriga spesso con volumi moderati e lascia un po' di drenaggio per evitare l'accumulo di sali.",
+      "hidro": "In idroponica, misura regolarmente pH ed EC della soluzione (il pH di solito resta tra 5,5 e 6,5), regola secondo la fase e rinnova la soluzione perché non si esaurisca né si concentri. Se la pompa o l'aerazione si guastano, agisci in fretta: le radici si danneggiano in poche ore.",
+      "dli": "Il DLI è la luce totale che la pianta riceve in un giorno: PPFD × ore di luce × 3600 ÷ 1.000.000. Per esempio, 300 µmol/m²/s per 16 ore danno circa 17 mol/m²/giorno. Come riferimento, gli ortaggi da foglia stanno di solito tra 12 e 17 e quelli da frutto tra 20 e 30.",
+      "germinacion": "Semina a una profondità di 2 o 3 volte il diametro del seme e mantieni il substrato umido, senza ristagni. Prima di trapiantare all'aperto, abitua le piantine per 1 o 2 settimane: poco alla volta più ore all'aria aperta e meno protezione.",
+      "calendario": "Le gelate sono il limite di molte colture estive: pomodoro, basilico, cetriolo e zucca sono molto sensibili. Informati sulla data dell'ultimo rischio di gelata nella tua zona (i servizi agricoli locali pubblicano calendari di semina per regione) e semina o trapianta dopo, oppure proteggi le piante con una copertura.",
+      "huerta": "Nell'orto, compost e pacciamatura aiutano molto: migliorano la struttura del suolo e conservano l'umidità. Ruota le famiglie di colture anno dopo anno per ridurre parassiti e malattie.",
+      "riego": "Prima di irrigare, controlla se la terra o il substrato è asciutto a qualche centimetro di profondità. Troppa o poca acqua danno sintomi simili, per questo conviene annotare ogni irrigazione.",
+      "luz": "Per la luce LED contano l'intensità (PPFD), l'altezza e le ore di luce. Ogni fase ha il suo intervallo. Inserisci la misurazione e l'app ti avvisa se è fuori da quanto consigliato.",
+      "masDatos": "Raccontami qualcosa in più: che tipo di pianta è, in che fase si trova e cosa osservi. Intanto, un consiglio: {{consejo}}"
+    },
+    "lluvia": " È prevista pioggia per domani: controlla il drenaggio delle piante all'aperto.",
+    "proCultivos": " (Piano {{plan}}: tengo conto delle tue {{n}} coltivazioni.)",
+    "proUltimo": " In {{nombre}} ({{etapa}}), la tua ultima registrazione è stata: \"{{nota}}\".",
+    "foto": {
+      "titulo": "Analizza una foto",
+      "ayuda": "Scatta una foto alla pianta, a una foglia, a un parassita o a un insetto, e la guida ti dice cosa vede e cosa conviene fare.",
+      "pista": "Se scrivi una domanda qui sotto prima di scattare la foto, la inviamo insieme a essa.",
+      "sacar": "Scatta foto",
+      "elegir": "Scegli dalla galleria",
+      "analizando": "Sto analizzando la foto…",
+      "alt": "Foto caricata dall'utente",
+      "sinPermiso": "Per scattare foto, BROTA ha bisogno del permesso di usare la fotocamera. Puoi darlo nelle impostazioni del telefono o scegliere una foto dalla galleria.",
+      "error": "Non sono riuscito ad aprire la foto. Riprova o scegline un'altra.",
+      "sinConexion": "Non sono riuscito ad analizzare la foto perché non c'è connessione con la guida. Riprova tra poco.",
+      "limite": "Hai raggiunto il limite di {{n}} foto al giorno. Domani puoi inviarne altre."
+    },
+    "reco": {
+      "titulo": "Cosa può essere",
+      "certeza": {
+        "alta": "Molto probabile",
+        "media": "Probabile",
+        "baja": "Poco sicuro"
+      },
+      "confianza": "{{n}} %",
+      "a11y": "{{nombre}}: {{n}} % di affidabilità",
+      "pedirFoto": "Per essere più sicuro, mandami una foto di: {{que}}",
+      "derivar": "Conviene farlo vedere a un tecnico o a un agronomo.",
+      "noSe": "Non lo so",
+      "mandarFoto": "Invia foto"
+    }
+  },
+  "aprender": {
+    "tuNivel": "Il tuo livello",
+    "pts": "pt",
+    "pendiente": "Hai i punti per Maestro coltivatore. Per ottenerlo, supera l'Esame finale (Pro).",
+    "faltan": "Ti mancano {{n}} punti per {{nivel}}",
+    "hastaMaestro": " e superare l'Esame finale (Pro)",
+    "maximo": "Hai raggiunto il livello massimo.",
+    "resumen": "Moduli superati: {{a}} su {{n}} · Esami superati: {{e}} su {{t}}",
+    "nivelChip": "{{t}} · {{min}}",
+    "modulos": "Moduli",
+    "examenes": "Esami",
+    "glosario": "Glossario",
+    "bloqueado": "Bloccato",
+    "aprobadoPrefijo": "✓ Superato · ",
+    "sinAprobarPrefijo": "Non superato · ",
+    "mejor": "Migliore: {{pts}} su {{max}} pt",
+    "sinIntentar": "Non tentato · fino a {{max}} pt",
+    "volverModulos": "← Moduli",
+    "volverAprender": "← Impara",
+    "leccion": "Lezione {{i}} di {{n}}",
+    "comoAprobar": "Per superare il modulo devi indovinarne {{a}} su {{n}}. Puoi ripetere il quiz: le domande cambiano.",
+    "hacerTest": "Fai il quiz ({{n}} domande)",
+    "siguienteLeccion": "Lezione successiva"
+  },
+  "test": {
+    "salir": "Esci dal quiz",
+    "pregunta": "Domanda {{i}} di {{n}}",
+    "dificultad": {
+      "1": "Base",
+      "2": "Intermedia",
+      "3": "Trabocchetto"
+    },
+    "etiqueta": "{{dificultad}} · {{pts}} pt",
+    "correcto": "Corretto.",
+    "casi": "Quasi.",
+    "siguiente": "Domanda successiva",
+    "verPuntaje": "Vedi il mio punteggio",
+    "resultado": "Risultato · {{modulo}}",
+    "aciertos": "{{a}} su {{n}}",
+    "aprobado": "Modulo superato",
+    "sinAprobar": "Non ancora superato",
+    "puntosNuevos": "+{{gan}} pt nuovi · il tuo record: {{mejor}} su {{max}}",
+    "mejorMarca": "Conta solo il tuo miglior risultato in ogni modulo: ripetere il quiz serve per imparare, non per sommare punti in più.",
+    "mensajes": {
+      "perfecto": "Perfetto. Hai vinto il bonus di {{bonus}} punti.",
+      "aprobado": "Hai superato il quiz. Ripassa la domanda sbagliata.",
+      "unAcierto": "Non ancora superato: ti servono {{a}} su {{n}}. Rileggi le lezioni.",
+      "ninguno": "Non fa niente. Ti servono {{a}} su {{n}} per superarlo: rileggi il modulo e riprova."
+    },
+    "repetir": "Ripeti il quiz",
+    "yaPodesRendir": "Ora puoi sostenere: {{examen}}",
+    "seguirCon": "Continua con {{modulo}}",
+    "volver": "Torna ai moduli"
+  },
+  "pestanas": {
+    "hoy": "Oggi",
+    "cultivos": "Colture",
+    "agente": "Guida",
+    "aprender": "Impara",
+    "plan": "Piano"
+  },
+  "titulos": {
+    "hoy": "Oggi",
+    "cultivos": "Le mie colture",
+    "agente": "Guida",
+    "aprender": "Impara",
+    "plan": "Piani"
+  },
+  "comun": {
+    "cancelar": "Annulla",
+    "ejemplo": "esempio",
+    "pro": "Pro"
+  },
+  "onboarding": {
+    "pasos": [
+      {
+        "t": "Benvenuto in BROTA",
+        "x": "È il tuo quaderno di coltivazione: registri quello che fai con le tue piante e capisci perché succede quello che succede."
+      },
+      {
+        "t": "Attività, registrazioni e traguardi",
+        "x": "Ogni giorno hai attività semplici per le tue colture. Registrare, misurare e completare attività fa guadagnare punti e mantiene la tua serie."
+      },
+      {
+        "t": "Apprendimento e una guida",
+        "x": "Moduli brevi con quiz che danno punti e, alla fine di un blocco, esami con voto per verificare ciò che hai imparato. Una guida ti dà consigli per le tue colture."
+      },
+      {
+        "t": "Cosa coltivi?",
+        "x": "Scegliamo i primi moduli in base al tuo modo di coltivare. Puoi cambiarlo quando vuoi."
+      }
+    ],
+    "perfiles": {
+      "huerta": "Orto",
+      "hidro": "Idroponica",
+      "interior": "Interno con LED",
+      "exterior": "Esterno o balcone"
+    },
+    "siguiente": "Avanti",
+    "empezar": "Inizia"
+  },
+  "hoy": {
+    "hechasDe": "{{hechas}} su {{total}}",
+    "tareasDeHoy": "attività di oggi",
+    "puntos": "punti",
+    "diasSeguidos": "giorni di fila",
+    "nivel": "livello",
+    "tituloTareas": "Attività di oggi",
+    "sinCultivos": "Non hai ancora colture. Creane una per ricevere attività giornaliere.",
+    "crearPrimero": "Crea la mia prima coltura",
+    "todasHechas": "Hai completato tutte le attività di oggi. Ottimo lavoro.",
+    "topeTareas": "Attività di oggi: {{pts}} su {{tope}} pt possibili al giorno. Registrazioni, misurazioni e studio si sommano a parte.",
+    "tusCultivos": "Le tue colture",
+    "logros": "Traguardi",
+    "climaYConsejo": "Meteo e consiglio"
+  },
+  "tareas": {
+    "riego": "Controlla l'umidità di {{nombre}}",
+    "obs": "Osserva la pagina inferiore delle foglie di {{nombre}}",
+    "med": "Misura luce e temperatura di {{nombre}}",
+    "dren": "Controlla il drenaggio di {{nombre}} (domani piove)",
+    "puntos": "+{{pts}} · {{dificultad}}",
+    "dificultad": {
+      "facil": "Facile",
+      "media": "Media",
+      "dificil": "Difficile"
+    }
+  },
+  "recomendacion": {
+    "propio": "Consigliato per il tuo modo di coltivare",
+    "mientrasTanto": "Nel frattempo, per guadagnare punti",
+    "siguiente": "Prossimo modulo da superare",
+    "retomar": "Riprendi questo modulo (devi ancora superare il quiz)",
+    "empezar": "Inizia questo modulo",
+    "bloqueado": "{{motivo}}. Guadagna punti con attività, registrazioni e altri moduli.",
+    "yaPodesRendir": "Ora puoi sostenere",
+    "verExamen": "Vedi l'esame"
+  },
+  "motivos": {
+    "puntos": "Si sblocca al raggiungimento di {{nivel}} ({{req}} pt)",
+    "pre": "Prima supera: {{lista}}",
+    "pro": "Disponibile nel piano Pro",
+    "cannabis": "Prossimamente: soggetto a revisione legale"
+  },
+  "examenes": {
+    "suelo": {
+      "t": "Esame di Suolo, compost e rotazione",
+      "d": "Tessitura, sostanza organica, compost, rotazione e consociazioni."
+    },
+    "siembra": {
+      "t": "Esame di Semina e calendario",
+      "d": "Germinazione, semenzai e cosa seminare in ogni stagione."
+    },
+    "hidro": {
+      "t": "Esame di Idroponica e nutrizione",
+      "d": "Nutrienti, sistemi e soluzione nutritiva."
+    },
+    "inerte": {
+      "t": "Esame di Substrato inerte",
+      "d": "Cocco, perlite, lana di roccia e come irrigarli."
+    },
+    "luz": {
+      "t": "Esame di Luce e ambiente",
+      "d": "PPFD, DLI e VPD."
+    },
+    "plagas": {
+      "t": "Esame di Parassiti",
+      "d": "Parassiti frequenti, gestione integrata e, in Pro, diagnosi."
+    },
+    "final": {
+      "t": "Esame finale BROTA",
+      "d": "Tutto il programma, con casi e trabocchetti. Sblocca il livello Maestro coltivatore e l'attestato."
+    },
+    "titulo": "Esami",
+    "intro": "Misurano se hai davvero imparato: domande casuali con le opzioni mescolate, tempo limite e trabocchetti. Ogni risposta giusta somma secondo la sua difficoltà, ogni errore toglie un terzo e \"Non lo so\" non toglie nulla. Si supera con il {{pct}} %.",
+    "estadoAprobado": "✓ Superato · migliore {{pct}} %",
+    "estadoMejor": "Miglior risultato: {{pct}} %",
+    "estadoDisponible": "Disponibile · non tentato",
+    "motivos": {
+      "pro": "Disponibile nel piano Pro",
+      "preExamenes": "Prima supera: {{lista}}",
+      "modulos": "Prima supera il quiz di: {{lista}}",
+      "agotado": "Hai già fatto {{n}} tentativi oggi. Torna domani e ripassa i moduli."
+    },
+    "volver": "← Esami",
+    "reglas": {
+      "preguntas": "{{n}} domande scelte a caso tra {{total}}: ogni tentativo è diverso.",
+      "tiempo": "Tempo: {{min}} minuti. Se finisce, si corregge ciò che hai risposto.",
+      "nota": "Si supera con il {{pct}} % o più. Ogni risposta giusta somma secondo la sua difficoltà, ogni errore toglie un terzo di quel valore e \"Non lo so\" non somma né toglie.",
+      "intentos": "Non si può tornare indietro. Hai {{n}} tentativi al giorno (oggi ne hai usati {{hoy}}).",
+      "puntos": "La prima volta che lo superi guadagni +{{pts}} punti.",
+      "maestro": "Superandolo si sblocca il livello Maestro coltivatore e l'attestato."
+    },
+    "empezar": "Inizia l'esame",
+    "proximamente": "Gli esami saranno attivati nella prossima versione di prova: hanno bisogno della connessione al server."
+  },
+  "logros": {
+    "primero": "Prima registrazione",
+    "constante": "Costante: 3 giorni di fila",
+    "led": "Prima misurazione della luce",
+    "cultivador": "Coltivatore: 3 colture create",
+    "explorador": "Esploratore: 3 moduli superati",
+    "test": "Quiz perfetto",
+    "examen": "Primo esame superato",
+    "maestro": "Esame finale superato"
+  },
+  "clima": {
+    "hoyEn": "Oggi a {{ciudad}}",
+    "lluviaViento": "Pioggia {{lluvia}}% · vento {{viento}} km/h",
+    "dia": "{{dia}} {{t}} · {{lluvia}}%",
+    "grados": "{{t}}°",
+    "consejoDelDia": "Consiglio del giorno.",
+    "porQue": "Perché:",
+    "sinPronostico": "Previsioni non disponibili senza connessione.",
+    "desc": {
+      "soleado": "Soleggiato",
+      "parcial": "Parzialmente nuvoloso",
+      "nublado": "Nuvoloso",
+      "niebla": "Nebbia",
+      "lluvia": "Pioggia",
+      "nieve": "Neve",
+      "tormenta": "Temporale"
+    },
+    "diasSemana": [
+      "Dom",
+      "Lun",
+      "Mar",
+      "Mer",
+      "Gio",
+      "Ven",
+      "Sab"
+    ]
+  },
+  "tips": [
+    "Prima di irrigare, infila un dito nella terra o nel substrato. Se è asciutto a qualche centimetro, irriga.",
+    "Controlla la pagina inferiore delle foglie: lì si nasconde la maggior parte dei parassiti.",
+    "Nei substrati inerti, irriga spesso con volumi moderati. Si asciugano più in fretta della terra.",
+    "Misura la luce all'altezza delle foglie, non a mezz'aria.",
+    "Annota ogni irrigazione e ogni cambiamento. Tra un mese vedrai schemi che oggi non vedi.",
+    "Con il caldo forte, irriga presto perché la pianta abbia acqua prima di mezzogiorno.",
+    "Se una foglia cambia colore, guarda anche le radici e l'irrigazione prima di aggiungere concime."
+  ],
+  "tipsPorque": [
+    "Le radici hanno bisogno d'aria oltre che d'acqua. Se irrighi con il substrato ancora umido, i pori restano pieni d'acqua, la radice soffoca e compaiono marciumi. In vaso, irrigare troppo è una delle cause più comuni della perdita di piante.",
+    "Afidi, ragnetto rosso, mosca bianca e tripidi si rifugiano sulla pagina inferiore, al riparo dal sole, e lì depongono le uova. Con il caldo le loro popolazioni crescono in pochi giorni: individuarli quando sono pochi permette di controllarli con misure leggere, come togliere foglie o lavare con acqua.",
+    "Perlite, fibra di cocco e lana di roccia trattengono meno acqua della terra e non conservano nutrienti. Irrigazioni piccole e frequenti mantengono stabili l'umidità e la soluzione, e un po' di drenaggio evita l'accumulo di sali.",
+    "L'intensità della luce cala molto allontanandosi dalla lampada. Se misuri più in alto o più in basso, il valore non è quello che riceve la pianta e puoi correggere l'altezza nel senso sbagliato.",
+    "I sintomi spesso compaiono giorni dopo la causa. Con le registrazioni puoi collegare un cambio di irrigazione, concime o luce a quello che è successo dopo, e non ripetere l'errore.",
+    "Al mattino evapora meno acqua e la pianta la ha a disposizione nelle ore più calde, quando traspira di più. Irrigare a mezzogiorno spreca acqua per evaporazione, e irrigare di notte lascia foglie e suolo bagnati più a lungo, il che favorisce i funghi.",
+    "L'eccesso d'acqua o una radice danneggiata impediscono di assorbire i nutrienti e danno sintomi simili a una carenza. Se in quel caso si aggiunge concime, aumentano i sali e il problema peggiora."
+  ],
+  "cultivos": {
+    "stats": {
+      "cultivos": "colture",
+      "enCosecha": "in raccolta",
+      "conAlertas": "con avvisi"
+    },
+    "limiteTitulo": "Hai raggiunto il limite del piano Gratuito",
+    "limiteTexto": "Include {{n}} colture tue. Pro è illimitato.",
+    "nuevo": "+ Nuova coltura",
+    "form": {
+      "nombre": "Nome (es. Basilico 1)",
+      "tipo": "Tipo di pianta",
+      "ubicacion": "Posizione",
+      "etapa": "Fase",
+      "fecha": "Data di semina (AAAA-MM-GG)",
+      "guardar": "Salva coltura"
+    },
+    "ubicaciones": {
+      "interior": "interno",
+      "exterior": "esterno"
+    },
+    "filtros": {
+      "todos": "Tutte",
+      "interior": "Interno",
+      "exterior": "Esterno",
+      "alertas": "Con avvisi"
+    },
+    "sinCoincidencias": "Nessuna coltura corrisponde a questo filtro.",
+    "vacio": "Non hai ancora colture. Crea la prima o inizia da un modello.",
+    "empezarRapido": "Inizio rapido",
+    "oCrea": "Oppure crea una tua coltura con il pulsante in alto.",
+    "plantilla": "{{tipo}} · {{ubicacion}}",
+    "dia": "Giorno {{n}}",
+    "linea": "{{tipo}} · {{ubicacion}} · {{etapa}}",
+    "ultimo": "Ultima: {{nota}}",
+    "sinRegistros": "Ancora nessuna registrazione",
+    "salud": {
+      "luz": "Controlla la luce: c'è una misurazione fuori intervallo",
+      "sinRegistros": "Ancora nessuna registrazione",
+      "diasSinRegistro": "Nessuna registrazione da {{dias}} giorni",
+      "enOrden": "Tutto in ordine per ora"
+    },
+    "proximo": {
+      "primerRegistro": "Fai la tua prima registrazione per iniziare il diario",
+      "regar": "È ora di irrigare: non c'è un'irrigazione recente registrata",
+      "cosecha": "Registra la quantità raccolta",
+      "alDia": "Tutto in regola. Continua con le attività di oggi"
+    }
+  },
+  "cultivo": {
+    "volver": "← Colture",
+    "info": "{{tipo}} · {{ubicacion}} · Giorno {{dia}} dal {{fecha}}",
+    "proximoPaso": "Prossimo passo",
+    "guia": {
+      "Siembra": "Mantieni il substrato umido senza ristagni e dagli una luce morbida e costante.",
+      "Crecimiento": "È la fase con più irrigazione e osservazione. Aumenta la luce poco alla volta e controlla la pagina inferiore delle foglie.",
+      "Floración": "Tieni d'occhio umidità e temperatura per evitare funghi. Aumenta l'intensità della luce secondo l'intervallo della fase.",
+      "Cosecha": "Registra il raccolto. A seconda della specie, riduci il concime prima di raccogliere."
+    },
+    "stats": {
+      "registros": "registrazioni",
+      "riegos": "irrigazioni",
+      "hoy": "Oggi",
+      "diaDesde": "giorno dall'ultima",
+      "diasDesde": "giorni dall'ultima"
+    },
+    "etapa": "Fase",
+    "registroRapido": "Registrazione rapida",
+    "detalle": "Dettaglio (facoltativo): cosa hai fatto o osservato",
+    "puntosRegistro": "Ogni registrazione vale 2 pt (oggi {{r}} su {{tope}}).",
+    "puntosMedicion": " Ogni misurazione della luce vale 4 pt (oggi {{m}} su {{tope}}).",
+    "luzYAmbiente": "Luce e ambiente",
+    "medicionAyuda": "Inserisci una misurazione quando vuoi; l'app la confronta con la fase.",
+    "campos": {
+      "watts": "Potenza della lampada (W)",
+      "altura": "Altezza sopra la pianta (cm)",
+      "horas": "Ore di luce al giorno",
+      "ppfd": "PPFD misurato (µmol/m²/s)",
+      "temp": "Temperatura (°C)",
+      "humedad": "Umidità relativa (%)"
+    },
+    "guardarMedicion": "Salva misurazione",
+    "ultimaMedicion": "Ultima misurazione",
+    "ppfd": {
+      "poca": "Poca luce per {{etapa}} (consigliato {{min}}–{{max}}). Avvicina la lampada o aumenta la potenza.",
+      "mucha": "Troppa luce per {{etapa}} (consigliato {{min}}–{{max}}). Allontana la lampada per evitare stress luminoso.",
+      "ok": "Intensità nell'intervallo consigliato ({{min}}–{{max}})."
+    },
+    "altura": {
+      "cerca": "La lampada è molto vicina (meno di 20 cm). Rischio di bruciature.",
+      "ok": "Altezza ragionevole. Verifica la raccomandazione del produttore."
+    },
+    "vpd": "VPD {{v}} kPa · zona indicativa da 0,8 a 1,2 kPa",
+    "evolucionPPFD": "Andamento del PPFD",
+    "ppfdRegistrado": "PPFD registrato (dal più vecchio al più recente): {{valores}}",
+    "exterior": "All'esterno, il meteo arriva dalle previsioni. Lo vedi nella scheda Oggi.",
+    "fotos": {
+      "titulo": "Foto della coltura",
+      "ayuda": "Carica una foto ogni settimana per vedere l'evoluzione. Le foto vengono salvate su questo dispositivo.",
+      "agregar": "Aggiungi foto",
+      "primera": "Prima · {{fecha}}",
+      "ultima": "Ultima · {{fecha}}",
+      "altPrimera": "Prima foto della coltura",
+      "altUltima": "Foto più recente della coltura",
+      "alt": "Foto della coltura"
+    },
+    "bitacora": "Diario",
+    "todas": "Tutte",
+    "sinRegistros": "Nessuna registrazione",
+    "sinRegistrosTodas": " per ora. Tocca una registrazione rapida per iniziare.",
+    "sinRegistrosTipo": " di questo tipo.",
+    "entrada": "{{fecha}} · {{tipo}}",
+    "zonaPeligro": "Zona pericolosa",
+    "eliminar": "Elimina questa coltura",
+    "confirmarEliminar": "Sì, elimina e perdi il suo diario"
+  },
+  "categorias": {
+    "todas": "Tutte",
+    "huerta": "Orto",
+    "nutricion": "Nutrizione",
+    "hidro": "Idroponica",
+    "inerte": "Substrato inerte",
+    "luz": "Luce e ambiente",
+    "plagas": "Parassiti e diagnosi"
+  },
+  "etapas": {
+    "Siembra": "Semina",
+    "Crecimiento": "Crescita",
+    "Floración": "Fioritura",
+    "Cosecha": "Raccolta"
+  },
+  "tiposRegistro": {
+    "Riego": "Irrigazione",
+    "Fertilizante": "Concime",
+    "Poda": "Potatura",
+    "Plaga": "Parassita",
+    "Observación": "Osservazione"
+  },
+  "configuracion": {
+    "titulo": "Impostazioni",
+    "abrir": "Apri le impostazioni",
+    "volver": "← Indietro",
+    "idioma": "Lingua",
+    "idiomaNota": "Per ora le lezioni, le domande e il glossario sono in spagnolo.",
+    "letra": "Dimensione del testo",
+    "letras": {
+      "normal": "Normale",
+      "grande": "Grande",
+      "muyGrande": "Molto grande"
+    },
+    "letraEjemplo": "Così appare il testo delle lezioni e della guida.",
+    "tema": "Modalità schermo",
+    "temas": {
+      "sistema": "Automatica",
+      "claro": "Chiara",
+      "oscuro": "Scura"
+    },
+    "temaAyuda": "Automatica segue la modalità del telefono.",
+    "perfil": "Profilo",
+    "formaCultivar": "Modo di coltivare",
+    "formaAyuda": "Scegliamo i moduli consigliati in base al tuo modo di coltivare.",
+    "planActual": "Il tuo piano: {{plan}}",
+    "documentos": "Privacy e termini",
+    "version": "Versione {{v}}"
+  },
+  "terminos": {
+    "titulo": "Termini e condizioni",
+    "ver": "Vedi termini e condizioni",
+    "version": "Versione di prova. Il testo definitivo sarà pubblicato prima del lancio.",
+    "items": [
+      "BROTA è un'app per registrare le tue colture e imparare su di esse. Usandola accetti questi termini.",
+      "Il contenuto è educativo e generale. Non sostituisce il consiglio di un agronomo o di un tecnico: per un problema serio, consulta un professionista.",
+      "La guida usa l'intelligenza artificiale e può sbagliare. Verifica le sue risposte prima di applicare qualsiasi trattamento.",
+      "BROTA non dà informazioni su dosi, consumo o vendita di sostanze.",
+      "Sei responsabile di rispettare le leggi del tuo paese su ciò che coltivi.",
+      "Il piano Pro si paga con gli acquisti di App Store o Google Play. L'abbonamento si rinnova automaticamente finché non lo annulli dal tuo account dello store, almeno 24 ore prima della fine del periodo.",
+      "L'attestato dell'Esame finale è un riconoscimento interno di BROTA, senza valore accademico né legale.",
+      "Puoi eliminare il tuo account e tutti i tuoi dati quando vuoi, da Impostazioni > Profilo.",
+      "Possiamo aggiornare questi termini. Se la modifica è importante, te lo comunichiamo nell'app."
+    ]
+  },
+  "niveles": {
+    "Inexperto": "Principiante",
+    "Aprendiz": "Apprendista",
+    "Aprendiz avanzado": "Apprendista avanzato",
+    "Cultivador": "Coltivatore",
+    "Cultivador experto": "Coltivatore esperto",
+    "Maestro de cultivo": "Maestro coltivatore"
+  }
+}

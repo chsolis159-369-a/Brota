@@ -1,0 +1,576 @@
+{
+  "marca": "BROTA",
+  "encabezado": {
+    "planGratis": "Free plan",
+    "prueba": "Beta"
+  },
+  "planes": {
+    "gratis": "Free",
+    "pro": "Pro",
+    "verPlanes": "See plans",
+    "precioGratis": "US$ 0",
+    "precioPro": "US$ 5.99 / month · or US$ 49.99 / year (save about 30%)",
+    "recomendado": "Recommended",
+    "itemsGratis": {
+      "cultivos": "Up to {{n}} crops of your own",
+      "bitacora": "Grow log and quick entries",
+      "tareas": "Daily tasks, achievements and streak",
+      "modulos": "{{n}} modules with quizzes: vegetable garden, nutrition, hydroponics, inert substrate, light and pests",
+      "examenes": "{{n}} graded exams with a review of mistakes and their explanations",
+      "agente": "Guide with general answers: up to {{n}} questions a day and limited memory of your data"
+    },
+    "itemsPro": [
+      "Everything in Free, with unlimited crops",
+      "Advanced diagnosis module for pests and deficiencies",
+      "Final exam with a certificate and the Master Grower level",
+      "Export the grow log as text to copy",
+      "Guide that uses the history of each crop"
+    ],
+    "actual": "Current plan",
+    "elegir": "Choose {{plan}}",
+    "elegirMensual": "Choose Pro monthly · US$ 5.99",
+    "elegirAnual": "Choose Pro yearly · US$ 49.99",
+    "cobroLocal": "Real billing will be connected later. For now the change is only on this device."
+  },
+  "opinion": {
+    "titulo": "Your feedback on the beta",
+    "pregunta": "How useful is BROTA for you so far?",
+    "placeholder": "What did you like? What failed or confused you?",
+    "copiar": "Copy my feedback",
+    "aviso": "The app doesn't send anything by itself: paste the text into the form or message we point you to.",
+    "plan": "Plan: {{plan}}",
+    "mensual": " monthly",
+    "anual": " yearly",
+    "calificacion": "Rating: {{c}}",
+    "sinCalificar": "not rated",
+    "cultivos": "Own crops: {{n}}",
+    "modulos": "Modules passed: {{a}} of {{n}}",
+    "examenes": "Exams passed: {{a}} of {{n}}",
+    "errores": "Errors captured: {{e}}",
+    "ninguno": "none",
+    "comentario": "Comment:",
+    "sinComentario": "(no comment)"
+  },
+  "privacidad": {
+    "titulo": "Privacy",
+    "ver": "See how we handle your data",
+    "ocultar": "Hide",
+    "tusDatos": "Your data",
+    "version": "Beta version. The final privacy text will be published before launch.",
+    "items": [
+      "We store what you enter: crops, entries, measurements, photos, progress and exam results.",
+      "Your crops, entries, measurements and progress stay on your phone. The questions and photos you send to the guide travel to our server and to the artificial intelligence service only to answer you: we don't keep the photos.",
+      "You can delete your account and all data from Settings > Profile."
+    ],
+    "borrar": "Delete my account and all data",
+    "confirmarTexto": "Crops, grow log, progress, exams and tasks will be deleted from this device. This can't be undone.",
+    "confirmar": "Confirm deletion"
+  },
+  "agente": {
+    "saludo": "Hi, I'm your growing guide. Ask me anything or use the quick questions.",
+    "preguntasRapidas": "Quick questions",
+    "chat": "Chat",
+    "placeholder": "Write your question",
+    "enviar": "Send",
+    "modoReglas": "Offline sample mode: answers come from simple rules. The real guide connects to the server.",
+    "modoIA": "The guide uses artificial intelligence and only answers about growing. It can make mistakes: for a serious problem, ask a specialist.",
+    "pensando": "Thinking…",
+    "limite": "You've reached today's limit of questions to the guide. You can continue tomorrow; meanwhile, review the modules in Learn.",
+    "sinConexion": "I couldn't reach the guide. Here's an answer from simple rules:",
+    "rapidas": {
+      "0": "Yellow leaves",
+      "1": "Pests",
+      "2": "Nutrients",
+      "3": "Inert substrate",
+      "4": "Hydroponics and pH",
+      "5": "Garden and compost",
+      "6": "LED light"
+    },
+    "respuestas": {
+      "negativa": "I can only help with growing plants. I don't give information about doses, consumption or sales.",
+      "amarillas": "Yellow leaves usually point to over- or under-watering, nitrogen deficiency or light stress. Check watering and the distance to the lamp first. If it keeps getting worse, ask a specialist.",
+      "plagas": "Check the underside of the leaves and isolate the affected plant while you investigate. If the infestation spreads, a specialist can recommend the right treatment.",
+      "diagnostico": "To diagnose, sort the clues: are the affected leaves new or old? Is the problem even or in spots? How are watering, pH and light? Rule out the simplest causes first (watering, light, pH) before thinking of deficiencies or pests, and change one thing at a time so you know what worked.",
+      "nutrientes": "Nutrients are split into macronutrients (N, P, K, calcium, magnesium and sulfur) and micronutrients (iron, boron, zinc, etc.). Mobile ones (N, P, K and Mg) show first on old leaves; less mobile ones (Ca, Fe and B), on new leaves. Before fertilizing, check watering, light and pH: many \"deficiencies\" are actually pH or watering problems.",
+      "inerte": "In inert substrates the medium gives no nutrients, so watering with nutrient solution is key. Water often with moderate volumes and allow some drainage to avoid salt buildup.",
+      "hidro": "In hydroponics, measure the solution's pH and EC regularly (pH usually stays between 5.5 and 6.5), adjust to the stage and renew the solution so it doesn't run out or get too concentrated. If the pump or aeration fails, act fast: roots get damaged within hours.",
+      "dli": "DLI is the total light a plant gets in a day: PPFD × hours of light × 3600 ÷ 1,000,000. For example, 300 µmol/m²/s for 16 hours gives about 17 mol/m²/day. As a reference, leafy greens usually need 12 to 17 and fruiting crops 20 to 30.",
+      "germinacion": "Sow at a depth of 2 to 3 times the seed's diameter and keep the medium moist but not soaked. Before transplanting outdoors, harden off the seedlings for 1 to 2 weeks: gradually more hours outside and less protection.",
+      "calendario": "Frost limits many summer crops: tomato, basil, cucumber and squash are very sensitive. Find out the date of the last frost risk in your area (local agricultural services publish sowing calendars by region) and sow or transplant after it, or protect the plants with a cover.",
+      "huerta": "In the garden, compost and mulch help a lot: they improve soil structure and keep moisture. Rotate crop families year after year to reduce pests and diseases.",
+      "riego": "Before watering, check whether the soil or substrate is dry a few centimeters down. Over- and under-watering give similar symptoms, so it's worth logging every watering.",
+      "luz": "For LED light, intensity (PPFD), height and hours of light matter. Each stage has its range. Enter a measurement and the app tells you if it's outside the recommended range.",
+      "masDatos": "Tell me a bit more: what kind of plant it is, what stage it's in and what you see. Meanwhile, a tip: {{consejo}}"
+    },
+    "lluvia": " Rain is forecast for tomorrow: check the drainage of your outdoor plants.",
+    "proCultivos": " ({{plan}} plan: I take your {{n}} crop(s) into account.)",
+    "proUltimo": " In {{nombre}} ({{etapa}}), your last entry was: \"{{nota}}\".",
+    "foto": {
+      "titulo": "Analyze a photo",
+      "ayuda": "Take a photo of the plant, a leaf, a pest or an insect, and the guide tells you what it sees and what to do.",
+      "pista": "If you write a question below before taking the photo, we send it along with it.",
+      "sacar": "Take photo",
+      "elegir": "Choose from gallery",
+      "analizando": "Analyzing the photo…",
+      "alt": "Photo uploaded by the user",
+      "sinPermiso": "To take photos, BROTA needs permission to use the camera. You can grant it in the phone settings or choose a photo from the gallery.",
+      "error": "I couldn't open the photo. Try again or choose another one.",
+      "sinConexion": "I couldn't analyze the photo because there's no connection to the guide. Try again in a while.",
+      "limite": "You've reached the limit of {{n}} photos per day. You can send more tomorrow."
+    },
+    "reco": {
+      "titulo": "What it could be",
+      "certeza": {
+        "alta": "Very likely",
+        "media": "Likely",
+        "baja": "Not sure"
+      },
+      "confianza": "{{n}} %",
+      "a11y": "{{nombre}}: {{n}} % confidence",
+      "pedirFoto": "To be more certain, send me a photo of: {{que}}",
+      "derivar": "It's best to have a specialist or an agronomist look at it.",
+      "noSe": "I don't know",
+      "mandarFoto": "Send photo"
+    }
+  },
+  "aprender": {
+    "tuNivel": "Your level",
+    "pts": "pts",
+    "pendiente": "You have the points for Master Grower. To get it, pass the Final exam (Pro).",
+    "faltan": "You need {{n}} more points for {{nivel}}",
+    "hastaMaestro": " and to pass the Final exam (Pro)",
+    "maximo": "You've reached the highest level.",
+    "resumen": "Modules passed: {{a}} of {{n}} · Exams passed: {{e}} of {{t}}",
+    "nivelChip": "{{t}} · {{min}}",
+    "modulos": "Modules",
+    "examenes": "Exams",
+    "glosario": "Glossary",
+    "bloqueado": "Locked",
+    "aprobadoPrefijo": "✓ Passed · ",
+    "sinAprobarPrefijo": "Not passed · ",
+    "mejor": "Best: {{pts}} of {{max}} pts",
+    "sinIntentar": "Not attempted · up to {{max}} pts",
+    "volverModulos": "← Modules",
+    "volverAprender": "← Learn",
+    "leccion": "Lesson {{i}} of {{n}}",
+    "comoAprobar": "To pass the module you need {{a}} of {{n}} right. You can retake the quiz: the questions change.",
+    "hacerTest": "Take the quiz ({{n}} questions)",
+    "siguienteLeccion": "Next lesson"
+  },
+  "test": {
+    "salir": "Leave the quiz",
+    "pregunta": "Question {{i}} of {{n}}",
+    "dificultad": {
+      "1": "Basic",
+      "2": "Intermediate",
+      "3": "Trick"
+    },
+    "etiqueta": "{{dificultad}} · {{pts}} pts",
+    "correcto": "Correct.",
+    "casi": "Almost.",
+    "siguiente": "Next question",
+    "verPuntaje": "See my score",
+    "resultado": "Result · {{modulo}}",
+    "aciertos": "{{a}} of {{n}}",
+    "aprobado": "Module passed",
+    "sinAprobar": "Not passed yet",
+    "puntosNuevos": "+{{gan}} new pts · your best: {{mejor}} of {{max}}",
+    "mejorMarca": "Only your best result in each module counts: retaking the quiz is for learning, not for adding extra points.",
+    "mensajes": {
+      "perfecto": "Perfect. You earned the {{bonus}}-point bonus.",
+      "aprobado": "You passed. Review the question you missed.",
+      "unAcierto": "Not passed yet: you need {{a}} of {{n}}. Read the lessons again.",
+      "ninguno": "No problem. You need {{a}} of {{n}} to pass: read the module again and try once more."
+    },
+    "repetir": "Retake quiz",
+    "yaPodesRendir": "You can now take: {{examen}}",
+    "seguirCon": "Continue with {{modulo}}",
+    "volver": "Back to modules"
+  },
+  "pestanas": {
+    "hoy": "Today",
+    "cultivos": "Crops",
+    "agente": "Guide",
+    "aprender": "Learn",
+    "plan": "Plan"
+  },
+  "titulos": {
+    "hoy": "Today",
+    "cultivos": "My crops",
+    "agente": "Guide",
+    "aprender": "Learn",
+    "plan": "Plans"
+  },
+  "comun": {
+    "cancelar": "Cancel",
+    "ejemplo": "sample",
+    "pro": "Pro"
+  },
+  "onboarding": {
+    "pasos": [
+      {
+        "t": "Welcome to BROTA",
+        "x": "It's your growing notebook: log what you do with your plants and understand why things happen."
+      },
+      {
+        "t": "Tasks, entries and achievements",
+        "x": "Every day you get simple tasks for your crops. Logging, measuring and completing tasks earns points and keeps your streak."
+      },
+      {
+        "t": "Learning and a guide",
+        "x": "Short modules with quizzes that earn points and, when you finish a block, graded exams to check what you learned. A guide gives you tips for your crops."
+      },
+      {
+        "t": "What do you grow?",
+        "x": "We pick your first modules based on how you grow. You can change it anytime."
+      }
+    ],
+    "perfiles": {
+      "huerta": "Vegetable garden",
+      "hidro": "Hydroponics",
+      "interior": "Indoor with LED",
+      "exterior": "Outdoor or balcony"
+    },
+    "siguiente": "Next",
+    "empezar": "Start"
+  },
+  "hoy": {
+    "hechasDe": "{{hechas}} of {{total}}",
+    "tareasDeHoy": "tasks today",
+    "puntos": "points",
+    "diasSeguidos": "days in a row",
+    "nivel": "level",
+    "tituloTareas": "Today's tasks",
+    "sinCultivos": "You don't have crops yet. Create one to get daily tasks.",
+    "crearPrimero": "Create my first crop",
+    "todasHechas": "You completed all of today's tasks. Well done.",
+    "topeTareas": "Today's tasks: {{pts}} of {{tope}} possible pts per day. Entries, measurements and studying add up separately.",
+    "tusCultivos": "Your crops",
+    "logros": "Achievements",
+    "climaYConsejo": "Weather and tip"
+  },
+  "tareas": {
+    "riego": "Check the moisture of {{nombre}}",
+    "obs": "Look at the underside of the leaves of {{nombre}}",
+    "med": "Measure light and temperature of {{nombre}}",
+    "dren": "Check the drainage of {{nombre}} (rain tomorrow)",
+    "puntos": "+{{pts}} · {{dificultad}}",
+    "dificultad": {
+      "facil": "Easy",
+      "media": "Medium",
+      "dificil": "Hard"
+    }
+  },
+  "recomendacion": {
+    "propio": "Recommended for how you grow",
+    "mientrasTanto": "Meanwhile, to earn points",
+    "siguiente": "Next module to pass",
+    "retomar": "Resume this module (you still need to pass the quiz)",
+    "empezar": "Start this module",
+    "bloqueado": "{{motivo}}. Earn points with tasks, entries and other modules.",
+    "yaPodesRendir": "You can now take",
+    "verExamen": "See the exam"
+  },
+  "motivos": {
+    "puntos": "Unlocks when you reach {{nivel}} ({{req}} pts)",
+    "pre": "First pass: {{lista}}",
+    "pro": "Available in the Pro plan",
+    "cannabis": "Coming soon: subject to legal review"
+  },
+  "examenes": {
+    "suelo": {
+      "t": "Soil, compost and rotation exam",
+      "d": "Texture, organic matter, compost, rotation and companion planting."
+    },
+    "siembra": {
+      "t": "Sowing and calendar exam",
+      "d": "Germination, seedlings and what to sow in each season."
+    },
+    "hidro": {
+      "t": "Hydroponics and nutrition exam",
+      "d": "Nutrients, systems and nutrient solution."
+    },
+    "inerte": {
+      "t": "Inert substrate exam",
+      "d": "Coco, perlite, rockwool and how to water them."
+    },
+    "luz": {
+      "t": "Light and environment exam",
+      "d": "PPFD, DLI and VPD."
+    },
+    "plagas": {
+      "t": "Pests exam",
+      "d": "Common pests, integrated management and, in Pro, diagnosis."
+    },
+    "final": {
+      "t": "BROTA final exam",
+      "d": "The whole syllabus, with cases and tricks. Unlocks the Master Grower level and the certificate."
+    },
+    "titulo": "Exams",
+    "intro": "They check whether you really learned: random questions with shuffled options, a time limit and tricks. Each right answer adds according to its difficulty, each mistake subtracts a third and \"I don't know\" subtracts nothing. You pass with {{pct}} %.",
+    "estadoAprobado": "✓ Passed · best {{pct}} %",
+    "estadoMejor": "Best result: {{pct}} %",
+    "estadoDisponible": "Available · not attempted",
+    "motivos": {
+      "pro": "Available in the Pro plan",
+      "preExamenes": "First pass: {{lista}}",
+      "modulos": "First pass the quiz of: {{lista}}",
+      "agotado": "You've made {{n}} attempts today. Come back tomorrow and review the modules."
+    },
+    "volver": "← Exams",
+    "reglas": {
+      "preguntas": "{{n}} questions picked at random from {{total}}: every attempt is different.",
+      "tiempo": "Time: {{min}} minutes. When it runs out, what you answered is graded.",
+      "nota": "You pass with {{pct}} % or more. Each right answer adds according to its difficulty, each mistake subtracts a third of that value and \"I don't know\" adds or subtracts nothing.",
+      "intentos": "You can't go back. You have {{n}} attempts per day (today you've used {{hoy}}).",
+      "puntos": "The first time you pass you earn +{{pts}} points.",
+      "maestro": "Passing unlocks the Master Grower level and the certificate."
+    },
+    "empezar": "Start the exam",
+    "proximamente": "Exams will be enabled in the next beta version: they need a connection to the server."
+  },
+  "logros": {
+    "primero": "First entry",
+    "constante": "Consistent: 3 days in a row",
+    "led": "First light measurement",
+    "cultivador": "Grower: 3 crops created",
+    "explorador": "Explorer: 3 modules passed",
+    "test": "Perfect quiz",
+    "examen": "First exam passed",
+    "maestro": "Final exam passed"
+  },
+  "clima": {
+    "hoyEn": "Today in {{ciudad}}",
+    "lluviaViento": "Rain {{lluvia}}% · wind {{viento}} km/h",
+    "dia": "{{dia}} {{t}} · {{lluvia}}%",
+    "grados": "{{t}}°",
+    "consejoDelDia": "Tip of the day.",
+    "porQue": "Why:",
+    "sinPronostico": "Forecast not available offline.",
+    "desc": {
+      "soleado": "Sunny",
+      "parcial": "Partly cloudy",
+      "nublado": "Cloudy",
+      "niebla": "Fog",
+      "lluvia": "Rain",
+      "nieve": "Snow",
+      "tormenta": "Storm"
+    },
+    "diasSemana": [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ]
+  },
+  "tips": [
+    "Before watering, push a finger into the soil or substrate. If it's dry a few centimeters down, water.",
+    "Check the underside of the leaves: that's where most pests hide.",
+    "In inert substrates, water often with moderate volumes. They dry faster than soil.",
+    "Measure light at leaf height, not in the air.",
+    "Log every watering and every change. In a month you'll see patterns you can't see today.",
+    "In strong heat, water early so the plant has water before midday.",
+    "If a leaf changes color, also check the roots and watering before adding fertilizer."
+  ],
+  "tipsPorque": [
+    "Roots need air as well as water. If you water while the substrate is still wet, the pores stay full of water, the roots suffocate and rot appears. In pots, overwatering is one of the most common causes of losing plants.",
+    "Aphids, spider mites, whiteflies and thrips shelter on the underside of leaves, away from the sun, and lay their eggs there. In warm weather their populations grow in a few days: spotting them while they're few lets you control them with gentle measures, like removing leaves or washing with water.",
+    "Perlite, coco coir and rockwool hold less water than soil and don't store nutrients. Small, frequent waterings keep moisture and the solution stable, and a little drainage prevents salt buildup.",
+    "Light intensity drops a lot as you move away from the lamp. If you measure higher or lower, the value isn't what the plant receives and you may correct the height in the wrong direction.",
+    "Symptoms often appear days after the cause. With entries you can link a change in watering, fertilizer or light to what happened later, and not repeat the mistake.",
+    "In the morning less water evaporates and the plant has it available for the hottest hours, when it transpires the most. Watering at midday wastes water to evaporation, and watering at night leaves leaves and soil wet longer, which favors fungi.",
+    "Overwatering or a damaged root prevents nutrient uptake and gives symptoms similar to a deficiency. Adding fertilizer in that case raises salts and makes the problem worse."
+  ],
+  "cultivos": {
+    "stats": {
+      "cultivos": "crops",
+      "enCosecha": "harvesting",
+      "conAlertas": "with alerts"
+    },
+    "limiteTitulo": "You've reached the Free plan limit",
+    "limiteTexto": "It includes {{n}} crops of your own. Pro is unlimited.",
+    "nuevo": "+ New crop",
+    "form": {
+      "nombre": "Name (e.g. Basil 1)",
+      "tipo": "Plant type",
+      "ubicacion": "Location",
+      "etapa": "Stage",
+      "fecha": "Sowing date (YYYY-MM-DD)",
+      "guardar": "Save crop"
+    },
+    "ubicaciones": {
+      "interior": "indoor",
+      "exterior": "outdoor"
+    },
+    "filtros": {
+      "todos": "All",
+      "interior": "Indoor",
+      "exterior": "Outdoor",
+      "alertas": "With alerts"
+    },
+    "sinCoincidencias": "No crop matches this filter.",
+    "vacio": "You don't have crops yet. Create the first one or start from a template.",
+    "empezarRapido": "Quick start",
+    "oCrea": "Or create your own crop with the button above.",
+    "plantilla": "{{tipo}} · {{ubicacion}}",
+    "dia": "Day {{n}}",
+    "linea": "{{tipo}} · {{ubicacion}} · {{etapa}}",
+    "ultimo": "Last: {{nota}}",
+    "sinRegistros": "No entries yet",
+    "salud": {
+      "luz": "Check the light: a measurement is out of range",
+      "sinRegistros": "No entries yet",
+      "diasSinRegistro": "No entries for {{dias}} days",
+      "enOrden": "All good for now"
+    },
+    "proximo": {
+      "primerRegistro": "Make your first entry to start the grow log",
+      "regar": "Time to water: there's no recent watering logged",
+      "cosecha": "Log the amount harvested",
+      "alDia": "All up to date. Continue with today's tasks"
+    }
+  },
+  "cultivo": {
+    "volver": "← Crops",
+    "info": "{{tipo}} · {{ubicacion}} · Day {{dia}} since {{fecha}}",
+    "proximoPaso": "Next step",
+    "guia": {
+      "Siembra": "Keep the medium moist but not soaked and give it soft, steady light.",
+      "Crecimiento": "This is the stage with the most watering and observation. Raise the light gradually and check the underside of the leaves.",
+      "Floración": "Watch humidity and temperature to avoid fungi. Increase light intensity according to the stage's range.",
+      "Cosecha": "Log what you harvest. Depending on the species, reduce fertilizer before harvesting."
+    },
+    "stats": {
+      "registros": "entries",
+      "riegos": "waterings",
+      "hoy": "Today",
+      "diaDesde": "day since the last",
+      "diasDesde": "days since the last"
+    },
+    "etapa": "Stage",
+    "registroRapido": "Quick entry",
+    "detalle": "Detail (optional): what you did or observed",
+    "puntosRegistro": "Each entry earns 2 pts (today {{r}} of {{tope}}).",
+    "puntosMedicion": " Each light measurement earns 4 pts (today {{m}} of {{tope}}).",
+    "luzYAmbiente": "Light and environment",
+    "medicionAyuda": "Enter a measurement whenever you want; the app compares it with the stage.",
+    "campos": {
+      "watts": "Lamp power (W)",
+      "altura": "Height above the plant (cm)",
+      "horas": "Hours of light per day",
+      "ppfd": "Measured PPFD (µmol/m²/s)",
+      "temp": "Temperature (°C)",
+      "humedad": "Relative humidity (%)"
+    },
+    "guardarMedicion": "Save measurement",
+    "ultimaMedicion": "Last measurement",
+    "ppfd": {
+      "poca": "Too little light for {{etapa}} (recommended {{min}}–{{max}}). Bring the lamp closer or raise the power.",
+      "mucha": "Too much light for {{etapa}} (recommended {{min}}–{{max}}). Move the lamp away to avoid light stress.",
+      "ok": "Intensity within the recommended range ({{min}}–{{max}})."
+    },
+    "altura": {
+      "cerca": "The lamp is very close (less than 20 cm). Risk of burns.",
+      "ok": "Reasonable height. Check the manufacturer's recommendation."
+    },
+    "vpd": "VPD {{v}} kPa · guide zone 0.8 to 1.2 kPa",
+    "evolucionPPFD": "PPFD over time",
+    "ppfdRegistrado": "Logged PPFD (oldest to newest): {{valores}}",
+    "exterior": "Outdoors, the weather comes from the forecast. You can see it in the Today tab.",
+    "fotos": {
+      "titulo": "Crop photos",
+      "ayuda": "Upload a photo every week to see how it evolves. Photos are saved on this device.",
+      "agregar": "Add photo",
+      "primera": "First · {{fecha}}",
+      "ultima": "Latest · {{fecha}}",
+      "altPrimera": "First photo of the crop",
+      "altUltima": "Most recent photo of the crop",
+      "alt": "Photo of the crop"
+    },
+    "bitacora": "Grow log",
+    "todas": "All",
+    "sinRegistros": "No entries",
+    "sinRegistrosTodas": " yet. Tap a quick entry to start.",
+    "sinRegistrosTipo": " of this type.",
+    "entrada": "{{fecha}} · {{tipo}}",
+    "zonaPeligro": "Danger zone",
+    "eliminar": "Delete this crop",
+    "confirmarEliminar": "Yes, delete it and lose its grow log"
+  },
+  "categorias": {
+    "todas": "All",
+    "huerta": "Vegetable garden",
+    "nutricion": "Nutrition",
+    "hidro": "Hydroponics",
+    "inerte": "Inert substrate",
+    "luz": "Light and environment",
+    "plagas": "Pests and diagnosis"
+  },
+  "etapas": {
+    "Siembra": "Sowing",
+    "Crecimiento": "Growth",
+    "Floración": "Flowering",
+    "Cosecha": "Harvest"
+  },
+  "tiposRegistro": {
+    "Riego": "Watering",
+    "Fertilizante": "Fertilizer",
+    "Poda": "Pruning",
+    "Plaga": "Pest",
+    "Observación": "Observation"
+  },
+  "configuracion": {
+    "titulo": "Settings",
+    "abrir": "Open settings",
+    "volver": "← Back",
+    "idioma": "Language",
+    "idiomaNota": "Lessons, questions and the glossary are in Spanish for now.",
+    "letra": "Text size",
+    "letras": {
+      "normal": "Normal",
+      "grande": "Large",
+      "muyGrande": "Extra large"
+    },
+    "letraEjemplo": "This is how the text of the lessons and the guide looks.",
+    "tema": "Display mode",
+    "temas": {
+      "sistema": "Automatic",
+      "claro": "Light",
+      "oscuro": "Dark"
+    },
+    "temaAyuda": "Automatic follows the phone's mode.",
+    "perfil": "Profile",
+    "formaCultivar": "How you grow",
+    "formaAyuda": "We pick the recommended modules based on how you grow.",
+    "planActual": "Your plan: {{plan}}",
+    "documentos": "Privacy and terms",
+    "version": "Version {{v}}"
+  },
+  "terminos": {
+    "titulo": "Terms and conditions",
+    "ver": "See terms and conditions",
+    "version": "Beta version. The final text will be published before launch.",
+    "items": [
+      "BROTA is an app to log your crops and learn about them. By using it you accept these terms.",
+      "The content is educational and general. It doesn't replace the advice of an agronomist or a specialist: for a serious problem, consult a professional.",
+      "The guide uses artificial intelligence and can make mistakes. Check its answers before applying any treatment.",
+      "BROTA doesn't give information about doses, consumption or sale of substances.",
+      "You're responsible for complying with the laws of your country regarding what you grow.",
+      "The Pro plan is paid through App Store or Google Play purchases. The subscription renews automatically until you cancel it from your store account, at least 24 hours before the period ends.",
+      "The Final exam certificate is an internal BROTA recognition, with no academic or legal validity.",
+      "You can delete your account and all your data whenever you want, from Settings > Profile.",
+      "We may update these terms. If the change is important, we'll let you know in the app."
+    ]
+  },
+  "niveles": {
+    "Inexperto": "Novice",
+    "Aprendiz": "Apprentice",
+    "Aprendiz avanzado": "Advanced apprentice",
+    "Cultivador": "Grower",
+    "Cultivador experto": "Expert grower",
+    "Maestro de cultivo": "Master Grower"
+  }
+}

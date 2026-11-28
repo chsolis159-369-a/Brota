@@ -205,3 +205,12 @@ Pantalla nueva que se abre con un engranaje en el encabezado de todas las pesta�
 - **Privacidad y términos**: la privacidad se mudó desde Plan (su texto dice ahora dónde está el borrado). Los términos y condiciones son genéricos, marcados como versión de prueba: uso educativo, el guía puede equivocarse, nada de dosis, consumo ni venta, leyes de cada país, suscripción por las tiendas con renovación automática, constancia sin validez, borrado de datos y cambios. Hay que revisarlos con un abogado antes de publicar.
 - **Dónde se guarda**: idioma, letra y modo son preferencias del dispositivo y se guardan en el almacén clave-valor de expo-sqlite, que se lee de forma sincrónica al abrir (la app arranca ya con lo elegido). "Borrar mi cuenta" no las cambia.
 - **Textos**: nuevos, en el tono del prototipo, en la lista de textos nuevos de `__tests__/textos.test.ts`.
+
+## D-36 · Idiomas: inglés, italiano, francés y chino (pedido del usuario, 2026-11-28)
+- **Qué se traduce**: todos los textos de la app (`src/i18n/*.json`): pantallas, consejos del día con su fundamento, respuestas sin conexión del guía, términos y privacidad. También los nombres de los niveles, que estaban en el código: se traducen al mostrarlos y las reglas siguen usando los nombres del prototipo.
+- **Qué queda en español**: el contenido de `content/modulos.json` (lecciones, preguntas y glosario), que no se edita y del que no se inventan versiones. Configuración lo avisa al elegir otro idioma. Si se quiere el contenido traducido, hace falta una traducción revisada del archivo, como contenido aparte.
+- **Chino**: chino simplificado (`zh-CN`). Fraunces y Nunito Sans no tienen caracteres chinos: el teléfono usa su fuente del sistema para esos textos.
+- **El guía con IA** responde en el idioma elegido: la app manda el idioma y el servidor, que solo acepta los cinco de la app, agrega la instrucción al último mensaje. En español no cambia nada.
+- **Datos que viajan al guía** (con D-34): en Gratis la app manda solo los datos básicos de cada cultivo; en Pro, también registros y la última medición. El servidor recorta igual según el plan que confirma.
+- **Pruebas**: `__tests__/idiomas.test.ts` exige que cada idioma tenga las mismas claves y las mismas variables que el español, sin textos vacíos. El flujo de Maestro de Configuración cambia a inglés y a chino y vuelve al español.
+- **Calidad**: traducciones hechas con cuidado pero sin revisión de hablantes nativos; conviene revisarlas antes de publicar en esos mercados.
