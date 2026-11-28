@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { Pressable, StyleSheet, TextInput, View, type TextInputProps, type ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, TextInput, useWindowDimensions, View, type TextInputProps, type ViewStyle } from 'react-native';
 
 import type { Colores } from '@/tema/colores';
 import { TAMANO_ICONO, type NombreIcono } from '@/tema/iconos';
@@ -201,13 +201,21 @@ export function Medalla({ icono, tono = 'accent', tamano = 40 }: { icono: Nombre
 
 type ItemEstadistica = { valor: string | number; etiqueta: string; texto?: boolean; icono?: NombreIcono; tono?: Tono };
 
-/** Grilla de datos (.stats): con letra grande, los recuadros pasan a la línea siguiente. */
+/** Ancho mínimo de un recuadro de la grilla de datos con la letra del sistema normal. */
+export const ANCHO_MINIMO_DATO = 104;
+
+/**
+ * Grilla de datos (.stats). El ancho mínimo de cada recuadro crece con la letra del sistema: con letra
+ * grande, los recuadros pasan a la línea siguiente en lugar de partir las palabras ("cultivo-s").
+ */
 export function Estadisticas({ items }: { items: ItemEstadistica[] }) {
   const { c } = useTema();
+  const { fontScale } = useWindowDimensions();
+  const minWidth = ANCHO_MINIMO_DATO * Math.max(1, fontScale || 1);
   return (
     <View style={estilos.stats}>
       {items.map((it) => (
-        <View key={it.etiqueta} style={[estilos.stat, superficie(c)]} accessible>
+        <View key={it.etiqueta} style={[estilos.stat, { minWidth }, superficie(c)]} accessible>
           {it.icono ? <Medalla icono={it.icono} tono={it.tono} tamano={36} /> : null}
           <Texto variante={it.texto ? 'cuerpoFuerte' : 'numero'} color="fg" style={estilos.valor}>
             {String(it.valor)}
@@ -295,7 +303,7 @@ const estilos = StyleSheet.create({
   },
   medalla: { alignItems: 'center', justifyContent: 'center' },
   stats: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginVertical: MEDIDAS.separacion },
-  stat: { flexGrow: 1, flexBasis: '28%', minWidth: 104, borderRadius: 18, paddingVertical: 14, paddingHorizontal: 14, gap: 4 },
+  stat: { flexGrow: 1, flexBasis: '28%', borderRadius: 18, paddingVertical: 14, paddingHorizontal: 14, gap: 4 },
   valor: { marginTop: 4 },
   h3: { marginTop: 28, marginBottom: 12 },
   mensaje: { flexDirection: 'row', alignItems: 'center', gap: 10, borderRadius: 12, paddingVertical: 10, paddingHorizontal: 14, marginVertical: 6 },
