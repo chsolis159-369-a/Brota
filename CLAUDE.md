@@ -84,3 +84,11 @@ Migración inicial desde datos locales: reconstruir el ledger con los topes diar
 - Hitos H1 a H6 según `PLAN.md`, un commit por hito, con las pruebas pasando.
 - Terminado = pasan `npm test`, `npm run lint:contenido` y los flujos de Maestro, sin errores en consola, y todo el texto visible coincide con el prototipo.
 - Documentos vivos: `PLAN.md` (hitos y estado), `DECISIONS.md` (decisiones tomadas), `CONTENIDO_PENDIENTE.md` (errores de contenido detectados).
+
+## Diseño con Stitch
+- `diseno/DESIGN.md` es el sistema de diseño: sale de `src/tema` y `src/componentes`, y se actualizan juntos. `__tests__/disenoDoc.test.ts` falla si sus colores no coinciden con `src/tema/colores.ts`.
+- El proyecto de Google Stitch se llama "BROTA" (servidor MCP `stitch`, alcance de usuario; se conecta con `tools/conectar-stitch.ps1`).
+- Flujo: se diseña en Stitch, el usuario elige y recién después se implementa en React Native, una pantalla por vez, con `src/tema` y `src/componentes`. El HTML y Tailwind de Stitch son solo referencia visual: nunca se copian. Un color, medida o componente nuevo se suma a `src/tema` o `src/componentes` y a `diseno/DESIGN.md`, con su decisión en DECISIONS.md.
+- Pedidos a Stitch: una pantalla por pedido, de menos de 5.000 caracteres, en formato móvil de 390 × 844 y en español rioplatense. Solo información de diseño y los datos de ejemplo de la app: nada de datos personales ni claves.
+- Clave: nunca se pide por el chat ni se escribe en archivos del repositorio; si un archivo la necesita, usa la variable de entorno `${STITCH_API_KEY}`.
+- Textos: los que invente Stitch no entran a la app; se usan los de `src/i18n`.
