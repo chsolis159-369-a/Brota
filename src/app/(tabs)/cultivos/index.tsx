@@ -80,7 +80,6 @@ export default function Cultivos() {
         <Boton
           texto={creando ? t('comun.cancelar') : t('cultivos.nuevo')}
           variante={creando ? 'fantasma' : 'primario'}
-          icono={creando ? undefined : 'cultivo'}
           onPress={() => setCreando(!creando)}
           testID="nuevo-cultivo"
         />
@@ -136,7 +135,7 @@ export default function Cultivos() {
                       setCreando(true);
                     }}
                     style={({ pressed }) => [estilos.plantilla, superficie(colores), { transform: [{ scale: pressed ? 0.98 : 1 }] }]}>
-                    <Medalla icono={p.ubicacion === 'interior' ? 'luz' : 'huerta'} tamano={36} />
+                    <Medalla icono={p.ubicacion === 'interior' ? 'interior' : 'exterior'} tamano={36} />
                     <Texto variante="cuerpoFuerte">{p.nombre}</Texto>
                     <Texto variante="secundario">{t('cultivos.plantilla', { tipo: p.tipo, ubicacion: p.ubicacion })}</Texto>
                   </Pressable>

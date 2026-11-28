@@ -185,15 +185,16 @@ export function colorTono(c: Colores, tono: Tono): { fuerte: string; suave: stri
 }
 
 /**
- * Círculo suave con un ícono adentro. Por defecto, en el tono de la marca: el color propio queda para
- * lo que significa algo (clima = información; salud del cultivo = bien, atención o problema).
+ * Ícono dentro de un cuadrado de esquinas redondeadas, sobre el fondo suave de su tono (D-33). Por defecto,
+ * en el tono de la marca: el color propio queda para lo que significa algo (clima = información; salud del
+ * cultivo = bien, atención o problema). El ícono mide siempre lo mismo, sea cual sea el cuadrado.
  */
 export function Medalla({ icono, tono = 'accent', tamano = 40 }: { icono: NombreIcono; tono?: Tono; tamano?: number }) {
   const { c } = useTema();
   const { fuerte, suave } = colorTono(c, tono);
   return (
-    <View style={[estilos.medalla, { width: tamano, height: tamano, borderRadius: tamano / 2, backgroundColor: suave }]}>
-      <Icono nombre={icono} color={fuerte} tamano={tamano >= 44 ? TAMANO_ICONO.normal : TAMANO_ICONO.chico} />
+    <View style={[estilos.medalla, { width: tamano, height: tamano, borderRadius: Math.round(tamano * 0.28), backgroundColor: suave }]}>
+      <Icono nombre={icono} color={fuerte} tamano={TAMANO_ICONO.normal} />
     </View>
   );
 }
