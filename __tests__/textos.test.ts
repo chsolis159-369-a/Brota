@@ -36,6 +36,11 @@ const NUEVOS = new Set([
   ...['ayuda', 'pista', 'sacar', 'elegir', 'analizando', 'sinPermiso', 'error', 'sinConexion', 'limite'].map((k) => `agente.foto.${k}`),
   // Reconocimiento con fotos y preguntas, pedido del usuario (D-31).
   ...['titulo', 'certeza.alta', 'certeza.media', 'certeza.baja', 'confianza', 'a11y', 'pedirFoto', 'derivar', 'noSe', 'mandarFoto'].map((k) => `agente.reco.${k}`),
+  // Plan Gratis con 6 exámenes y el Agente con límite y memoria limitada, pedido del usuario (D-34).
+  'planes.itemsGratis.examenes',
+  'planes.itemsGratis.agente',
+  'examenes.hidro.d',
+  ...['suelo', 'siembra', 'inerte', 'luz', 'plagas'].flatMap((k) => [`examenes.${k}.t`, `examenes.${k}.d`]),
 ]);
 
 /** Hojas de un objeto de textos, con su clave completa. */

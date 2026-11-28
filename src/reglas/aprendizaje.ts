@@ -37,12 +37,14 @@ export function moduloDisponible(
 
 /* ---------- Exámenes ---------- */
 
-export type IdExamen = 'huerta' | 'hidro' | 'luzplagas' | 'final';
+export type IdExamen = 'suelo' | 'siembra' | 'hidro' | 'inerte' | 'luz' | 'plagas' | 'final';
 
 export type Examen = {
   id: IdExamen;
   /** Categorías del bloque; null = todo el temario (sin cannabis). */
   cats: readonly Categoria[] | null;
+  /** Si está, el bloque son estos módulos (para partir una categoría grande en dos exámenes). */
+  mods?: readonly string[];
   /** Cantidad de preguntas (y minutos). */
   n: number;
   /** Puntos la primera vez que se aprueba. */
@@ -52,16 +54,23 @@ export type Examen = {
   pre?: readonly IdExamen[];
 };
 
+/**
+ * Seis exámenes en el plan Gratis (D-34, pedido del usuario; el prototipo tenía tres) y el final Pro.
+ * Cada bloque tiene al menos 14 preguntas en el banco para sortear 10 o 12 sin repetir.
+ */
 export const EXAMENES: readonly Examen[] = [
-  { id: 'huerta', cats: ['huerta'], n: 12, pts: 40 },
-  { id: 'hidro', cats: ['nutricion', 'hidro', 'inerte'], n: 15, pts: 40 },
-  { id: 'luzplagas', cats: ['luz', 'plagas'], n: 15, pts: 40 },
-  { id: 'final', cats: null, n: 30, pts: 0, pro: true, pre: ['huerta', 'hidro', 'luzplagas'] },
+  { id: 'suelo', cats: ['huerta'], mods: ['suelo', 'compost', 'rotacion'], n: 12, pts: 40 },
+  { id: 'siembra', cats: ['huerta'], mods: ['germinacion', 'calendario'], n: 10, pts: 40 },
+  { id: 'hidro', cats: ['hidro', 'nutricion'], n: 12, pts: 40 },
+  { id: 'inerte', cats: ['inerte'], n: 10, pts: 40 },
+  { id: 'luz', cats: ['luz'], n: 12, pts: 40 },
+  { id: 'plagas', cats: ['plagas'], n: 10, pts: 40 },
+  { id: 'final', cats: null, n: 30, pts: 0, pro: true, pre: ['suelo', 'siembra', 'hidro', 'inerte', 'luz', 'plagas'] },
 ];
 
 /** Módulos de un examen a los que el plan da acceso. */
 export const modulosExamen = (ex: Examen, modulos: readonly Modulo[], plan: Plan): Modulo[] =>
-  modulosDelPlan(modulos, plan).filter((m) => !ex.cats || ex.cats.includes(m.cat));
+  modulosDelPlan(modulos, plan).filter((m) => (ex.mods ? ex.mods.includes(m.id) : !ex.cats || ex.cats.includes(m.cat)));
 
 export const intentosHoy = (estado: EstadoExamen | undefined, ahora: Date = new Date()): number =>
   estado && estado.dia === hoyStr(ahora) ? (estado.n ?? 0) : 0;

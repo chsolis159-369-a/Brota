@@ -33,7 +33,7 @@ describe('Contenido y constantes', () => {
     ['INTENTOS_DIA = 3', D.INTENTOS_DIA, 3],
     ['APROBAR_EXAMEN = 0.8', D.APROBAR_EXAMEN, 0.8],
     ['Maestro requiere el Examen final', D.MAESTRO_REQUIERE_EXAMEN, true],
-    ['Límite Gratis: 2 cultivos propios', D.LIMITE_GRATIS, 2],
+    ['Límite Gratis: 3 cultivos propios (D-34)', D.LIMITE_GRATIS, 3],
   ])('%s', (_n, valor, esperado) => expect(valor).toBe(esperado));
 
   it('16 módulos con test sin pagar', () => expect(modulosDelPlan(MODULOS, 'gratis')).toHaveLength(16));
@@ -72,7 +72,7 @@ describe('Niveles', () => {
         progreso: { suelo: { mejorAciertos: 3, mejorPuntos: 75 } },
         tareasPorDia: { '2026-11-20': ['riego-1'] },
         ledger: { dias: { '2026-11-20': { r: 1, m: 1 } }, creados: 0 },
-        examenes: { huerta: { aprobado: true, pts: 40, mejor: 0.9 } },
+        examenes: { suelo: { aprobado: true, pts: 40, mejor: 0.9 } },
       }),
     ).toBe(75 + 5 + 2 + 4 + 40);
   });
@@ -134,7 +134,7 @@ describe('Logros', () => {
   });
   it('Test perfecto', () => expect(logros({ ...base, progreso: aprobados(['suelo'], 3) }).test).toBe(true));
   it('Primer examen aprobado y Examen final aprobado', () => {
-    const l1 = logros({ ...base, examenes: { huerta: { aprobado: true, pts: 40, mejor: 0.9 } } });
+    const l1 = logros({ ...base, examenes: { suelo: { aprobado: true, pts: 40, mejor: 0.9 } } });
     expect([l1.examen, l1.maestro]).toEqual([true, false]);
     expect(logros({ ...base, examenes: { final: { aprobado: true, pts: 0, mejor: 0.9 } } }).maestro).toBe(true);
   });
@@ -166,38 +166,56 @@ describe('Exámenes: configuración y habilitación', () => {
   const e = (o: Partial<{ plan: D.Plan; progreso: Record<string, ProgresoModulo>; examenes: Record<string, EstadoExamen> }> = {}) => ({
     plan: 'gratis' as D.Plan, progreso: {}, examenes: {}, ...o,
   });
-  it('Cuatro exámenes', () => expect(EXAMENES.map((x) => [x.id, x.n, x.pts])).toEqual([['huerta', 12, 40], ['hidro', 15, 40], ['luzplagas', 15, 40], ['final', 30, 0]]));
-  it('Final: Pro, exige los tres y todo el temario', () => expect([ex('final').pro, ex('final').pre, ex('final').cats]).toEqual([true, ['huerta', 'hidro', 'luzplagas'], null]));
-  it('Pool de Huerta: 5 módulos', () => expect(modulosExamen(ex('huerta'), MODULOS, 'gratis')).toHaveLength(5));
+  const SEIS = ['suelo', 'siembra', 'hidro', 'inerte', 'luz', 'plagas'];
+  it('Seis exámenes en Gratis y el final Pro (D-34)', () =>
+    expect(EXAMENES.map((x) => [x.id, x.n, x.pts])).toEqual([
+      ['suelo', 12, 40], ['siembra', 10, 40], ['hidro', 12, 40], ['inerte', 10, 40], ['luz', 12, 40], ['plagas', 10, 40], ['final', 30, 0],
+    ]));
+  it('Final: Pro, exige los seis y todo el temario', () => expect([ex('final').pro, ex('final').pre, ex('final').cats]).toEqual([true, SEIS, null]));
+  it('Huerta se reparte en dos exámenes sin repetir módulos', () => {
+    expect(modulosExamen(ex('suelo'), MODULOS, 'gratis').map((m) => m.id)).toEqual(['suelo', 'rotacion', 'compost']);
+    expect(modulosExamen(ex('siembra'), MODULOS, 'gratis').map((m) => m.id)).toEqual(['germinacion', 'calendario']);
+  });
+  it('Entre los seis cubren los 16 módulos de Gratis, cada uno una vez', () => {
+    const ids = SEIS.flatMap((id) => modulosExamen(ex(id), MODULOS, 'gratis').map((m) => m.id));
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids.sort()).toEqual(modulosDelPlan(MODULOS, 'gratis').map((m) => m.id).sort());
+  });
+  it('Cada examen tiene en el banco más preguntas que las que sortea', () => {
+    for (const x of EXAMENES.filter((y) => !y.pro)) {
+      const banco = modulosExamen(x, MODULOS, 'gratis').reduce((s, m) => s + m.quiz.length + m.banco.length, 0);
+      expect(banco).toBeGreaterThan(x.n);
+    }
+  });
   it('Bloqueado si falta aprobar un módulo del bloque', () => {
-    const d = examenDisponible(ex('huerta'), e(), MODULOS, AHORA);
+    const d = examenDisponible(ex('suelo'), e(), MODULOS, AHORA);
     expect(d.ok).toBe(false);
     expect(!d.ok && d.motivo.tipo).toBe('modulos');
   });
   it('Habilitado con todos los módulos del bloque aprobados', () => {
-    const ids = modulosExamen(ex('huerta'), MODULOS, 'gratis').map((m) => m.id);
-    expect(examenDisponible(ex('huerta'), e({ progreso: aprobados(ids) }), MODULOS, AHORA).ok).toBe(true);
+    const ids = modulosExamen(ex('suelo'), MODULOS, 'gratis').map((m) => m.id);
+    expect(examenDisponible(ex('suelo'), e({ progreso: aprobados(ids) }), MODULOS, AHORA).ok).toBe(true);
   });
-  it('En Pro, Luz y plagas exige también diagnóstico', () => {
-    const ids = modulosExamen(ex('luzplagas'), MODULOS, 'gratis').map((m) => m.id);
-    expect(examenDisponible(ex('luzplagas'), e({ progreso: aprobados(ids) }), MODULOS, AHORA).ok).toBe(true);
-    expect(examenDisponible(ex('luzplagas'), e({ plan: 'pro', progreso: aprobados(ids) }), MODULOS, AHORA)).toEqual({
+  it('En Pro, Plagas exige también diagnóstico', () => {
+    const ids = modulosExamen(ex('plagas'), MODULOS, 'gratis').map((m) => m.id);
+    expect(examenDisponible(ex('plagas'), e({ progreso: aprobados(ids) }), MODULOS, AHORA).ok).toBe(true);
+    expect(examenDisponible(ex('plagas'), e({ plan: 'pro', progreso: aprobados(ids) }), MODULOS, AHORA)).toEqual({
       ok: false, motivo: { tipo: 'modulos', ids: ['diagnostico'] },
     });
   });
   it('Final en Gratis: "Disponible en el plan Pro"', () => expect(examenDisponible(ex('final'), e(), MODULOS, AHORA)).toEqual({ ok: false, motivo: { tipo: 'pro' } }));
-  it('Final en Pro sin los tres exámenes', () => {
+  it('Final en Pro sin los seis exámenes', () => {
     const todos = aprobados(MODULOS.map((m) => m.id));
     expect(examenDisponible(ex('final'), e({ plan: 'pro', progreso: todos }), MODULOS, AHORA)).toEqual({
-      ok: false, motivo: { tipo: 'preExamenes', ids: ['huerta', 'hidro', 'luzplagas'] },
+      ok: false, motivo: { tipo: 'preExamenes', ids: SEIS },
     });
   });
   it('Tres intentos por día; el cuarto se bloquea', () => {
-    const ids = modulosExamen(ex('huerta'), MODULOS, 'gratis').map((m) => m.id);
-    const estado = (n: number, dia = '2026-11-23') => e({ progreso: aprobados(ids), examenes: { huerta: { aprobado: false, mejor: 0, pts: 0, dia, n } } });
-    expect(examenDisponible(ex('huerta'), estado(2), MODULOS, AHORA).ok).toBe(true);
-    expect(examenDisponible(ex('huerta'), estado(3), MODULOS, AHORA)).toEqual({ ok: false, motivo: { tipo: 'agotado' } });
-    expect(examenDisponible(ex('huerta'), estado(3, '2026-11-22'), MODULOS, AHORA).ok).toBe(true);
+    const ids = modulosExamen(ex('suelo'), MODULOS, 'gratis').map((m) => m.id);
+    const estado = (n: number, dia = '2026-11-23') => e({ progreso: aprobados(ids), examenes: { suelo: { aprobado: false, mejor: 0, pts: 0, dia, n } } });
+    expect(examenDisponible(ex('suelo'), estado(2), MODULOS, AHORA).ok).toBe(true);
+    expect(examenDisponible(ex('suelo'), estado(3), MODULOS, AHORA)).toEqual({ ok: false, motivo: { tipo: 'agotado' } });
+    expect(examenDisponible(ex('suelo'), estado(3, '2026-11-22'), MODULOS, AHORA).ok).toBe(true);
   });
 });
 
@@ -221,7 +239,7 @@ describe('Onboarding y recomendación', () => {
   });
   it('Ofrece el examen habilitado', () => {
     const ids = modulosExamen(EXAMENES[0]!, MODULOS, 'gratis').map((m) => m.id);
-    expect(recomendacion(null, { ...e, progreso: aprobados(ids) }, MODULOS, AHORA).examen?.id).toBe('huerta');
+    expect(recomendacion(null, { ...e, progreso: aprobados(ids) }, MODULOS, AHORA).examen?.id).toBe('suelo');
   });
   it('Interior con LED recomienda luz', () => expect(recomendacion('interior', e, MODULOS, AHORA).propio?.modulo.id).toBe('luz'));
   it('Títulos de los prerrequisitos para el motivo', () => expect(titulo('suelo')).toBe('Suelo, compost y acolchado'));

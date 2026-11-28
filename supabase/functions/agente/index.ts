@@ -7,7 +7,8 @@
  * - Reconoce con fotos y preguntas (D-31): responde con salida estructurada (texto, candidatos con su
  *   confianza, una pregunta con opciones, foto puntual, derivar). Si está KINDWISE_API_KEY, antes consulta
  *   el servicio plant.id con la foto y le pasa el resultado al modelo como un dato más.
- * - Usa el historial de los cultivos solo si RevenueCat confirma el entitlement `pro` (H5).
+ * - Límite diario y memoria según el plan (D-34): Pro (entitlement `pro` de RevenueCat, H5) usa el historial
+ *   de los cultivos y 30 preguntas por día; Gratis, los datos básicos y 6 preguntas por día.
  * Secretos (nunca en la app): ANTHROPIC_API_KEY, ANTHROPIC_MODEL (opcional), REVENUECAT_SECRET_KEY (H5),
  * KINDWISE_API_KEY (opcional, D-31).
  * Supabase inyecta SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY.
@@ -110,9 +111,11 @@ Deno.serve(async (req) => {
 
   const admin = createClient(url, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
   const conFoto = v.pedido.foto !== null;
+  // El plan lo decide el servidor (RevenueCat): define el límite diario y la memoria del agente (D-34).
+  const pro = await esPro(user.id).catch(() => false);
   const { data: uso, error: errorUso } = await admin.rpc('agente_consumir', {
     p_usuario: user.id,
-    p_limite: LIMITE_DIARIO,
+    p_limite: pro ? LIMITE_DIARIO.pro : LIMITE_DIARIO.gratis,
     p_foto: conFoto,
     p_limite_fotos: LIMITE_FOTOS_DIARIO,
   });
@@ -126,10 +129,7 @@ Deno.serve(async (req) => {
     return json({ error: 'servidor' }, 500);
   }
 
-  const [pro, servicio] = await Promise.all([
-    esPro(user.id).catch(() => false),
-    v.pedido.foto ? reconocerConServicio(v.pedido.foto) : Promise.resolve([]),
-  ]);
+  const servicio = v.pedido.foto ? await reconocerConServicio(v.pedido.foto) : [];
 
   try {
     const respuesta = await anthropic.beta.messages.create({

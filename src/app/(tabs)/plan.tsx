@@ -12,7 +12,7 @@ import { Texto } from '@/componentes/Texto';
 import { VERSION_APP } from '@/config/flags';
 import { MODULOS } from '@/contenido';
 import { EXAMENES, moduloAprobado, modulosDelPlan } from '@/reglas/aprendizaje';
-import { LIMITE_GRATIS, type Plan } from '@/reglas/dominio';
+import { LIMITE_GRATIS, PREGUNTAS_AGENTE_GRATIS, type Plan } from '@/reglas/dominio';
 import { hoyStr } from '@/reglas/fechas';
 import { erroresRecientes } from '@/servicios/errores';
 import { useApp } from '@/store/app';
@@ -36,8 +36,8 @@ export default function PantallaPlan() {
     t('planes.itemsGratis.bitacora'),
     t('planes.itemsGratis.tareas'),
     t('planes.itemsGratis.modulos', { n: modulosDelPlan(MODULOS, 'gratis').length }),
-    t('planes.itemsGratis.examenes'),
-    t('planes.itemsGratis.agente'),
+    t('planes.itemsGratis.examenes', { n: EXAMENES.filter((x) => !x.pro).length }),
+    t('planes.itemsGratis.agente', { n: PREGUNTAS_AGENTE_GRATIS }),
   ];
 
   return (

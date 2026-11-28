@@ -129,16 +129,18 @@ describe('Bitácora, mediciones y ledger', () => {
 });
 
 describe('Plan y paywall', () => {
-  it('Gratis permite 2 cultivos propios', async () => {
+  it('Gratis permite 3 cultivos propios (D-34)', async () => {
     await nuevo('A');
     await nuevo('B');
-    expect(S().cultivos.filter((c) => !c.ejemplo)).toHaveLength(2);
+    await nuevo('C');
+    expect(S().cultivos.filter((c) => !c.ejemplo)).toHaveLength(3);
   });
 
-  it('El tercero se bloquea en Gratis', async () => {
+  it('El cuarto se bloquea en Gratis', async () => {
     await nuevo('A');
     await nuevo('B');
-    expect(await S().crearCultivo({ ...FORM, nombre: 'C' })).toEqual({ ok: false, error: 'limite' });
+    await nuevo('C');
+    expect(await S().crearCultivo({ ...FORM, nombre: 'D' })).toEqual({ ok: false, error: 'limite' });
   });
 
   it('Los de ejemplo no cuentan para el límite', async () => {

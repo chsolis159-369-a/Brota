@@ -16,15 +16,24 @@ appId: com.brota.app
 # La respuesta de la IA cambia el largo de la pantalla: se espera a que se acomode antes de escribir.
 - waitForAnimationToEnd:
     timeout: 5000
-- scrollUntilVisible:
-    element:
-      id: "campo-pregunta"
-- tapOn:
-    id: "campo-pregunta"
-- inputText: "que dosis uso"
-# Se manda con la tecla Enter del teclado (envía, como el botón). "hideKeyboard" en Android aprieta
-# "atrás" y, si el teclado ya estaba cerrado, cambia de pestaña.
-- pressKey: Enter
-- scrollUntilVisible:
-    element:
-      text: "Solo puedo orientarte sobre cultivo. No doy información sobre dosis, consumo ni venta."
+# Si la respuesta de la IA es larga (por ejemplo, un reconocimiento con opciones), la pantalla se sigue
+# acomodando y el texto puede no llegar al campo: se reintenta escribir y mandar hasta ver la negativa.
+- retry:
+    maxRetries: 2
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "campo-pregunta"
+      - tapOn:
+          id: "campo-pregunta"
+      - eraseText
+      - inputText: "que dosis uso"
+      # Se manda con la tecla Enter del teclado (envía, como el botón). "hideKeyboard" en Android aprieta
+      # "atrás" y, si el teclado ya estaba cerrado, cambia de pestaña.
+      - pressKey: Enter
+      # La respuesta aparece arriba del campo: se busca subiendo.
+      - scrollUntilVisible:
+          element:
+            text: "Solo puedo orientarte sobre cultivo. No doy información sobre dosis, consumo ni venta."
+          direction: UP
+          timeout: 10000

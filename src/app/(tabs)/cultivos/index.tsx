@@ -10,7 +10,7 @@ import { Pantalla } from '@/componentes/Pantalla';
 import { Tarjeta } from '@/componentes/Tarjeta';
 import { Texto } from '@/componentes/Texto';
 import { limiteAlcanzado, PLANTILLAS, saludCultivo } from '@/reglas/cultivos';
-import { ETAPAS, UBICACIONES, type Etapa, type Ubicacion } from '@/reglas/dominio';
+import { ETAPAS, LIMITE_GRATIS, UBICACIONES, type Etapa, type Ubicacion } from '@/reglas/dominio';
 import { hoyStr } from '@/reglas/fechas';
 import { useApp } from '@/store/app';
 import { useDatos } from '@/store/datos';
@@ -72,7 +72,7 @@ export default function Cultivos() {
         <Tarjeta>
           <Texto variante="cuerpoFuerte">{t('cultivos.limiteTitulo')}</Texto>
           <Texto variante="secundario" style={estilos.parrafo}>
-            {t('cultivos.limiteTexto')}
+            {t('cultivos.limiteTexto', { n: LIMITE_GRATIS })}
           </Texto>
           <Boton texto={t('planes.verPlanes')} onPress={() => router.navigate('/plan')} testID="ver-planes-limite" />
         </Tarjeta>

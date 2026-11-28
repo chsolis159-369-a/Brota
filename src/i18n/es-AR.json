@@ -16,8 +16,8 @@
       "bitacora": "Bitácora y registro rápido",
       "tareas": "Tareas diarias, logros y racha",
       "modulos": "{{n}} módulos con test: huerta, nutrición, hidroponía, sustrato inerte, luz y plagas",
-      "examenes": "3 exámenes con nota y repaso de errores",
-      "agente": "Agente con consejos generales"
+      "examenes": "{{n}} exámenes con nota y repaso de errores con fundamentos",
+      "agente": "Agente con respuestas generales: hasta {{n}} preguntas por día y memoria limitada de tus datos"
     },
     "itemsPro": [
       "Todo lo de Gratis, con cultivos ilimitados",
@@ -278,17 +278,29 @@
     "cannabis": "Próximamente: sujeto a revisión legal"
   },
   "examenes": {
-    "huerta": {
-      "t": "Examen de Huerta",
-      "d": "Suelo, compost, germinación, rotación y calendario."
+    "suelo": {
+      "t": "Examen de Suelo, compost y rotación",
+      "d": "Textura, materia orgánica, compost, rotación y asociaciones."
+    },
+    "siembra": {
+      "t": "Examen de Siembra y calendario",
+      "d": "Germinación, almácigos y qué sembrar en cada época."
     },
     "hidro": {
       "t": "Examen de Hidroponía y nutrición",
-      "d": "Nutrientes, sistemas, solución nutritiva, sustratos y riego."
+      "d": "Nutrientes, sistemas y solución nutritiva."
     },
-    "luzplagas": {
-      "t": "Examen de Luz, ambiente y plagas",
-      "d": "PPFD, DLI, VPD, plagas, MIP y diagnóstico."
+    "inerte": {
+      "t": "Examen de Sustrato inerte",
+      "d": "Coco, perlita, lana de roca y cómo regarlos."
+    },
+    "luz": {
+      "t": "Examen de Luz y ambiente",
+      "d": "PPFD, DLI y VPD."
+    },
+    "plagas": {
+      "t": "Examen de Plagas",
+      "d": "Plagas frecuentes, manejo integrado y, en Pro, diagnóstico."
     },
     "final": {
       "t": "Examen final BROTA",
@@ -379,7 +391,7 @@
       "conAlertas": "con alertas"
     },
     "limiteTitulo": "Llegaste al límite del plan Gratis",
-    "limiteTexto": "Incluye 2 cultivos propios. Pro es ilimitado.",
+    "limiteTexto": "Incluye {{n}} cultivos propios. Pro es ilimitado.",
     "nuevo": "+ Nuevo cultivo",
     "form": {
       "nombre": "Nombre (ej. Albahaca 1)",

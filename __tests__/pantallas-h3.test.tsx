@@ -51,7 +51,7 @@ describe('Aprender', () => {
     await render(<Aprender />);
     expect(screen.getByText('Tu nivel')).toBeTruthy();
     expect(screen.getByText('Te faltan 60 puntos para Aprendiz.')).toBeTruthy();
-    expect(screen.getByText('Módulos aprobados: 0 de 16 · Exámenes aprobados: 0 de 4')).toBeTruthy();
+    expect(screen.getByText('Módulos aprobados: 0 de 16 · Exámenes aprobados: 0 de 7')).toBeTruthy();
     expect(screen.getByText('Inexperto · 0')).toBeTruthy();
     expect(screen.getByText('Suelo, compost y acolchado')).toBeTruthy();
     expect(screen.getAllByText('Sin intentar · hasta 75 pts').length).toBeGreaterThan(0);
@@ -78,23 +78,24 @@ describe('Aprender', () => {
     await aprobar('suelo');
     await render(<Aprender />);
     expect(screen.getByText('✓ Aprobado · Mejor: 30 de 75 pts')).toBeTruthy();
-    expect(screen.getByText('Módulos aprobados: 1 de 16 · Exámenes aprobados: 0 de 4')).toBeTruthy();
+    expect(screen.getByText('Módulos aprobados: 1 de 16 · Exámenes aprobados: 0 de 7')).toBeTruthy();
   });
 
   it('muestra la lista de exámenes con sus motivos', async () => {
     await render(<Aprender />);
     await fireEvent.press(screen.getByTestId('sec-examenes'));
-    expect(screen.getByText('Examen de Huerta')).toBeTruthy();
-    expect(screen.getByText(/^Aprobá antes el test de: Suelo, compost y acolchado/)).toBeTruthy();
+    expect(screen.getByText('Examen de Suelo, compost y rotación')).toBeTruthy();
+    expect(screen.getByText('Examen de Plagas')).toBeTruthy();
+    expect(screen.getAllByText(/^Aprobá antes el test de: Suelo, compost y acolchado/)).toHaveLength(1);
     // En Gratis, el final pide el plan Pro antes que los exámenes previos (como el prototipo).
     expect(screen.getByText('Disponible en el plan Pro')).toBeTruthy();
   });
 
-  it('en Pro, el final pide los tres exámenes previos', async () => {
+  it('en Pro, el final pide los seis exámenes previos (D-34)', async () => {
     useApp.setState({ plan: 'pro' });
     await render(<Aprender />);
     await fireEvent.press(screen.getByTestId('sec-examenes'));
-    expect(screen.getByText('Primero aprobá: Examen de Huerta, Examen de Hidroponía y nutrición, Examen de Luz, ambiente y plagas')).toBeTruthy();
+    expect(screen.getByText('Primero aprobá: Examen de Suelo, compost y rotación, Examen de Siembra y calendario, Examen de Hidroponía y nutrición, Examen de Sustrato inerte, Examen de Luz y ambiente, Examen de Plagas')).toBeTruthy();
   });
 });
 
@@ -142,11 +143,11 @@ describe('Glosario y ficha de examen', () => {
     expect(screen.getByText('Plazo de carencia')).toBeTruthy();
   });
 
-  it('ficha del examen de Huerta habilitado: reglas y aviso de próxima versión', async () => {
-    for (const id of ['suelo', 'germinacion', 'rotacion', 'compost', 'calendario']) await aprobar(id);
-    mockParams = { id: 'huerta' };
+  it('ficha del examen de Suelo habilitado: reglas y aviso de próxima versión', async () => {
+    for (const id of ['suelo', 'rotacion', 'compost']) await aprobar(id);
+    mockParams = { id: 'suelo' };
     await render(<FichaExamen />);
-    expect(screen.getByText('12 preguntas elegidas al azar entre 35: cada intento es distinto.')).toBeTruthy();
+    expect(screen.getByText('12 preguntas elegidas al azar entre 21: cada intento es distinto.')).toBeTruthy();
     expect(screen.getByText('Tiempo: 12 minutos. Si se acaba, se corrige lo que respondiste.')).toBeTruthy();
     expect(screen.getByText('No se puede volver atrás. Tenés 3 intentos por día (hoy llevás 0).')).toBeTruthy();
     expect(screen.getByText('La primera vez que aprobás ganás +40 puntos.')).toBeTruthy();

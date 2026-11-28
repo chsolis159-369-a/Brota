@@ -116,11 +116,13 @@ describe('Cultivos', () => {
     expect(screen.getByText('Guardar cultivo')).toBeTruthy();
   });
 
-  it('con 2 cultivos propios en Gratis muestra el límite', async () => {
-    await S().crearCultivo({ nombre: 'A', tipo: '', ubicacion: 'interior', etapa: 'Siembra', fecha: '2026-11-23' });
-    await S().crearCultivo({ nombre: 'B', tipo: '', ubicacion: 'interior', etapa: 'Siembra', fecha: '2026-11-23' });
+  it('con 3 cultivos propios en Gratis muestra el límite (D-34)', async () => {
+    for (const nombre of ['A', 'B', 'C']) {
+      await S().crearCultivo({ nombre, tipo: '', ubicacion: 'interior', etapa: 'Siembra', fecha: '2026-11-23' });
+    }
     await render(<Cultivos />);
     expect(screen.getByText('Llegaste al límite del plan Gratis')).toBeTruthy();
+    expect(screen.getByText('Incluye 3 cultivos propios. Pro es ilimitado.')).toBeTruthy();
     expect(screen.queryByText('+ Nuevo cultivo')).toBeNull();
     await fireEvent.press(screen.getByText('Ver planes'));
     expect(mockRouter.navigate).toHaveBeenCalledWith('/plan');

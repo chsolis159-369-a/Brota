@@ -13,7 +13,7 @@ App móvil (iOS y Android) de bitácora de cultivo con aprendizaje, exámenes y 
 ## Alcance
 - Pestañas: Hoy, Cultivos, Agente, Aprender, Plan.
 - Fuera de alcance y **sin código accesible**: plan Business y contenido de cannabis (`CANNABIS_HABILITADO = false`). El análisis de fotos por IA en el Agente está prendido (`FOTO_AGENTE = true`, D-30), con reconocimiento por fotos y preguntas (candidatos, certeza y opciones como botones, D-31).
-- **Gratis (US$ 0)**: hasta 2 cultivos propios (los de ejemplo no cuentan), bitácora y registro rápido, tareas diarias, logros y racha, 16 módulos con test, 3 exámenes por bloque, agente con consejos generales.
+- **Gratis (US$ 0)** (D-34): hasta 3 cultivos propios (los de ejemplo no cuentan), bitácora y registro rápido, tareas diarias, logros y racha, 16 módulos con test, 6 exámenes con nota y repaso de errores con fundamentos, agente con respuestas generales (6 preguntas por día y memoria limitada: últimos 2 mensajes y datos básicos de los cultivos).
 - **Pro (US$ 5.99/mes o US$ 49.99/año)**: todo lo de Gratis más cultivos ilimitados, módulo `diagnostico`, Examen final con constancia y nivel Maestro de cultivo, exportar la bitácora como texto, agente que usa el historial del cultivo.
 - Puntos de paywall (como en el prototipo): límite de 2 cultivos, módulo Diagnóstico bloqueado, Examen final, aviso de Maestro pendiente, exportar, historial del agente.
 
@@ -42,10 +42,13 @@ Constantes: `PREGS_TEST=3`, `APROBAR_MODULO=2`, `BONUS_PERFECTO=15`, `TOPE_TAREA
 ## Exámenes (Aprender > Exámenes)
 | Examen | Preguntas | Tiempo | Puntos | Temario |
 |---|---|---|---|---|
-| Huerta | 12 | 12 min | +40 la 1.ª vez | categoría `huerta` |
-| Hidroponía y nutrición | 15 | 15 min | +40 | `nutricion`, `hidro`, `inerte` |
-| Luz, ambiente y plagas | 15 | 15 min | +40 | `luz`, `plagas` |
-| Examen final BROTA (Pro) | 30 | 30 min | 0 | todo menos cannabis; exige los tres anteriores aprobados |
+| Suelo, compost y rotación | 12 | 12 min | +40 la 1.ª vez | módulos `suelo`, `compost`, `rotacion` |
+| Siembra y calendario | 10 | 10 min | +40 | módulos `germinacion`, `calendario` |
+| Hidroponía y nutrición | 12 | 12 min | +40 | `hidro`, `nutricion` |
+| Sustrato inerte | 10 | 10 min | +40 | `inerte` |
+| Luz y ambiente | 12 | 12 min | +40 | `luz` |
+| Plagas | 10 | 10 min | +40 | `plagas` (en Pro, con `diagnostico`) |
+| Examen final BROTA (Pro) | 30 | 30 min | 0 | todo menos cannabis; exige los seis anteriores aprobados |
 
 - Habilitado solo si están aprobados todos los módulos de su bloque a los que el plan da acceso.
 - Sorteo estratificado: 20 % básicas, 40 % intermedias, 40 % trampa; parejo entre módulos; prioriza preguntas no vistas.
@@ -58,7 +61,7 @@ Constantes: `PREGS_TEST=3`, `APROBAR_MODULO=2`, `BONUS_PERFECTO=15`, `TOPE_TAREA
 **Anti-trampa**: sorteo, hora de inicio, vencimiento, conteo de intentos, corrección y puntos de examen se resuelven en Edge Functions. El cliente nunca recibe las respuestas correctas antes de enviar las suyas. El servidor valida el entitlement `pro` con RevenueCat antes de iniciar el final y devuelve la corrección con explicaciones. Los exámenes requieren conexión. Los tests de módulo corren en el dispositivo y se sincronizan después.
 
 ## Agente (IA)
-Conserva las reglas del agente por reglas del prototipo: solo cultivo; nunca dosis, consumo ni venta; ante un problema grave sugerir consultar a un técnico; el historial del cultivo solo en Pro (se valida en el servidor).
+Conserva las reglas del agente por reglas del prototipo: solo cultivo; nunca dosis, consumo ni venta; ante un problema grave sugerir consultar a un técnico; el historial del cultivo solo en Pro (se valida en el servidor). Límite diario: 6 preguntas en Gratis y 30 en Pro (D-34).
 
 ## Datos (Postgres con RLS: cada usuario ve solo lo suyo)
 `profiles`, `cultivos`, `registros`, `mediciones`, `tareas_hechas`, `ledger_dias`, `progreso_modulos` (mejor_aciertos, mejor_puntos), `examenes_intentos` (examen_id, inicio, fin, respuestas, porcentaje, aprobado), `examenes_estado` (mejor, aprobado, fecha, puntos), `constancias`, `feedback` (calificación, comentario, versión, errores recientes).

@@ -25,7 +25,10 @@ export const TOPE_MED_DIA = 2;
 export const INTENTOS_DIA = 3;
 export const APROBAR_EXAMEN = 0.8;
 export const MAESTRO_REQUIERE_EXAMEN = true;
-export const LIMITE_GRATIS = 2;
+/** Cultivos propios en el plan Gratis (D-34: 3, pedido del usuario; el prototipo tenía 2). */
+export const LIMITE_GRATIS = 3;
+/** Preguntas por día al Agente en Gratis (D-34). El servidor aplica el mismo límite (LIMITE_DIARIO). */
+export const PREGUNTAS_AGENTE_GRATIS = 6;
 
 export const PTS_REGISTRO = 2;
 export const PTS_MEDICION = 4;
