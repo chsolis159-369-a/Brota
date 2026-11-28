@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 
-import { Encabezado } from '@/componentes/Encabezado';
+import { BotonAjustes, Encabezado } from '@/componentes/Encabezado';
 import '@/i18n';
 import { useApp } from '@/store/app';
 
@@ -25,7 +25,7 @@ describe('Encabezado', () => {
   });
 
   it('el engranaje abre Configuración y se desactiva durante un examen (D-35)', async () => {
-    await render(<Encabezado />);
+    await render(<BotonAjustes />);
     await fireEvent.press(screen.getByLabelText('Abrir configuración'));
     expect(mockPush).toHaveBeenCalledWith('/configuracion');
     await act(() => useApp.getState().setExamenEnCurso(true));

@@ -11,15 +11,11 @@ import { Icono } from './Icono';
 import { Logo } from './Logo';
 import { Texto } from './Texto';
 
-/**
- * Logo y "BROTA", el plan actual con la etiqueta "Prueba" en la versión pública de prueba y el botón de
- * Configuración (D-35), que se desactiva durante un examen, como las otras pestañas.
- */
+/** Logo y "BROTA", y el plan actual con la etiqueta "Prueba" en la versión pública de prueba. */
 export function Encabezado() {
   const { t } = useTranslation();
   const { c } = useTema();
   const plan = useApp((s) => s.plan);
-  const examenEnCurso = useApp((s) => s.examenEnCurso);
   const etiqueta = plan === 'gratis' ? t('encabezado.planGratis') : t('planes.pro');
   return (
     <View style={estilos.fila}>
@@ -42,18 +38,29 @@ export function Encabezado() {
           </>
         ) : null}
       </View>
-      <Pressable
-        onPress={() => router.push('/configuracion')}
-        disabled={examenEnCurso}
-        accessibilityRole="button"
-        accessibilityLabel={t('configuracion.abrir')}
-        accessibilityState={{ disabled: examenEnCurso }}
-        hitSlop={4}
-        testID="abrir-configuracion"
-        style={({ pressed }) => [estilos.ajustes, { borderColor: c.border, backgroundColor: c.surface, opacity: examenEnCurso ? 0.4 : pressed ? 0.7 : 1 }]}>
-        <Icono nombre="ajustes" color={c.fg} />
-      </Pressable>
     </View>
+  );
+}
+
+/**
+ * Botón de Configuración (D-35), a la derecha del título de cada pestaña (en el encabezado no entra junto
+ * al plan). Se desactiva durante un examen, como las otras pestañas.
+ */
+export function BotonAjustes() {
+  const { t } = useTranslation();
+  const { c } = useTema();
+  const examenEnCurso = useApp((s) => s.examenEnCurso);
+  return (
+    <Pressable
+      onPress={() => router.push('/configuracion')}
+      disabled={examenEnCurso}
+      accessibilityRole="button"
+      accessibilityLabel={t('configuracion.abrir')}
+      accessibilityState={{ disabled: examenEnCurso }}
+      testID="abrir-configuracion"
+      style={({ pressed }) => [estilos.ajustes, { borderColor: c.border, backgroundColor: c.surface, opacity: examenEnCurso ? 0.4 : pressed ? 0.7 : 1 }]}>
+      <Icono nombre="ajustes" color={c.fg} />
+    </Pressable>
   );
 }
 
@@ -71,5 +78,5 @@ const estilos = StyleSheet.create({
   marca: { flexDirection: 'row', alignItems: 'center', gap: 10, flexShrink: 0 },
   plan: { flexDirection: 'row', alignItems: 'center', flexShrink: 1, borderWidth: 1, borderRadius: 999, paddingLeft: 14, paddingRight: 6, paddingVertical: 5 },
   nombrePlan: { fontFamily: 'NunitoSans_600SemiBold' },
-  ajustes: { width: MEDIDAS.toque - 4, height: MEDIDAS.toque - 4, borderRadius: 999, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  ajustes: { width: MEDIDAS.toque, height: MEDIDAS.toque, borderRadius: 999, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
 });

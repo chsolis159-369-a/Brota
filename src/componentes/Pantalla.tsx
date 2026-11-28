@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { MEDIDAS, useTema } from '@/tema/useTema';
 
-import { Encabezado } from './Encabezado';
+import { BotonAjustes, Encabezado } from './Encabezado';
 import { Texto } from './Texto';
 
 /** `cabecera`: reemplaza el encabezado de BROTA (por ejemplo, el botón para volver de Configuración). */
@@ -19,9 +19,13 @@ export function Pantalla({ titulo, cabecera, children }: Props) {
         <View style={estilos.columna}>
           {cabecera ?? <Encabezado />}
           {titulo ? (
-            <Texto variante="tituloGrande" style={estilos.titulo}>
-              {titulo}
-            </Texto>
+            <View style={estilos.filaTitulo}>
+              <Texto variante="tituloGrande" style={estilos.titulo}>
+                {titulo}
+              </Texto>
+              {/* Configuración se abre desde el título de las pestañas, no desde su propia pantalla. */}
+              {cabecera ? null : <BotonAjustes />}
+            </View>
           ) : null}
           {children}
         </View>
@@ -34,5 +38,6 @@ const estilos = StyleSheet.create({
   raiz: { flex: 1 },
   scroll: { paddingHorizontal: MEDIDAS.margen, paddingBottom: 40 },
   columna: { width: '100%', maxWidth: MEDIDAS.anchoMaximo, alignSelf: 'center' },
-  titulo: { marginTop: 12, marginBottom: MEDIDAS.separacion },
+  filaTitulo: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 12, marginBottom: MEDIDAS.separacion },
+  titulo: { flex: 1 },
 });

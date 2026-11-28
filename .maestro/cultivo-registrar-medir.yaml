@@ -56,4 +56,6 @@ appId: com.brota.app
 - assertNotVisible: "Lechuga Maestro"
 # Los puntos del registro (2) y la medición (4) no se pierden al borrar el cultivo.
 - tapOn: "Hoy"
-- assertVisible: "6"
+- scrollUntilVisible:
+    element:
+      text: "6"

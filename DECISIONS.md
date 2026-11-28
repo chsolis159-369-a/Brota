@@ -197,7 +197,7 @@ El usuario definió qué incluye el plan Gratis. Cambia reglas y textos del prot
 - **Pruebas de Maestro**: el flujo del Agente reintenta escribir y mandar la pregunta si la respuesta anterior de la IA es larga (un reconocimiento con opciones movía la pantalla y el texto no llegaba al campo).
 
 ## D-35 · Configuración (pedido del usuario, 2026-11-28)
-Pantalla nueva que se abre con un engranaje en el encabezado de todas las pestañas (se desactiva durante un examen, como las pestañas). Las cinco pestañas del prototipo no cambian.
+Pantalla nueva que se abre con un engranaje a la derecha del título de cada pestaña (se desactiva durante un examen, como las pestañas). Primero estuvo en el encabezado, pero junto a "Plan gratis · Prueba" no entraba y bajaba a una segunda línea que empujaba toda la pantalla. Las cinco pestañas del prototipo no cambian.
 - **Idioma**: español (por defecto), inglés, italiano, francés y chino simplificado (D-36). Cada idioma se muestra con su propio nombre.
 - **Tamaño de letra**: Normal, Grande (×1,15) y Muy grande (×1,3). Se suma al tamaño de letra del sistema, que la app ya respetaba (D-32).
 - **Modo de pantalla**: Automático (sigue al teléfono, como hasta ahora), Claro u Oscuro. Se aplica a toda la app con `Appearance.setColorScheme`.
